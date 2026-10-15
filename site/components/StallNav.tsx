@@ -19,7 +19,7 @@ const lineOf = (it: Item) => `${sizeOf(it.size).label} · ${sizeOf(it.size).note
 export default function StallNav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [items, setItems] = useState<Item[]>(nav.bag.map((b) => ({ key: `${b.id}-single`, id: b.id, size: "single", qty: b.qty })));
+  const [items, setItems] = useState<Item[]>([]);
   const [fresh, setFresh] = useState<string | null>(null);
   const close = useRef(0);
 
@@ -58,6 +58,9 @@ export default function StallNav() {
     clearTimeout(close.current);
     setOpen(false);
   };
+  const removeItem = (key: string) => {
+    setItems((list) => list.filter((i) => i.key !== key));
+  };
   const count = items.reduce((n, i) => n + i.qty, 0);
   const total = items.reduce((n, i) => n + priceOf(i) * i.qty, 0);
 
@@ -94,24 +97,43 @@ export default function StallNav() {
             ×
           </button>
         </div>
-        <ul className="pf-drawer-list">
-          {items.map((it) => {
-            const p = products[it.id];
-            return (
-              <li key={it.key} className={it.key === fresh ? "is-fresh" : ""}>
-                <Bottle juice={p.juice} className="pf-cart-bottle" />
-                <span className="pf-drawer-text">
-                  <b className="font-display">{p.name}</b>
-                  <small>{lineOf(it)}</small>
-                  <small>
-                    {it.qty} × {rupee(priceOf(it))}
-                  </small>
-                </span>
-                <span className="mk pf-drawer-price">{rupee(priceOf(it) * it.qty)}</span>
-              </li>
-            );
-          })}
-        </ul>
+        {items.length === 0 ? (
+          <div className="pf-drawer-empty" style={{ padding: "48px 24px", textAlign: "center", color: "var(--muted)" }}>
+            <p className="font-display" style={{ fontSize: "20px", marginBottom: "8px", color: "var(--text)" }}>
+              Your crate is empty
+            </p>
+            <p style={{ fontSize: "14px" }}>Add bottles from the flavours or cleanse plans below.</p>
+          </div>
+        ) : (
+          <ul className="pf-drawer-list">
+            {items.map((it) => {
+              const p = products[it.id];
+              return (
+                <li key={it.key} className={it.key === fresh ? "is-fresh" : ""}>
+                  <Bottle juice={p.juice} className="pf-cart-bottle" />
+                  <span className="pf-drawer-text">
+                    <b className="font-display">{p.name}</b>
+                    <small>{lineOf(it)}</small>
+                    <small>
+                      {it.qty} × {rupee(priceOf(it))}
+                    </small>
+                  </span>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "4px" }}>
+                    <span className="mk pf-drawer-price">{rupee(priceOf(it) * it.qty)}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeItem(it.key)}
+                      style={{ background: "none", border: "none", cursor: "pointer", fontSize: "12px", color: "var(--muted)", textDecoration: "underline", padding: "2px" }}
+                      aria-label={`Remove ${p.name}`}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
         <div className="pf-drawer-foot">
           <div className="pf-cart-total">
             <span>Total</span>

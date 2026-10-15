@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react";
 import { gsap } from "@/lib/gsap";
 import { footer } from "@/site/content";
 import { clamp, isStatic, onScreen } from "@/site/lib/motion";
@@ -41,8 +41,36 @@ const BLOTS: [number, number][] = [
  * bottom (forward and back); the strip headline lifts in; a slow light band keeps the end screen alive. The
  * travelling orange becomes a round stamp on [data-orange-stamp], beside PURE JUICE.
  */
+function Check() {
+  return (
+    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M3 8.5 6.5 12 13 4.5" />
+    </svg>
+  );
+}
+
+/** Faint citrus-slice line drawing behind the sign-up panel (turns slowly). */
+function SliceArt() {
+  return (
+    <svg className="pf-press-slice" viewBox="0 0 200 200" aria-hidden>
+      <circle cx="100" cy="100" r="96" />
+      <circle cx="100" cy="100" r="84" />
+      {Array.from({ length: 10 }, (_, i) => {
+        const a = (i / 10) * Math.PI * 2;
+        return <line key={i} x1="100" y1="100" x2={100 + Math.cos(a) * 84} y2={100 + Math.sin(a) * 84} />;
+      })}
+      <circle cx="100" cy="100" r="10" />
+    </svg>
+  );
+}
+
 export default function StallFooter() {
   const root = useRef<HTMLElement>(null);
+  const [joined, setJoined] = useState(false);
+  const onJoin = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (e.currentTarget.checkValidity()) setJoined(true);
+  };
 
   useEffect(() => {
     if (isStatic()) return;
@@ -73,17 +101,39 @@ export default function StallFooter() {
     <footer ref={root} className="pf-footer" data-section="footer" data-record-time="2.0" data-record-align="bottom" data-record-label="Footer">
       <span className="pf-footer-band" aria-hidden />
       <div className="pf-strip">
-        <div className="pf-stage pf-strip-inner">
-          <p className="pf-strip-title font-display">{footer.strip}</p>
-          <form className="pf-signup">
-            <label className="sr-only" htmlFor="pf-email">
-              Email
-            </label>
-            <input id="pf-email" type="email" placeholder={footer.placeholder} autoComplete="off" />
-            <button type="button" className="pf-btn pf-btn-ink">
-              {footer.join}
-            </button>
-          </form>
+        <div className="pf-press">
+          <SliceArt />
+          <div className="pf-press-copy">
+            <span className="pf-press-eyebrow">{footer.signup.eyebrow}</span>
+            <h2 className="pf-strip-title font-display">
+              {footer.signup.title} <em>{footer.signup.accent}</em>
+            </h2>
+            <p className="pf-press-lead">{footer.signup.lead}</p>
+          </div>
+          <div className="pf-press-side">
+            {joined ? (
+              <p className="pf-press-done" role="status">
+                <Check /> {footer.signup.done}
+              </p>
+            ) : (
+              <form className="pf-signup" onSubmit={onJoin}>
+                <label className="sr-only" htmlFor="pf-email">
+                  Email address
+                </label>
+                <input id="pf-email" type="email" required placeholder={footer.placeholder} autoComplete="email" />
+                <button type="submit" className="pf-btn pf-btn-ink">
+                  {footer.join}
+                </button>
+              </form>
+            )}
+            <ul className="pf-press-perks">
+              {footer.signup.perks.map((p) => (
+                <li key={p}>
+                  <Check /> {p}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
       <div className="pf-stage pf-footer-body">

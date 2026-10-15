@@ -146,11 +146,8 @@ export const nav = {
     { label: "Cleanse Programs", href: "#cleanses" },
     { label: "Harvest Trace", href: "#farm" },
   ],
-  bagCount: 2,
-  bag: [
-    { id: "green", qty: 1 },
-    { id: "beet", qty: 1 },
-  ],
+  bagCount: 0,
+  bag: [] as { id: string; qty: number }[],
 };
 
 // ── Hero ────────────────────────────────────────────
@@ -277,7 +274,14 @@ export const reviews = {
 
 // ── Footer ──────────────────────────────────────────
 export const footer = {
-  strip: "Join the sunrise press list for seasonal batches.",
+  signup: {
+    eyebrow: "The press list",
+    title: "Join the sunrise press list for",
+    accent: "seasonal batches.",
+    lead: "New flavours before anyone else, early access to limited presses and one good recipe a month.",
+    perks: ["Early access", "Member prices", "Unsubscribe anytime"],
+    done: "You're on the list. See you at sunrise.",
+  },
   placeholder: "Enter your email address",
   join: "Subscribe",
   cols: [
