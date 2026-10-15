@@ -4638,3 +4638,388 @@ html.is-static .pf-press-slice {
     transform: scale(1);
   }
 }
+
+/* ═══ Product detail: buy box ═════════════════════════════════════════════════ */
+@layer components {
+  /* the bottle no longer touches the nav */
+  .pf-disc-wrap {
+    left: 432px;
+    top: 136px;
+  }
+  .pf-inside {
+    left: 452px;
+    top: 756px;
+  }
+  .pf-inside-item {
+    width: 104px;
+  }
+
+  .pf-buy {
+    left: 1000px;
+    top: 100px;
+    width: 376px;
+  }
+  .pf-buy-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .pf-buy-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font: 500 13px/1 var(--font-body-family);
+    color: var(--ink-muted);
+  }
+  .pf-buy-rating svg {
+    fill: #e8862a;
+  }
+  .pf-buy-rating b {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .pf-buy-title {
+    margin: 16px 0 8px;
+    font-size: 40px;
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+  }
+  .pf-buy-price {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .pf-buy-price b {
+    font: 600 26px/1 var(--font-display-family);
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+  .pf-buy-price span {
+    font-size: 14px;
+    color: var(--ink-muted);
+  }
+  .pf-buy-blurb {
+    margin-bottom: 16px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* size cards: name + contents left, saving + price right */
+  .pf-sizes {
+    gap: 8px;
+    margin: 10px 0 14px;
+  }
+  .pf-size {
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: border-color 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), background-color 0.25s var(--ease-out);
+  }
+  .pf-size.is-on {
+    background: #fffaf6;
+    border-color: var(--tomato);
+    box-shadow: inset 0 0 0 1px var(--tomato);
+  }
+  .pf-size:focus-visible {
+    outline: 2px solid var(--tomato);
+    outline-offset: 3px;
+  }
+  .pf-size-main {
+    display: grid;
+    gap: 4px;
+    text-align: left;
+  }
+  .pf-size-main small {
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+  .pf-size-price {
+    display: grid;
+    justify-items: end;
+    gap: 4px;
+  }
+  .pf-size-price b {
+    font: 600 17px/1 var(--font-display-family);
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  .pf-size-price em {
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: #eef4ea;
+    color: #2f6a35;
+    font: 600 11px/1 var(--font-body-family);
+    font-style: normal;
+  }
+
+  /* quantity + add */
+  .pf-buy-row {
+    display: flex;
+    gap: 10px;
+  }
+  .pf-qty {
+    display: flex;
+    align-items: center;
+    flex: none;
+    padding: 4px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--card);
+  }
+  .pf-qty button {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 999px;
+    font: 500 20px/1 var(--font-body-family);
+    color: var(--ink);
+    cursor: pointer;
+    transition: background-color 0.2s var(--ease-out);
+  }
+  .pf-qty button:hover:not(:disabled) {
+    background: var(--kraft);
+  }
+  .pf-qty button:disabled {
+    color: #c9c5bc;
+    cursor: default;
+  }
+  .pf-qty button:focus-visible {
+    outline: 2px solid var(--tomato);
+    outline-offset: 1px;
+  }
+  .pf-qty span {
+    min-width: 22px;
+    text-align: center;
+    font: 600 16px/1 var(--font-body-family);
+    font-variant-numeric: tabular-nums;
+  }
+  .pf-buy-row .pf-add {
+    flex: 1;
+  }
+
+  .pf-buy-trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin-top: 14px;
+    font: 500 13px/1.3 var(--font-body-family);
+    color: var(--ink-muted);
+  }
+  .pf-buy-trust li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pf-buy-trust li::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #5f9447;
+  }
+
+  /* nutrition as four small tiles */
+  .pf-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-top: 16px;
+  }
+  .pf-stats div {
+    display: grid;
+    gap: 6px;
+    padding: 10px 10px 11px;
+    border: 1px solid var(--hair);
+    border-radius: 12px;
+    background: var(--card);
+  }
+  .pf-stats dt {
+    font: 500 11px/1.2 var(--font-body-family);
+    color: var(--ink-muted);
+  }
+  .pf-stats dd {
+    font: 600 17px/1 var(--font-display-family);
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .pf-buy .pf-sample {
+    margin-top: 10px;
+  }
+}
+
+/* product: fits short windows (stage scales by --fit, set from the window height) + a tighter layout */
+@layer components {
+  .pf-pdp.pf-sticky {
+    min-height: 0;
+  }
+  .pf-pdp > .pf-stage {
+    transform: scale(var(--fit, 1));
+    transform-origin: 50% 76px;
+  }
+  .pf-pdp .pf-disc-wrap {
+    top: 120px;
+    transform: scale(0.9);
+    transform-origin: 50% 0;
+  }
+  .pf-pdp .pf-inside {
+    top: 672px;
+  }
+}
+
+/* ═══ Product detail: flavour profile, blend share, delivery promise ══════════ */
+@layer components {
+  /* compact wheel: the current flavour sits at 236 px, the profile card takes the space below */
+  .pf-pdp .pf-wheel {
+    top: 100px;
+    height: 472px;
+  }
+
+  .pf-profile {
+    position: absolute;
+    left: 64px;
+    top: 580px;
+    width: 352px;
+    padding: 18px 20px;
+    border: 1px solid var(--hair);
+    border-radius: 20px;
+    background: var(--card);
+    box-shadow: 0 20px 40px -30px rgba(20, 20, 20, 0.3);
+  }
+  .pf-profile-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font: 600 13px/1 var(--font-body-family);
+  }
+  .pf-profile-goal {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--c) 16%, white);
+    color: color-mix(in oklch, var(--c) 70%, black);
+    font-size: 12px;
+  }
+  .pf-taste {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 22px;
+  }
+  .pf-taste div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .pf-taste dt {
+    font: 500 13px/1 var(--font-body-family);
+    color: var(--ink-muted);
+  }
+  .pf-taste dd {
+    display: flex;
+    gap: 3px;
+  }
+  .pf-taste i {
+    width: 14px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--kraft);
+  }
+  .pf-taste i.is-on {
+    background: var(--c);
+  }
+  .pf-bestfor {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--hair);
+    font: 500 12px/1 var(--font-body-family);
+    color: var(--ink-muted);
+  }
+  .pf-bestfor span {
+    margin-right: 4px;
+  }
+  .pf-bestfor em {
+    padding: 6px 10px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    font-style: normal;
+    color: var(--ink);
+  }
+
+  /* ingredients with their share of the blend */
+  .pf-pdp .pf-inside {
+    top: 656px;
+    gap: 14px;
+  }
+  .pf-inside-item {
+    display: grid;
+    justify-items: center;
+    gap: 3px;
+    width: 108px;
+  }
+  .pf-inside-item img {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 4px;
+  }
+  .pf-inside-item b {
+    font: 600 17px/1 var(--font-display-family);
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  .pf-inside-item span {
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  /* delivery promise */
+  .pf-promise {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: #eef4ea;
+    color: #2f6a35;
+    font: 500 13px/1.35 var(--font-body-family);
+  }
+  .pf-promise svg {
+    flex: none;
+    margin-top: 1px;
+  }
+  .pf-promise b {
+    font-weight: 600;
+  }
+  .pf-promise small {
+    display: block;
+    font-size: 12px;
+    color: #4f7a52;
+  }
+  .pf-pdp .pf-buy-trust {
+    margin-top: 10px;
+  }
+  .pf-pdp .pf-stats {
+    margin-top: 12px;
+  }
+  .pf-pdp .pf-buy .pf-sample {
+    display: none;
+  }
+}
+
+@layer components {
+  .pf-pdp .pf-inside {
+    align-items: flex-start;
+  }
+  .pf-pdp .pf-inside > .pf-label-caps {
+    align-self: center;
+    margin-top: -40px;
+  }
+}
