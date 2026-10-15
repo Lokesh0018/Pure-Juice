@@ -286,7 +286,11 @@ export const footer = {
     { title: "Customer Care", links: ["Cold Shipping", "Subscription Management", "Bottle Upcycling"] },
   ],
   hours: ["Pressed Fresh Daily · 4:30 AM", "Delivered Cold by 8:30 AM"],
-  socials: ["Instagram", "YouTube", "Twitter / X"],
+  socials: [
+    { id: "instagram", label: "Instagram" },
+    { id: "youtube", label: "YouTube" },
+    { id: "x", label: "Twitter / X" },
+  ] as const,
   wordmark: "Pure Juice",
   note: "Crafted by Pure Juice Co. · 100% raw botanical press",
 };

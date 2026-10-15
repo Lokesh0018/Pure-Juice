@@ -3543,3 +3543,92 @@ html.is-static .pf-bin-fruit {
 html.is-static .pf-wordmark {
   -webkit-text-fill-color: #222120;
 }
+
+/* ═══ Footer: social icons, centred wordmark, wind-blown meadow ═══════════════ */
+@layer components {
+  .pf-footer {
+    height: 820px;
+  }
+  /* links and icons always sit above the wordmark and the meadow */
+  .pf-footer-body {
+    position: relative;
+    z-index: 3;
+    height: auto;
+    padding-top: 72px;
+  }
+  .pf-socials {
+    margin-top: 40px;
+    gap: 10px;
+  }
+  .pf-social {
+    width: 46px;
+    height: 46px;
+    color: var(--chalk-text);
+    border: 1px solid #3a3936;
+    background: rgba(255, 255, 255, 0.03);
+    transition: background-color 0.3s var(--ease-out), border-color 0.3s var(--ease-out), color 0.3s var(--ease-out), translate 0.3s var(--ease-out);
+  }
+  .pf-social:hover {
+    color: #fff;
+    background: var(--tomato-deep);
+    border-color: var(--tomato-deep);
+    translate: 0 -2px;
+  }
+  .pf-social:focus-visible {
+    outline: 2px solid var(--tomato);
+    outline-offset: 3px;
+  }
+  .pf-footnote {
+    margin-left: 18px;
+  }
+
+  /* centred wordmark, its lower edge sinking into the grass */
+  .pf-wordmark {
+    left: 50%;
+    right: auto;
+    bottom: -34px;
+    z-index: 1;
+    translate: -50% 0;
+    font-size: 250px;
+    text-align: center;
+  }
+
+  /* meadow along the bottom edge */
+  .pf-meadow {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    display: block;
+    width: 100%;
+    height: 140px;
+    pointer-events: none;
+  }
+  .pf-blade,
+  .pf-plant {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: pf-sway 4s ease-in-out infinite;
+  }
+  .pf-plant {
+    --a: 5deg;
+    animation-duration: 5.6s;
+  }
+  /* a soft shade line where the grass meets the page edge */
+  .pf-meadow-back {
+    opacity: 0.9;
+  }
+}
+html.is-static .pf-blade,
+html.is-static .pf-plant {
+  animation: none;
+}
+@keyframes pf-sway {
+  0%,
+  100% {
+    rotate: calc(var(--a, 4deg) * -0.6);
+  }
+  50% {
+    rotate: var(--a, 4deg);
+  }
+}
