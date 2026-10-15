@@ -227,14 +227,17 @@ export const farm = {
 
 // ── Benefits (fresh vs carton) ──────────────────────
 export const compare = {
+  eyebrow: "The difference",
   title: ["Pure Press vs", "store carton."],
+  lead: "Same fruit, two very different bottles. This is what changes when juice is never heated.",
   ours: "Pure Juice",
   theirs: "Commercial Carton",
+  // value (counts up when it starts with a number) + a short note; a / b = bar length in %
   rows: [
-    { label: "Thermal Processing", ours: "Zero Heat (Cold-Pressed)", theirs: "Ultra-Pasteurised (95 °C)", a: 0, b: 85 },
-    { label: "Refined Added Sugars", ours: "0 g (Whole Fruit Only)", theirs: "26 g per serving", a: 2, b: 78 },
-    { label: "Raw Fruit per Bottle", ours: "1.4 kg organic produce", theirs: "0.25 kg concentrate", a: 95, b: 20 },
-    { label: "Shelf Life Since Press", ours: "3 Days (Fresh & Active)", theirs: "180+ Days (Preserved)", a: 3, b: 96 },
+    { label: "Thermal processing", ours: "Zero heat", oursNote: "Cold-pressed", theirs: "95 °C", theirsNote: "Ultra-pasteurised", a: 0, b: 85 },
+    { label: "Refined added sugar", ours: "0 g", oursNote: "Whole fruit only", theirs: "26 g", theirsNote: "Per serving", a: 2, b: 78 },
+    { label: "Raw fruit per bottle", ours: "1.4 kg", oursNote: "Organic produce", theirs: "0.25 kg", theirsNote: "From concentrate", a: 95, b: 20 },
+    { label: "Shelf life since press", ours: "3 days", oursNote: "Fresh & active", theirs: "180+ days", theirsNote: "Preserved", a: 3, b: 96 },
   ],
   note: "Nutrient analysis based on third-party laboratory tests · Pure Juice standards",
 };

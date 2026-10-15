@@ -26,8 +26,8 @@ const show = (v: string, t: number) => {
 };
 
 /**
- * ST06 · chalkboard band, "fresh vs a carton" comparison bars. M225, scroll-linked (forward and back): as the band
- * arrives, each row fills in turn (ours, then theirs) and its numbers count up with it. The "Fruit per bottle" bar is
+ * ST06 · dark band, "Pure Press vs store carton" comparison table (our column highlighted). M225, scroll-linked
+ * (forward and back): as the band arrives, each row fills in turn (ours, then theirs) and its numbers count up. The "Fruit per bottle" bar is
  * filled by the travelling juice drop as it runs along it.
  */
 export default function CartonBars() {
@@ -64,10 +64,14 @@ export default function CartonBars() {
     <section ref={root} className="pf-compare" data-section="compare" data-record-time="1.2" data-record-label="Benefits">
       <div className="pf-stage">
         <div className="pf-compare-side">
-          <h2 className="pf-h2 font-display">
+          <span className="pf-cmp-eyebrow">{compare.eyebrow}</span>
+          <h2 className="pf-cmp-title font-display">
             <span className="pf-line">{compare.title[0]}</span>
-            <span className="pf-line">{compare.title[1]}</span>
+            <span className="pf-line">
+              <em>{compare.title[1]}</em>
+            </span>
           </h2>
+          <p className="pf-cmp-lead">{compare.lead}</p>
           <ul className="pf-legend">
             <li>
               <i className="is-ours" /> {compare.ours}
@@ -78,21 +82,39 @@ export default function CartonBars() {
           </ul>
           <p className="pf-compare-note">{compare.note}</p>
         </div>
-        <div className="pf-bars">
+
+        <div className="pf-cmp-table" role="table" aria-label={`${compare.ours} compared with ${compare.theirs}`}>
+          <span className="pf-cmp-highlight" aria-hidden />
+          <div className="pf-cmp-head" role="row">
+            <span role="columnheader">
+              <span className="sr-only">Measure</span>
+            </span>
+            <span role="columnheader" className="pf-cmp-col is-ours-col">
+              <i className="is-ours" /> {compare.ours}
+            </span>
+            <span role="columnheader" className="pf-cmp-col">
+              <i className="is-theirs" /> {compare.theirs}
+            </span>
+          </div>
           {compare.rows.map((r, i) => (
-            <div key={r.label} className="pf-bar" style={{ "--a": 1, "--b": 1 } as CSSProperties}>
-              <h3 className="font-display">
-                <span>{r.label}</span>
-                <span className="pf-bar-vals">
-                  <b data-ours>{r.ours}</b> <small>vs</small> <span data-theirs>{r.theirs}</span>
+            <div key={r.label} className="pf-bar" role="row" style={{ "--a": 1, "--b": 1 } as CSSProperties}>
+              <span role="rowheader" className="pf-cmp-label">
+                {r.label}
+              </span>
+              <span role="cell" className="pf-cmp-cell is-ours-cell">
+                <b data-ours>{r.ours}</b>
+                <small>{r.oursNote}</small>
+                <span className="pf-track" {...(i === FRUIT_ROW ? { "data-run-track": "" } : {})}>
+                  <i className={`is-ours ${r.a === 0 ? "is-dot" : ""}`} style={{ "--w": `${r.a}%` } as CSSProperties} />
                 </span>
-              </h3>
-              <div className="pf-track" {...(i === FRUIT_ROW ? { "data-run-track": "" } : {})}>
-                <i className={`is-ours ${r.a === 0 ? "is-dot" : ""}`} style={{ "--w": `${r.a}%` } as CSSProperties} />
-              </div>
-              <div className="pf-track">
-                <i className="is-theirs" style={{ "--w": `${r.b}%` } as CSSProperties} />
-              </div>
+              </span>
+              <span role="cell" className="pf-cmp-cell">
+                <b data-theirs>{r.theirs}</b>
+                <small>{r.theirsNote}</small>
+                <span className="pf-track">
+                  <i className="is-theirs" style={{ "--w": `${r.b}%` } as CSSProperties} />
+                </span>
+              </span>
             </div>
           ))}
         </div>

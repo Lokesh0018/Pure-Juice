@@ -4267,3 +4267,162 @@ html.is-static .pf-press-slice {
     background: #2f6a35;
   }
 }
+
+/* ═══ Benefits: "Pure Press vs store carton" comparison table ═════════════════ */
+@layer components {
+  .pf-compare {
+    height: 740px;
+  }
+  .pf-compare-side {
+    top: 120px;
+    width: 420px;
+  }
+  .pf-cmp-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid #34332f;
+    border-radius: 999px;
+    font: 500 13px/1 var(--font-body-family);
+    color: #c9c6bf;
+  }
+  .pf-cmp-eyebrow::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--tomato);
+  }
+  .pf-cmp-title {
+    margin-top: 20px;
+    font-size: 56px;
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+  }
+  .pf-cmp-title em {
+    font-family: "Instrument Serif", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: #ff8a55;
+  }
+  .pf-cmp-lead {
+    margin-top: 16px;
+    max-width: 380px;
+    font-size: 16px;
+    line-height: 1.55;
+    color: #b5b2ab;
+    text-wrap: pretty;
+  }
+  .pf-compare .pf-legend {
+    display: flex;
+    gap: 22px;
+    margin-top: 28px;
+    font-size: 14px;
+  }
+  .pf-compare-note {
+    margin-top: 18px;
+    width: 360px;
+    line-height: 1.5;
+  }
+
+  /* the table card */
+  .pf-cmp-table {
+    --label: 210px;
+    --pad: 28px;
+    position: absolute;
+    left: 540px;
+    right: 64px;
+    top: 104px;
+    padding: 0 var(--pad) 8px;
+    border: 1px solid #2c2b28;
+    border-radius: 24px;
+    background: #1d1d1c;
+    isolation: isolate;
+  }
+  /* soft highlight running down our column */
+  .pf-cmp-highlight {
+    position: absolute;
+    z-index: -1;
+    top: 12px;
+    bottom: 12px;
+    left: calc(var(--pad) + var(--label));
+    width: calc((100% - var(--pad) * 2 - var(--label)) / 2);
+    border: 1px solid rgba(232, 84, 30, 0.28);
+    border-radius: 18px;
+    background: linear-gradient(in oklch 180deg, rgba(232, 84, 30, 0.13), rgba(232, 84, 30, 0.04));
+  }
+  .pf-cmp-head,
+  .pf-compare .pf-bar {
+    display: grid;
+    grid-template-columns: var(--label) 1fr 1fr;
+  }
+  .pf-cmp-head {
+    align-items: center;
+    height: 72px;
+    border-bottom: 1px solid #2c2b28;
+  }
+  .pf-cmp-col {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 24px;
+    font: 600 15px/1 var(--font-body-family);
+    color: #c9c6bf;
+  }
+  .pf-cmp-col.is-ours-col {
+    color: #fff;
+  }
+  .pf-cmp-col i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  .pf-compare .pf-bar {
+    align-items: center;
+    min-height: 116px;
+    border-bottom: 1px solid #2c2b28;
+  }
+  .pf-compare .pf-bar:last-child {
+    border-bottom: 0;
+  }
+  .pf-cmp-label {
+    font: 500 16px/1.3 var(--font-body-family);
+    color: #c9c6bf;
+  }
+  .pf-cmp-cell {
+    display: grid;
+    gap: 4px;
+    padding: 0 24px;
+  }
+  .pf-cmp-cell b {
+    font: 600 26px/1.1 var(--font-display-family);
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    color: #e9e6df;
+  }
+  .pf-cmp-cell.is-ours-cell b {
+    color: #ff8a55;
+  }
+  .pf-cmp-cell small {
+    font: 500 13px/1.3 var(--font-body-family);
+    color: #8f8c86;
+  }
+  .pf-cmp-cell .pf-track {
+    display: block;
+    height: 6px;
+    margin: 10px 0 0;
+  }
+  .pf-cmp-cell .pf-track i.is-dot {
+    width: 6px;
+    height: 6px;
+  }
+  /* each cell holds one bar: ours fills with --a, theirs with --b */
+  .pf-compare .pf-cmp-cell.is-ours-cell .pf-track i:not(.is-dot) {
+    transform: scaleX(var(--a, 1));
+  }
+  .pf-compare .pf-cmp-cell:not(.is-ours-cell) .pf-track i {
+    transform: scaleX(var(--b, 1));
+  }
+}
