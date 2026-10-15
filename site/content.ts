@@ -199,18 +199,23 @@ export const mix = {
   title: ["Custom", "cold press."],
   lead: "Select three fresh botanicals from the crate. Our hydraulic press crafts your signature blend in seconds.",
   bins: [
-    { id: "orange", label: "Valencia Orange", liquid: "#F39A1E" },
-    { id: "apple-green", label: "Granny Smith", liquid: "#9CC54A" },
-    { id: "strawberry", label: "Hill Strawberry", liquid: "#E0313F" },
-    { id: "beet", label: "Organic Beetroot", liquid: "#7A1F45" },
-    { id: "carrot", label: "Sweet Carrot", liquid: "#E2561B" },
-    { id: "pineapple", label: "Queen Pineapple", liquid: "#F6C540" },
-    { id: "lime-half", label: "Persian Lime", liquid: "#B9D661" },
-    { id: "mint", label: "Garden Mint", liquid: "#6FAF5A" },
-    { id: "ginger", label: "Highland Ginger", liquid: "#EBCB6E" },
+    { id: "orange", label: "Valencia Orange", liquid: "#F39A1E", add: 20, kcal: 62, tag: "Vitamin C", nameA: "Sunrise", nameB: "Glow", juice: "orange" as Juice },
+    { id: "apple-green", label: "Granny Smith", liquid: "#9CC54A", add: 15, kcal: 52, tag: "Fibre", nameA: "Orchard", nameB: "Crisp", juice: "green" as Juice },
+    { id: "strawberry", label: "Hill Strawberry", liquid: "#E0313F", add: 30, kcal: 32, tag: "Antioxidants", nameA: "Berry", nameB: "Bloom", juice: "berry" as Juice },
+    { id: "beet", label: "Organic Beetroot", liquid: "#7A1F45", add: 20, kcal: 44, tag: "Iron", nameA: "Ruby", nameB: "Rush", juice: "beet" as Juice },
+    { id: "carrot", label: "Sweet Carrot", liquid: "#E2561B", add: 15, kcal: 25, tag: "Beta-carotene", nameA: "Harvest", nameB: "Root", juice: "orange" as Juice },
+    { id: "pineapple", label: "Queen Pineapple", liquid: "#F6C540", add: 20, kcal: 50, tag: "Digestion", nameA: "Tropic", nameB: "Splash", juice: "gold" as Juice },
+    { id: "lime-half", label: "Persian Lime", liquid: "#B9D661", add: 10, kcal: 11, tag: "Alkalising", nameA: "Zest", nameB: "Snap", juice: "green" as Juice },
+    { id: "mint", label: "Garden Mint", liquid: "#6FAF5A", add: 10, kcal: 4, tag: "Cooling", nameA: "Garden", nameB: "Breeze", juice: "green" as Juice },
+    { id: "ginger", label: "Highland Ginger", liquid: "#EBCB6E", add: 15, kcal: 8, tag: "Immunity", nameA: "Fire", nameB: "Kick", juice: "gold" as Juice },
   ],
+  eyebrow: "Build your own",
+  base: 99, // ₹ base price of a custom 300 ml bottle; each fruit adds its own `add`
+  // The demo blend (scroll picks these); ?static=1 shows it finished.
   picks: ["orange", "carrot", "ginger"],
-  blend: { name: ["Sunrise", "Vitality"], recipe: "Valencia orange + sweet carrot + highland ginger", price: 149 },
+  blend: { name: ["Sunrise", "Vitality"] },
+  waiting: "Pick three fruits",
+  reset: "Start over",
 };
 
 // ── Product detail ──────────────────────────────────

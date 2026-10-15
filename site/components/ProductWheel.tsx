@@ -9,6 +9,7 @@ import { Arrow, Bottle, Fruit, RollNumber, Stamp } from "./bits";
 const PIN = 700; // px pinned
 const FIT_H = 800; // px of window height the stage needs; shorter windows scale it down
 const NAV_H = 76; // the fixed nav: scaling is anchored just below it, so content never slides under it
+const DESIGN_W = 1440; // the stage is laid out at this width; narrower windows scale it down too
 const STEP_END = 0.72; // the drum reaches its last flavour here; the rest of the pin is for size + Add to bag
 const SMALL_H = 58; // px per wheel row when it is not the current flavour
 const BIG_H = 168; // px for the current flavour (two big lines)
@@ -52,7 +53,8 @@ export default function ProductWheel() {
   // the whole stage scales down (never up) and nothing (e.g. the ingredient row) falls below the screen
   useEffect(() => {
     const root = stage.current!;
-    const fit = () => root.style.setProperty("--fit", String(Math.min(1, (window.innerHeight - NAV_H) / (FIT_H - NAV_H))));
+    const fit = () =>
+      root.style.setProperty("--fit", String(Math.min(1, (window.innerHeight - NAV_H) / (FIT_H - NAV_H), document.documentElement.clientWidth / DESIGN_W)));
     fit();
     window.addEventListener("resize", fit);
     return () => window.removeEventListener("resize", fit);

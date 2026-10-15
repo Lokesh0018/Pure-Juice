@@ -5023,3 +5023,236 @@ html.is-static .pf-press-slice {
     margin-top: -40px;
   }
 }
+
+/* ═══ Custom cold press: header, priced fruit grid, blend board ═══════════════ */
+@layer components {
+  .pf-mix-copy {
+    top: 100px;
+  }
+  .pf-mix-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--card);
+    font: 500 13px/1 var(--font-body-family);
+  }
+  .pf-mix-eyebrow::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--tomato);
+  }
+  .pf-mix-title {
+    margin-top: 16px;
+    font-size: 64px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .pf-mix-title em {
+    font-family: "Instrument Serif", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .pf-mix .pf-mix-lead {
+    margin-top: 14px;
+    width: 440px;
+    font-size: 16px;
+  }
+  .pf-mix .pf-crate {
+    top: 420px;
+  }
+
+  /* each fruit shows its add-on */
+  .pf-bin {
+    cursor: pointer;
+  }
+  .pf-bin-add {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    z-index: 1;
+    padding: 4px 7px;
+    border-radius: 999px;
+    background: var(--card);
+    font: 600 11px/1 var(--font-body-family);
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-muted);
+  }
+  .pf-bin.is-on .pf-bin-add {
+    color: var(--tomato-deep);
+  }
+  .pf-bin:focus-visible {
+    outline: 2px solid var(--tomato);
+    outline-offset: 2px;
+  }
+
+  /* the blend board */
+  .pf-board {
+    justify-content: flex-start;
+    gap: 0;
+    padding: 30px 32px 32px;
+    text-align: center;
+  }
+  .pf-board-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .pf-board-reset {
+    font: 500 13px/1 var(--font-body-family);
+    color: #b5b2ab;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    transition: color 0.2s var(--ease-out);
+  }
+  .pf-board-reset:hover {
+    color: #fff;
+  }
+  .pf-board-name {
+    margin: 30px 0 14px;
+    font-size: 68px;
+  }
+  .pf-board-recipe {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+  }
+  .pf-board-recipe em {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    font: 500 13px/1 var(--font-body-family);
+    font-style: normal;
+    color: #e9e6df;
+  }
+  .pf-board-recipe em::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--c);
+  }
+  .pf-board-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .pf-board-tags i {
+    padding: 5px 9px;
+    border: 1px solid #3a3936;
+    border-radius: 999px;
+    font: 500 12px/1 var(--font-body-family);
+    font-style: normal;
+    color: #b5b2ab;
+  }
+  .pf-board-price {
+    display: grid;
+    justify-items: center;
+    letter-spacing: 0;
+    gap: 6px;
+    margin: 26px 0 22px;
+  }
+  .pf-board-price b {
+    font: 600 60px/1 var(--font-display-family);
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+    color: #fff;
+  }
+  .pf-board-price small {
+    font: 500 13px/1 var(--font-body-family);
+    letter-spacing: 0.01em;
+    color: #8f8c86;
+  }
+
+  /* while picking: three slots fill with the chosen fruits */
+  .pf-board-slots {
+    display: flex;
+    gap: 14px;
+    margin: 6px 0 22px;
+  }
+  .pf-board-slot {
+    display: grid;
+    place-items: center;
+    width: 76px;
+    height: 76px;
+    border: 1.5px dashed #4a4844;
+    border-radius: 50%;
+    font: 600 15px/1 var(--font-body-family);
+    color: #6e6b65;
+    transition: border-color 0.3s var(--ease-out), background-color 0.3s var(--ease-out);
+  }
+  .pf-board-slot.is-on {
+    border-style: solid;
+    border-color: var(--tomato);
+    background: rgba(232, 84, 30, 0.12);
+  }
+  .pf-board-slot img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    animation: pf-swap 0.35s var(--ease-out) both;
+  }
+  .pf-board-hint {
+    font: 500 14px/1.4 var(--font-body-family);
+    color: #b5b2ab;
+  }
+}
+
+/* custom cold press: compact layout that fits the screen + fit scaling for short windows (see MixCrate FIT_H) */
+@layer components {
+  .pf-mix.pf-sticky {
+    min-height: 0;
+  }
+  .pf-mix > .pf-stage {
+    transform: scale(var(--fit, 1));
+    transform-origin: 50% 76px;
+  }
+  .pf-mix .pf-mix-copy {
+    top: 96px;
+  }
+  .pf-mix .pf-mix-title {
+    font-size: 58px;
+  }
+  .pf-mix .pf-crate {
+    top: 360px;
+  }
+  .pf-mix .pf-bin {
+    height: 116px;
+  }
+  .pf-mix .pf-mix-bottle {
+    left: 650px;
+    top: 200px;
+    width: 214px;
+  }
+  .pf-mix .pf-board {
+    top: 180px;
+    height: 560px;
+  }
+}
+
+/* pinned product + mix stages: always the 1440-wide design, centred, scaled by --fit (height and width) */
+@layer components {
+  .pf-mix > .pf-stage,
+  .pf-pdp > .pf-stage {
+    position: relative;
+    left: 50%;
+    width: 1440px;
+    max-width: none;
+    margin-inline: 0;
+    transform: translateX(-50%) scale(var(--fit, 1));
+    transform-origin: 50% 76px;
+  }
+}
