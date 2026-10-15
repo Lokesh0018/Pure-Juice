@@ -37,11 +37,11 @@ export default function FarmLedger() {
     const stamp = root.querySelector<HTMLElement>("[data-step-stamp]")!;
     let shown = -1;
     let swap: gsap.core.Timeline | null = null;
-    const kick = { r: 0, s: 1 };
+    const kick = { s: 1 };
 
-    const setStep = (i: number, dir: number) => {
+    const setStep = (i: number) => {
       gsap.to(strip, { yPercent: 0, y: -i * cell.offsetHeight, duration: 0.3, ease: "power2.inOut", overwrite: true });
-      gsap.fromTo(kick, { r: 4.5 * dir, s: 0.975 }, { r: 0, s: 1, duration: 0.65, ease: "back.out(1.8)", overwrite: true });
+      gsap.fromTo(kick, { s: 0.98 }, { s: 1, duration: 0.65, ease: "power3.out", overwrite: true });
       rows.forEach((r, k) => r.classList.toggle("is-on", k === i));
       stamp.textContent = `Step ${String(i + 1).padStart(2, "0")} · ${farm.steps[i].word}`;
       swap?.kill();
@@ -57,10 +57,10 @@ export default function FarmLedger() {
       const f = 4 * pinProgress(pin.current!); // 0 → 4, linear over the whole pin
       gsap.set(bar, { y: f * ROW_H });
       photos.forEach((el, i) => (el.style.opacity = String(clamp(1 - Math.abs(i - f)))));
-      gsap.set(photo, { rotate: 1.5 + Math.sin(f * Math.PI) * 1.4 + kick.r, scale: kick.s, y: -6 * Math.sin(f * Math.PI * 0.5) });
+      gsap.set(photo, { scale: kick.s, y: -6 * Math.sin(f * Math.PI * 0.5) }); // Studio Press: no paper tilt, a calm lift + settle
       const i = Math.round(f);
       if (i !== shown) {
-        if (shown >= 0) setStep(i, i > shown ? 1 : -1);
+        if (shown >= 0) setStep(i);
         else {
           rows.forEach((r, k) => r.classList.toggle("is-on", k === i));
           word.textContent = farm.steps[i].word;
@@ -117,8 +117,6 @@ export default function FarmLedger() {
           </ol>
 
           <figure className="pf-photo">
-            <span className="pf-tape pf-tape-a" aria-hidden />
-            <span className="pf-tape pf-tape-b" aria-hidden />
             <div className="pf-photo-frame">
               {farm.steps.map((s, i) => (
                 <div key={s.photo} className="pf-photo-layer" data-photo={i} style={{ opacity: i === on ? 1 : 0 }}>

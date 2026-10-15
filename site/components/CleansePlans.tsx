@@ -20,7 +20,7 @@ export default function CleansePlans() {
       <div className="pf-stage">
         <figure className="pf-plans-pic">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={img("crate-box")} alt="A wooden crate of cold-pressed juice bottles on kraft paper" data-orange-bottle="427,400" />
+          <img src={img("crate-box")} alt="A box of eight cold-pressed juice bottles with fresh oranges" data-orange-bottle="427,400" />
           <Stamp className="pf-plans-stamp">{plans.stamp}</Stamp>
         </figure>
 

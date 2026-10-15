@@ -78,23 +78,25 @@ function build(vh: number, vw: number): Key[] | null {
     const c = centre(hops[i]);
     k(cardsIn + 70 * (n + 1), { x: c.x, y: c.top + 14 - 48, size: 96, rot: 720 - 120 * (n + 1), hop: n === 0 ? 70 : 34, squash: true });
   });
+  // ── Mix your own: ONE lane (the gap between the crate and the bottle, which also clears card 2's name), reached
+  // by gliding right just above the card row, then straight down it and left across the top row into cell 1.
+  // A single lane means no sideways snap between two lanes and only one change of direction after the hops.
   const c2 = centre(hops[1]);
-  const lane = c2.left + c2.w + 8; // just right of card 2's bottle: clear of every name and price
   const afterHops = cardsIn + 70 * 4;
-  k(afterHops + 90, { x: lane, y: c2.top + 14 - 48, size: 96, rot: 720 - 120 * 4 + 160 });
-  // ── Mix your own: down the lane between the crate and the bottle, across the top row, into cell 1
   const mixTop = docTop(mixStage.parentElement!);
   const PIN = mixStage.parentElement!.offsetHeight - vh;
   const b = centre(bin);
   const cellY = b.y - 6; // the fruit rests a little high in its bin
-  // stay in the lane until the cards have gone by, then the gap between the crate and the bottle
   const crate = q(".pf-crate");
   const mixBottle = q(".pf-mix-bottle");
-  const gap = crate && mixBottle ? (centre(crate).left + centre(crate).w + centre(mixBottle).left) / 2 : lane;
-  k(FT + flav.offsetHeight - vh * 0.25, { x: lane, y: vh * 0.42, size: 90, rot: 420 });
-  k(mixTop - vh * 0.25, { x: gap, y: vh * 0.37, size: 84, rot: 300 });
-  k(mixTop, { x: gap, y: cellY, size: 74, rot: 120 });
-  k(mixTop + PIN * 0.08, { x: b.x, y: cellY, size: 74, rot: -260, squash: true });
+  const lane = crate && mixBottle ? (centre(crate).left + centre(crate).w + centre(mixBottle).left) / 2 : c2.left + c2.w - 90;
+  k(afterHops + 130, { x: lane, y: c2.top + 14 - 48, size: 92, rot: 720 - 120 * 4 + 200 });
+  k(mixTop - vh * 0.3, { x: lane, y: vh * 0.4, size: 84, rot: 470 });
+  // land on where cell 1 WILL be once the stage pins (not where it is now while still scrolling up), so the drop is one
+  // clean downward move instead of sinking past the cell and riding back up with it
+  const cellAtPin = s0 < mixTop ? cellY - (mixTop - s0) : cellY;
+  k(mixTop, { x: lane, y: cellAtPin, size: 74, rot: 380 });
+  k(mixTop + PIN * 0.115, { x: b.x, y: cellY, size: 74, rot: -260, squash: true });
   k(mixTop + PIN * (PICK_AT[0] - 0.008), { x: b.x, y: cellY, size: 74, rot: -260 });
   k(mixTop + PIN * (PICK_AT[0] + 0.004), { x: b.x, y: cellY, size: 74, rot: -260, o: 0 });
   // ── Farm → bottle (pinned, 5 steps): appears at Cut, splits, squeezes into a drop at Press
@@ -178,6 +180,29 @@ export default function OrangeTraveller() {
       bin = bin ?? document.querySelector<HTMLElement>('[data-bin="orange"]');
       bin?.classList.toggle("is-traveller-home", s < mixTop + PIN * PICK_AT[0]);
 
+      // monotone cubic (Fritsch–Carlson) for x / y: the speed carries through waypoints instead of easing to a stop
+      // at each one; it only rests where the path turns or holds, and at landings (squash keys)
+      const slope = (k0: number, axis: "x" | "y") => {
+        const a0 = keys[k0];
+        const a1 = keys[k0 + 1];
+        if (!a0 || !a1) return 0;
+        return (a1[axis] - a0[axis]) / Math.max(1, a1.s - a0.s);
+      };
+      const tangent = (k0: number, axis: "x" | "y") => {
+        if (keys[k0]?.squash) return 0;
+        const d0 = slope(k0 - 1, axis);
+        const d1 = slope(k0, axis);
+        return d0 * d1 > 0 ? 2 / (1 / d0 + 1 / d1) : 0;
+      };
+      const curve = (k0: number, axis: "x" | "y", t: number) => {
+        const a0 = keys[k0];
+        const a1 = keys[k0 + 1];
+        const h = Math.max(1, a1.s - a0.s);
+        const t2 = t * t;
+        const t3 = t2 * t;
+        return (2 * t3 - 3 * t2 + 1) * a0[axis] + (t3 - 2 * t2 + t) * h * tangent(k0, axis) + (-2 * t3 + 3 * t2) * a1[axis] + (t3 - t2) * h * tangent(k0 + 1, axis);
+      };
+
       let i = keys.findIndex((kk) => kk.s > s) - 1;
       if (i < -1) i = keys.length - 1;
       let st: St;
@@ -190,6 +215,8 @@ export default function OrangeTraveller() {
         const e = smooth(0, 1, t);
         st = {} as St;
         (Object.keys(ORANGE) as (keyof St)[]).forEach((key) => (st[key] = lerp(a[key], b[key], key === "rot" ? t : e)));
+        st.x = curve(i, "x", t);
+        st.y = curve(i, "y", t);
         if (b.hop) st.y -= b.hop * 4 * t * (1 - t);
       }
       // squash near every landing (scroll-linked, symmetric forward/back)

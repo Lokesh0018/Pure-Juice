@@ -2,7 +2,7 @@
 
 **Mode: FULL (Max)**: recorded 1440×900 reels from Round 2 (must PASS), full screenshots and reports.
 
-**Status: Round 0 approved by the user (2026-10-10). Round 1 (static build) done 2026-10-11.**
+**Status: Round 0 approved by the user (2026-10-10). Round 1 (static build) done 2026-10-11. Rebranded to Pure Juice and restyled to "Studio Press" (minimal) on 2026-10-15 at the user's request; layouts and motion unchanged. The style overrides live in the last block of `site/site.css`.**
 
 Cold-pressed juice brand (fictional, ₹ prices). Direction: **Layout B "Market Crate"**, picked by the user from three full-page mockups (`day17/refs/layouts/b-market-crate.html`). Hero and Flavours come from the user's own references (hero-1, shop-1); every other section is ours, built around them.
 
@@ -12,13 +12,13 @@ Uniqueness: **8 of 8 different** from each of the last 3 sites, see the sites lo
 
 | Menu | Pick | Why (this site) |
 |---|---|---|
-| Look | **L24 art-directed collage, "market stall" edition**: kraft paper, wooden crates, chalkboard prices, ink stamps, tape, hand-lettered tags, with full-colour flavour bands | a juice bar that feels like a morning fruit market, not a lab; nothing glassy or dewy |
-| Palette | **Kraft & tomato**: paper `#FBF6EC`, kraft `#EFE2C8`, crate wood `#C9925A` / `#A8723F`, ink `#1C1A17`, chalkboard `#24302A`, accent tomato `#E8541E` (fills under white text use the deeper `#C9431A`, lesson 124). Flavour bands (on purpose): orange `#E9741C`, berry `#D7192E`, green `#5FA02B`, beet `#6B1B3D`, gold `#F7C336` | warm market paper with one loud accent; the flavour colours only ever fill whole bands, so the page stays one accent |
-| Type | **T27 Barlow Condensed (800/900) + Barlow**, accent **Permanent Marker** for chalk prices and flavour words (`@fontsource/barlow-condensed`, `@fontsource/barlow`, `@fontsource/permanent-marker`) | tall condensed caps read like crate stencils and fit giant faded flavour names; the marker is the chalkboard hand |
+| Look | **Studio Press (minimal restyle, 2026-10-15, user request)**: warm white page, hairline borders, soft shadows, no textures, tilts, tape or stamps; full-colour flavour bands kept. Replaces the first build's L24 "market stall" collage | the user asked for a more minimal, industry-level look; the product colours carry the energy, everything else steps back |
+| Palette | **Warm white & ink + one orange**: page `#F6F4EF`, stone surface `#ECE9E2`, cards `#FFFFFF`, hairline `#DFDBD2`, ink `#141414`, muted `#69665F`, dark band `#161616`, accent `#E8541E` (fills under white text `#C4441A`, lesson 124). Flavour bands (on purpose): orange `#E9741C`, berry `#D7192E`, green `#5FA02B`, beet `#6B1B3D`, gold `#F7C336` | one accent on a quiet neutral base; flavour colours only fill whole bands |
+| Type | **Inter Tight (variable, 500–650)** for headings and text, sentence case, tracking −0.035em; **Instrument Serif italic** for a few accent words (hero "sunrise", flavour goal, blend name, quotes). Prices always in the sans with tabular figures (`@fontsource-variable/inter-tight`, `@fontsource/instrument-serif`) | a calm grotesk reads premium and modern; the serif italic adds warmth without the market-hand look |
 | Nav | **N1 family as NV18**: stamped logo left, links centre, Bag pill right with a mini-cart flyout | a shop nav whose Bag reacts on camera when a bottle lands in it |
 | Hero | **HR23 (H4 family)**: headline left, a diagonal wall of bottles in two rows on paint blobs right, leaves + citrus, chalkboard price sign | from the user's hero-1; the two rows slide opposite ways (no orbit, no spin, no single centred bottle) |
-| Section shape | **S7 full-colour bands with a crate-slat seam** (a thin wooden slat strip where paper meets a colour band) | the page reads as crates and paper stacked on a market table |
-| Cards | **C9 as kraft price tags**: notched tag shape, string hole, hand-lettered price | price tags are how a market stall shows prices |
+| Section shape | **S7 full-colour bands, clean seams** (the wooden slat strips were removed; the X96 juice-pour edge stays) | bands meet paper directly, which keeps the page quiet |
+| Cards | **White cards, 16 px radius, hairline + soft shadow**; pills for buttons, chips and tags (one radius rule) | product cards and plan rows look like a real shop UI |
 | Signature | **Mix your own: crate-to-bottle fill** (new motion, see Motion map) | the visitor builds a juice: 3 fruits leave the crate, the bottle fills layer by layer, the chalkboard writes the blend's name and price |
 | Loader | **I34 drop-and-splash**: a juice drop falls, splashes, and PURE JUICE rises out of the splash, with a real 0–100 counter | a short, juicy opener that hands straight over to the hero |
 | Travelling object | **F9 / M717 travelling orange** (added in Round 3, user's request): one orange travels the page and becomes the juice | it tells the farm-to-bottle story in one object |

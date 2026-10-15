@@ -208,7 +208,6 @@ export default function FlavourStage() {
                 data-hop={i}
                 {...(i === 0 ? { "data-hover-demo": "", "data-hover-hold": "0.8", "data-hover-label": "Price tag" } : {})}
               >
-                <span className="pf-tag-hole" aria-hidden />
                 <span className="pf-tag-text">
                   <b className="font-display">{p.name}</b>
                   <small>

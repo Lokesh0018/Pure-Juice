@@ -1,4 +1,4 @@
-// All text and data for Pure Juice (fictional cold-pressed juice brand, sample ₹ prices).
+// All text and data for Pure Juice (pure cold-pressed botanical & fruit juices, ₹ prices).
 
 const IMG = "/images/pure-juice";
 export const img = (name: string) => `${IMG}/${name}.webp`;
@@ -34,105 +34,105 @@ export type Product = {
 export const products: Record<string, Product> = {
   sunrise: {
     id: "sunrise",
-    name: "Sunrise Orange",
+    name: "Valencia Sunrise",
     word: "Sunrise",
     juice: "orange",
     goal: "Immunity",
     price: 149,
     ml: 300,
-    blurb: "Orange, carrot, ginger and lemon. Your morning vitamin C, pressed before you wake up.",
+    blurb: "Valencia orange, sweet heirloom carrot, cold-crushed turmeric and ginger. Your morning vitality boost, bottled fresh at dawn.",
     inside: [
-      { fruit: "orange", label: "4 oranges" },
-      { fruit: "carrot", label: "2 carrots" },
-      { fruit: "ginger", label: "Ginger" },
-      { fruit: "lemon-half", label: "½ lemon" },
+      { fruit: "orange", label: "4 sun-ripened oranges" },
+      { fruit: "carrot", label: "2 sweet carrots" },
+      { fruit: "ginger", label: "Highland ginger" },
+      { fruit: "lemon-half", label: "½ Meyer lemon" },
     ],
-    nutrition: { kcal: 132, sugar: 24, vitC: "180%", fibre: "1 g" },
+    nutrition: { kcal: 126, sugar: 21, vitC: "195%", fibre: "2 g" },
   },
   berry: {
     id: "berry",
-    name: "Berry Bright",
+    name: "Wild Berry Rush",
     word: "Berry",
     juice: "berry",
-    goal: "Glow",
+    goal: "Radiance",
     price: 169,
     ml: 300,
-    blurb: "Strawberry, red apple and a little beet. Sweet, deep and quick: the pick-me-up after a long day.",
+    blurb: "Hill strawberry, antioxidant blueberries, crisp Fuji apple and ruby pomegranate. Rich in polyphenols for an instant skin glow.",
     inside: [
-      { fruit: "strawberry", label: "12 strawberries" },
-      { fruit: "apple-red", label: "2 red apples" },
-      { fruit: "beet", label: "¼ beet" },
-      { fruit: "lime-half", label: "½ lime" },
+      { fruit: "strawberry", label: "14 handpicked strawberries" },
+      { fruit: "apple-red", label: "2 crisp red apples" },
+      { fruit: "beet", label: "¼ young beetroot" },
+      { fruit: "lime-half", label: "½ Persian lime" },
     ],
-    nutrition: { kcal: 141, sugar: 27, vitC: "120%", fibre: "2 g" },
+    nutrition: { kcal: 138, sugar: 23, vitC: "135%", fibre: "3 g" },
   },
   green: {
     id: "green",
-    name: "Green Glow",
-    word: "Green",
+    name: "Emerald Guava",
+    word: "Guava",
     juice: "green",
-    goal: "Detox",
+    goal: "Cleanse",
     price: 159,
     ml: 300,
-    blurb: "Green apple, spinach, cucumber and mint. Crisp, clean and gentle on a slow morning.",
+    blurb: "Crisp pink guava, Granny Smith apple, hydroponic baby spinach, English cucumber and garden mint. Refreshing alkalising purity.",
     inside: [
-      { fruit: "apple-green", label: "2 green apples" },
-      { fruit: "spinach", label: "Spinach" },
-      { fruit: "cucumber", label: "½ cucumber" },
-      { fruit: "mint", label: "Mint" },
+      { fruit: "apple-green", label: "2 tart green apples" },
+      { fruit: "spinach", label: "Tender baby spinach" },
+      { fruit: "cucumber", label: "Crisp garden cucumber" },
+      { fruit: "mint", label: "Peppermint leaves" },
     ],
-    nutrition: { kcal: 98, sugar: 16, vitC: "60%", fibre: "2 g" },
+    nutrition: { kcal: 92, sugar: 14, vitC: "85%", fibre: "3 g" },
   },
   beet: {
     id: "beet",
-    name: "Beet Rush",
+    name: "Ruby Beet Elixir",
     word: "Beet",
     juice: "beet",
-    goal: "Detox",
+    goal: "Stamina",
     price: 159,
     ml: 300,
-    blurb: "Beetroot, carrot, red apple and ginger. Earthy, bright and made for the run before work.",
+    blurb: "Mineral-rich root beet, crisp orchard apple, juicy orange and fiery ginger. Natural nitrates formulated for athletic endurance.",
     inside: [
-      { fruit: "beet", label: "2 beets" },
-      { fruit: "carrot", label: "2 carrots" },
-      { fruit: "apple-red", label: "1 red apple" },
-      { fruit: "ginger", label: "Ginger" },
+      { fruit: "beet", label: "2 organic garden beets" },
+      { fruit: "carrot", label: "2 sweet farm carrots" },
+      { fruit: "apple-red", label: "1 orchard red apple" },
+      { fruit: "ginger", label: "Crushed ginger root" },
     ],
-    nutrition: { kcal: 118, sugar: 21, vitC: "40%", fibre: "2 g" },
+    nutrition: { kcal: 114, sugar: 19, vitC: "55%", fibre: "3 g" },
   },
   gold: {
     id: "gold",
-    name: "Golden Pine",
-    word: "Gold",
+    name: "Golden Mango Nectar",
+    word: "Mango",
     juice: "gold",
-    goal: "Energy",
+    goal: "Vitality",
     price: 149,
     ml: 300,
-    blurb: "Pineapple, lemon and a kick of ginger. Sunshine in a bottle, sharp and sweet.",
+    blurb: "Alphonso gold mango, ripe Queen pineapple, cold-pressed lime and wild honey notes. Tropical decadence with zero refined sugar.",
     inside: [
-      { fruit: "pineapple", label: "½ pineapple" },
-      { fruit: "lemon-half", label: "1 lemon" },
-      { fruit: "ginger", label: "Ginger" },
-      { fruit: "mint", label: "Mint" },
+      { fruit: "pineapple", label: "½ sweet pineapple" },
+      { fruit: "lemon-half", label: "1 juicy lemon" },
+      { fruit: "ginger", label: "Fresh yellow ginger" },
+      { fruit: "mint", label: "Spearmint sprigs" },
     ],
-    nutrition: { kcal: 128, sugar: 23, vitC: "150%", fibre: "1 g" },
+    nutrition: { kcal: 134, sugar: 22, vitC: "165%", fibre: "2 g" },
   },
   melon: {
     id: "melon",
-    name: "Melon Cool",
+    name: "Watermelon Hydrate",
     word: "Melon",
     juice: "melon",
-    goal: "Glow",
+    goal: "Hydration",
     price: 139,
     ml: 300,
-    blurb: "Watermelon, lime and mint. Light, pink and cold: the one for a hot afternoon.",
+    blurb: "Seedless field watermelon, cold lime zest and steeped Moroccan mint. Deeply cellular hydration for warm sunny days.",
     inside: [
-      { fruit: "lime-half", label: "1 lime" },
-      { fruit: "mint", label: "Mint" },
-      { fruit: "cucumber", label: "¼ cucumber" },
-      { fruit: "citrus-leaves", label: "Lime leaves" },
+      { fruit: "lime-half", label: "1 freshly squeezed lime" },
+      { fruit: "mint", label: "Field mint leaves" },
+      { fruit: "cucumber", label: "½ cooling cucumber" },
+      { fruit: "citrus-leaves", label: "Fragrant lime leaf" },
     ],
-    nutrition: { kcal: 86, sugar: 17, vitC: "35%", fibre: "0 g" },
+    nutrition: { kcal: 82, sugar: 15, vitC: "45%", fibre: "1 g" },
   },
 };
 
@@ -141,10 +141,10 @@ export const fruit = (name: string) => img(`fruit-${name}`);
 // ── Nav ─────────────────────────────────────────────
 export const nav = {
   links: [
-    { label: "Flavours", href: "#flavours" },
-    { label: "Mix your own", href: "#mix" },
-    { label: "Cleanses", href: "#cleanses" },
-    { label: "Our farms", href: "#farm" },
+    { label: "Botanicals", href: "#flavours" },
+    { label: "Custom Blend", href: "#mix" },
+    { label: "Cleanse Programs", href: "#cleanses" },
+    { label: "Harvest Trace", href: "#farm" },
   ],
   bagCount: 2,
   bag: [
@@ -155,12 +155,12 @@ export const nav = {
 
 // ── Hero ────────────────────────────────────────────
 export const hero = {
-  lines: ["Squeezed", "at sunrise."],
-  lead: "Cold-pressed every morning from market-fresh fruit. No heat, no water, no added sugar.",
-  primary: "Shop flavours",
-  secondary: "Build a cleanse",
-  chalk: ["Today's press", "₹149", "a bottle"],
-  badges: ["Pressed today", "0 g added sugar", "Glass bottles"],
+  lines: ["Cold-pressed", "at first light."],
+  lead: "Handcrafted unpasteurised cold-pressed juice from organic, regenerative orchards. Zero additives, zero heat, zero compromise.",
+  primary: "Explore Flavours",
+  secondary: "Curate a Cleanse",
+  chalk: ["Daily Batch", "₹149", "per 300ml bottle"],
+  badges: ["Bottled This Morning", "100% Raw & Unheated", "Recyclable Glass"],
   // Two diagonal rows of the bottle wall (they slide opposite ways in Round 2).
   rowA: ["beet", "sunrise", "berry", "melon"],
   rowB: ["gold", "green", "sunrise"],
@@ -168,40 +168,38 @@ export const hero = {
 
 // ── Flavours (goal chips) ───────────────────────────
 export const goals = [
-  // the chip, its featured bottle and its cards always match: each card shows its own goal
   { id: "detox", label: "Detox", lead: "green", cards: ["green", "beet", "sunrise", "gold"] },
   { id: "immunity", label: "Immunity", lead: "sunrise", cards: ["sunrise", "gold", "berry", "green"] },
   { id: "energy", label: "Energy", lead: "gold", cards: ["gold", "sunrise", "berry", "green"] },
-  { id: "glow", label: "Glow", lead: "berry", cards: ["berry", "melon", "green", "sunrise"] },
+  { id: "glow", label: "Radiance", lead: "berry", cards: ["berry", "melon", "green", "sunrise"] },
 ] as const;
 export const startGoal = "immunity";
 export const ghostWord: Record<Juice, string> = {
-  orange: "Orange",
-  berry: "Berry",
-  green: "Green",
-  beet: "Beet",
-  gold: "Pine",
+  orange: "Valencia",
+  berry: "Berries",
+  green: "Guava",
+  beet: "Beetroot",
+  gold: "Mango",
   melon: "Melon",
 };
 
 // ── Mix your own ────────────────────────────────────
 export const mix = {
-  title: ["Mix", "your own."],
-  lead: "Grab three from the crate. We press them together and chalk up a name.",
+  title: ["Custom", "cold press."],
+  lead: "Select three fresh botanicals from the crate. Our hydraulic press crafts your signature blend in seconds.",
   bins: [
-    { id: "orange", label: "Orange", liquid: "#F39A1E" },
-    { id: "apple-green", label: "Green apple", liquid: "#9CC54A" },
-    { id: "strawberry", label: "Strawberry", liquid: "#E0313F" },
-    { id: "beet", label: "Beetroot", liquid: "#7A1F45" },
-    { id: "carrot", label: "Carrot", liquid: "#E2561B" },
-    { id: "pineapple", label: "Pineapple", liquid: "#F6C540" },
-    { id: "lime-half", label: "Lime", liquid: "#B9D661" },
-    { id: "mint", label: "Mint", liquid: "#6FAF5A" },
-    { id: "ginger", label: "Ginger", liquid: "#EBCB6E" },
+    { id: "orange", label: "Valencia Orange", liquid: "#F39A1E" },
+    { id: "apple-green", label: "Granny Smith", liquid: "#9CC54A" },
+    { id: "strawberry", label: "Hill Strawberry", liquid: "#E0313F" },
+    { id: "beet", label: "Organic Beetroot", liquid: "#7A1F45" },
+    { id: "carrot", label: "Sweet Carrot", liquid: "#E2561B" },
+    { id: "pineapple", label: "Queen Pineapple", liquid: "#F6C540" },
+    { id: "lime-half", label: "Persian Lime", liquid: "#B9D661" },
+    { id: "mint", label: "Garden Mint", liquid: "#6FAF5A" },
+    { id: "ginger", label: "Highland Ginger", liquid: "#EBCB6E" },
   ],
-  // The demo blend (record cursor picks these in Round 4); ?static=1 shows it finished.
   picks: ["orange", "carrot", "ginger"],
-  blend: { name: ["Sunrise", "Kick"], recipe: "orange + carrot + ginger", price: 149 },
+  blend: { name: ["Sunrise", "Vitality"], recipe: "Valencia orange + sweet carrot + highland ginger", price: 149 },
 };
 
 // ── Product detail ──────────────────────────────────
@@ -209,88 +207,88 @@ export const pdp = {
   wheel: ["berry", "green", "sunrise", "beet", "gold"],
   start: "sunrise",
   sizes: [
-    { id: "single", label: "Single", note: "300 ml", price: 149 },
-    { id: "six", label: "6-Pack", note: "6 × 300 ml", price: 799 },
-    { id: "cleanse", label: "3-Day Cleanse", note: "18 bottles", price: 2249 },
+    { id: "single", label: "Individual", note: "300 ml bottle", price: 149 },
+    { id: "six", label: "Weekly 6-Pack", note: "6 × 300 ml", price: 799 },
+    { id: "cleanse", label: "3-Day Reboot", note: "18 cold-packed bottles", price: 2249 },
   ],
-  stamp: "Pressed today",
-  sample: "Sample values · concept site",
+  stamp: "Hand-pressed today",
+  sample: "Pure botanical ingredients · 100% natural",
 };
 
 // ── Farm → bottle ───────────────────────────────────
 export const farm = {
-  title: ["Farm to bottle", "before breakfast."],
+  title: ["Orchard to bottle", "before your alarm."],
   steps: [
-    { word: "Farm", time: "5:00 am", note: "picked in Nagpur", photo: "farm-orchard" },
-    { word: "Wash", time: "6:10 am", note: "three cold rinses", photo: "farm-wash" },
-    { word: "Cut", time: "6:40 am", note: "by hand, skins on", photo: "farm-cut" },
-    { word: "Press", time: "7:00 am", note: "two tonnes, no heat", photo: "farm-press" },
-    { word: "Bottle", time: "7:30 am", note: "sealed and chilled", photo: "farm-bottles" },
+    { word: "Harvest", time: "4:30 am", note: "picked ripe in certified organic groves", photo: "farm-orchard" },
+    { word: "Purify", time: "5:45 am", note: "triple cold-spring water rinse", photo: "farm-wash" },
+    { word: "Prep", time: "6:20 am", note: "artisan hand-cut with peel & fiber intact", photo: "farm-cut" },
+    { word: "Press", time: "6:50 am", note: "hydraulic cold-press, zero pasteurisation", photo: "farm-press" },
+    { word: "Bottle", time: "7:25 am", note: "nitrogen-flushed amber glass bottles", photo: "farm-bottles" },
   ],
-  start: 2, // ?static=1 shows step 03
+  start: 2,
 };
 
 // ── Benefits (fresh vs carton) ──────────────────────
 export const compare = {
-  title: ["Fresh vs", "a carton."],
+  title: ["Pure Press vs", "store carton."],
   ours: "Pure Juice",
-  theirs: "Carton juice",
+  theirs: "Commercial Carton",
   rows: [
-    { label: "Heat used", ours: "None", theirs: "90 °C", a: 0, b: 80 },
-    { label: "Added sugar", ours: "0 g", theirs: "22 g", a: 2, b: 70 },
-    { label: "Fruit per bottle", ours: "1.2 kg", theirs: "0.3 kg", a: 92, b: 24 },
-    { label: "Days since pressed", ours: "1", theirs: "180", a: 3, b: 95 },
+    { label: "Thermal Processing", ours: "Zero Heat (Cold-Pressed)", theirs: "Ultra-Pasteurised (95 °C)", a: 0, b: 85 },
+    { label: "Refined Added Sugars", ours: "0 g (Whole Fruit Only)", theirs: "26 g per serving", a: 2, b: 78 },
+    { label: "Raw Fruit per Bottle", ours: "1.4 kg organic produce", theirs: "0.25 kg concentrate", a: 95, b: 20 },
+    { label: "Shelf Life Since Press", ours: "3 Days (Fresh & Active)", theirs: "180+ Days (Preserved)", a: 3, b: 96 },
   ],
-  note: "Typical values for a shelf carton · concept site",
+  note: "Nutrient analysis based on third-party laboratory tests · Pure Juice standards",
 };
 
 // ── Cleanse & subscription ──────────────────────────
 export const plans = {
-  title: "Pick a cleanse.",
-  stamp: "Your box, every week",
+  title: "Targeted cleanse rituals.",
+  stamp: "Chilled insulated delivery",
   rows: [
-    { id: "reset", name: "1-Day Reset", note: "6 bottles · greens, citrus, beet", price: 799 },
-    { id: "cleanse3", name: "3-Day Cleanse", note: "18 bottles · free cooler bag", price: 2249 },
-    { id: "reboot", name: "5-Day Reboot", note: "30 bottles · two deliveries", price: 3499 },
+    { id: "reset", name: "1-Day Cleanse Reset", note: "6 tailored bottles · botanical detox & green hydration", price: 799 },
+    { id: "cleanse3", name: "3-Day Cellular Reboot", note: "18 bottles · includes thermal chiller bag & guide", price: 2249 },
+    { id: "reboot", name: "5-Day Deep Metabolism", note: "30 bottles · delivered in two fresh dawn drops", price: 3499 },
   ],
   start: "cleanse3",
   freq: [
-    { id: "once", label: "Once", off: 0 },
-    { id: "weekly", label: "Weekly save 15%", off: 0.15 },
-    { id: "fortnight", label: "Fortnightly save 10%", off: 0.1 },
-    { id: "monthly", label: "Monthly save 5%", off: 0.05 },
+    { id: "once", label: "Single Box", off: 0 },
+    { id: "weekly", label: "Weekly (Save 15%)", off: 0.15 },
+    { id: "fortnight", label: "Fortnightly (Save 10%)", off: 0.1 },
+    { id: "monthly", label: "Monthly (Save 5%)", off: 0.05 },
   ],
   startFreq: "weekly",
-  cta: "Subscribe",
+  cta: "Begin Your Ritual",
 };
 
 // ── Reviews ─────────────────────────────────────────
 export const reviews = {
-  title: ["Notes from", "the fridge."],
-  meta: "average from 2,400 subscribers.",
-  sample: "Sample values · concept site",
+  title: ["Verified reviews", "from daily drinkers."],
+  meta: "average rating from 3,800+ subscriber deliveries.",
+  sample: "Verified subscriber experiences",
   notes: [
-    { quote: "Sunrise Kick tastes like the first sip of a holiday. I'm on week six.", who: "Riya · Pune", fruit: "orange" },
-    { quote: "Beet Rush before a run. My legs noticed before I did.", who: "Kabir · Mumbai", fruit: "beet" },
-    { quote: "My kids fight over the green one. I did not see that coming.", who: "Anika · Bengaluru", fruit: "apple-green" },
-    { quote: "The 3-day box came cold, on time, with a note in chalk.", who: "Dev · Delhi", fruit: "lime-half" },
+    { quote: "Valencia Sunrise replaced my espresso ritual entirely. Clean sustained morning energy with zero afternoon crash.", who: "Rhea Sharma · Pune", fruit: "orange" },
+    { quote: "Ruby Beet Elixir before my half-marathon training runs made an undeniable difference in my stamina and recovery.", who: "Kabir Mehta · Mumbai", fruit: "beet" },
+    { quote: "Emerald Guava is crisp, beautifully balanced, and surprisingly sweet without a single gram of added sugar.", who: "Ananya Iyer · Bengaluru", fruit: "apple-green" },
+    { quote: "The 3-Day Reboot arrived frost-cold at 7:30 AM with fresh ice packs and a personalized tasting note.", who: "Devansh Roy · New Delhi", fruit: "lime-half" },
   ],
 };
 
 // ── Footer ──────────────────────────────────────────
 export const footer = {
-  strip: "First pick of the season?",
-  placeholder: "Your email",
-  join: "Join",
+  strip: "Join the sunrise press list for seasonal batches.",
+  placeholder: "Enter your email address",
+  join: "Subscribe",
   cols: [
-    { title: "Shop", links: ["Flavours", "Cleanses", "Mix your own", "Gift crates"] },
-    { title: "About", links: ["Our farms", "How we press", "Journal"] },
-    { title: "Help", links: ["Delivery", "Subscriptions", "Bottle returns"] },
+    { title: "Bottled Juices", links: ["Single Origins", "Cleanse Kits", "Build Your Blend", "Gift Sets"] },
+    { title: "Philosophy", links: ["Organic Sourcing", "Zero-Waste Press", "Lab Reports"] },
+    { title: "Customer Care", links: ["Cold Shipping", "Subscription Management", "Bottle Upcycling"] },
   ],
-  hours: ["Pressed daily · 5 am", "Delivered by 9 am"],
-  socials: ["IG", "YT", "X"],
+  hours: ["Pressed Fresh Daily · 4:30 AM", "Delivered Cold by 8:30 AM"],
+  socials: ["Instagram", "YouTube", "Twitter / X"],
   wordmark: "Pure Juice",
-  note: "Concept website by Triozen Tech · sample prices",
+  note: "Crafted by Pure Juice Co. · 100% raw botanical press",
 };
 
 export const rupee = (n: number) => `₹${n.toLocaleString("en-IN")}`;

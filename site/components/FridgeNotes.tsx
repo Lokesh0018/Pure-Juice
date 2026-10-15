@@ -77,7 +77,6 @@ export default function FridgeNotes() {
                 }}
                 style={{ "--r": `${TILT[depth]}deg`, "--d": depth, zIndex: N - depth } as CSSProperties}
               >
-                <span className="pf-note-tape" aria-hidden />
                 <blockquote className="mk">&ldquo;{n.quote}&rdquo;</blockquote>
                 <figcaption>
                   <Fruit name={n.fruit} className="pf-note-badge" />

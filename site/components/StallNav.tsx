@@ -18,9 +18,19 @@ const lineOf = (it: Item) => `${sizeOf(it.size).label} · ${sizeOf(it.size).note
  */
 export default function StallNav() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [items, setItems] = useState<Item[]>(nav.bag.map((b) => ({ key: `${b.id}-single`, id: b.id, size: "single", qty: b.qty })));
   const [fresh, setFresh] = useState<string | null>(null);
   const close = useRef(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const onAdd = (e: Event) => {
@@ -53,7 +63,7 @@ export default function StallNav() {
 
   return (
     <>
-      <header className="pf-nav" data-nav>
+      <header className={`pf-nav ${scrolled ? "is-scrolled" : ""}`} data-nav>
         <a href="#top" className="pf-logo" aria-label="Pure Juice home">
           <PureMark className="pf-logo-mark" />
           <span>Pure</span>
@@ -112,7 +122,7 @@ export default function StallNav() {
           <button type="button" className="pf-btn pf-btn-tomato pf-btn-block">
             Checkout
           </button>
-          <p className="pf-sample">Free cold delivery over ₹999 · concept site</p>
+          <p className="pf-sample">Free chilled insulated delivery on orders over ₹999</p>
         </div>
       </aside>
     </>

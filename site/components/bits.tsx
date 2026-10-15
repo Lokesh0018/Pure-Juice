@@ -54,7 +54,7 @@ export function Fruit({ name, className = "", style }: { name: string; className
   return <img src={fruit(name)} alt="" className={`pf-fruit ${className}`} style={style} draggable={false} decoding="async" />;
 }
 
-/** Rubber-stamp label (ink border, slight tilt). */
+/** Small pill tag with an accent dot. */
 export function Stamp({ children, className = "", style }: { children: ReactNode; className?: string; style?: CSSProperties }) {
   return (
     <span className={`pf-stamp ${className}`} style={style}>
@@ -63,10 +63,6 @@ export function Stamp({ children, className = "", style }: { children: ReactNode
   );
 }
 
-/** Thin wooden crate slat where paper meets a colour band (S7 seam). */
-export function Slat({ className = "" }: { className?: string }) {
-  return <div className={`pf-slat ${className}`} aria-hidden />;
-}
 
 export function Arrow() {
   return (
@@ -76,19 +72,6 @@ export function Arrow() {
   );
 }
 
-/** Soft paint blob (hero, product disc accents). */
-export function Blob({ color, seed = 0, className = "", style }: { color: string; seed?: number; className?: string; style?: CSSProperties }) {
-  const paths = [
-    "M421 63c75 47 127 141 112 233-15 93-97 181-196 204S120 482 74 401 21 214 77 138 346 16 421 63Z",
-    "M452 112c58 68 70 175 21 252-48 77-157 124-255 108S29 365 19 272 70 81 160 40s234 4 292 72Z",
-    "M398 49c86 33 150 128 135 219-14 91-107 177-207 196S105 431 62 351 14 162 79 95 312 16 398 49Z",
-  ];
-  return (
-    <svg viewBox="0 0 560 520" className={`pf-blob ${className}`} style={style} aria-hidden>
-      <path d={paths[seed % paths.length]} fill={color} />
-    </svg>
-  );
-}
 
 /**
  * A price / number whose digits roll to the new value (transform only, no layout jump). Each digit cell is sized to

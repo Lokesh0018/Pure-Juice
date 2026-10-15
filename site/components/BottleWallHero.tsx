@@ -142,7 +142,7 @@ export default function BottleWallHero() {
             </span>
             <span className="pf-line pf-mask">
               <span className="pf-line-in">
-                at <em>sunrise.</em>
+                at <em>first light.</em>
               </span>
             </span>
           </h1>

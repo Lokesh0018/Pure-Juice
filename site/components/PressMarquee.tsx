@@ -4,7 +4,14 @@ import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import { isStatic, onScreen } from "@/site/lib/motion";
 
-const WORDS = ["Pressed today", "No heat", "No added sugar", "Glass bottles"];
+const WORDS = [
+  "Pressed at first light",
+  "100% Raw cold-pressed",
+  "Zero thermal processing",
+  "Whole organic fruit",
+  "Recyclable amber glass",
+  "Chilled delivery by 8:30 am",
+];
 const BASE = 46; // px/s drift when the page is still
 
 /**
