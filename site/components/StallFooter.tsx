@@ -161,6 +161,11 @@ export default function StallFooter() {
             </ul>
           </div>
         </div>
+        <div className="pf-footer-brand">
+          <a href="#top" className="pf-footer-logo" aria-label="Pure Juice home">
+            <img src="/logo-white.webp" alt="Pure Juice" className="pf-footer-logo-img" />
+          </a>
+        </div>
         <div className="pf-socials">
           {footer.socials.map((s) => (
             <a key={s.id} href="#top" className="pf-social" aria-label={`Pure Juice on ${s.label}`} title={s.label}>

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { nav, pdp, products, rupee, type Juice } from "@/site/content";
-import { Bottle, PureMark, RollNumber } from "./bits";
+import { Bottle, RollNumber } from "./bits";
 
 /** A bag line: a product (+ size), or a custom line such as a cleanse plan (its own name, note, price and bottle). */
 type Item = { key: string; id: string; size: string; qty: number; name?: string; note?: string; price?: number; juice?: Juice };
@@ -74,9 +74,7 @@ export default function StallNav() {
     <>
       <header className={`pf-nav ${scrolled ? "is-scrolled" : ""}`} data-nav>
         <a href="#top" className="pf-logo" aria-label="Pure Juice home">
-          <PureMark className="pf-logo-mark" />
-          <span>Pure</span>
-          <span>Juice</span>
+          <img src="/logo.webp" alt="Pure Juice" className="pf-logo-img" />
         </a>
         <nav className="pf-nav-links" aria-label="Main">
           {nav.links.map((l) => (
