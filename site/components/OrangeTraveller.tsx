@@ -123,12 +123,11 @@ function build(vh: number, vw: number): Key[] | null {
   // down the clear column between the title side and the bars (no label is ever crossed), then onto the bar
   const colX = tr.left - 30;
   k(step(4) + 70, { ...D, x: colX, y: vh * 0.86 });
-  k(runStart - 50, { ...D, x: colX, y: trackY() - dropAbove });
-  k(runStart, { ...D, x: tr.left, y: trackY() - dropAbove });
-  k(runEnd, { ...D, x: tr.left + tr.w * 0.92, y: trackY() - dropAbove });
-  // ── End of Benefits bar: drop gently dissolves at the end of the track
-  k(runEnd + 40, { ...D, x: tr.left + tr.w * 0.95, y: trackY() - dropAbove, o: 0.5 });
-  k(runEnd + 80, { ...D, x: tr.left + tr.w, y: trackY() - dropAbove, o: 0 });
+  k(runStart, { ...D, x: tr.left, y: trackY() - dropAbove, o: 1 });
+  k(runEnd, { ...D, x: tr.left + tr.w * 0.96, y: trackY() - dropAbove, o: 1 });
+  // ── Stop drop right here: dissolve immediately at the bar's end so it never drifts down
+  k(runEnd + 8, { ...D, x: tr.left + tr.w * 0.98, y: trackY() - dropAbove, o: 0 });
+  k(max - 260, { ...D, x: tr.left + tr.w * 0.98, y: trackY() - dropAbove, o: 0 });
   // ── Footer: a final orange rolls in from the right and becomes a round stamp
   const st = centre(stampSpot);
   k(max - 250, { x: st.x + 380, y: st.y, size: 130, rot: 0, o: 0 });

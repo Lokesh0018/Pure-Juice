@@ -4008,3 +4008,262 @@ html.is-static .pf-press-slice {
     top: 412px;
   }
 }
+
+/* ═══ Combos (cleanse plans): one-screen plan picker ════════════════════════════════ */
+@layer components {
+  .pf-plans {
+    height: 920px;
+  }
+  .pf-plans-pic {
+    top: 100px;
+    height: 720px;
+    border-radius: 24px;
+  }
+  .pf-plans-incl {
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    z-index: 1;
+    padding: 18px 20px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 20px 40px -24px rgba(20, 20, 20, 0.45);
+  }
+  .pf-plans-incl-title {
+    display: block;
+    margin-bottom: 10px;
+    font: 600 13px/1 var(--font-body-family);
+    color: var(--ink-muted);
+  }
+  .pf-plans-incl ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    font: 500 14px/1.2 var(--font-body-family);
+    color: var(--ink);
+  }
+  .pf-plans-incl li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pf-plans-incl svg {
+    color: #2f6a35;
+  }
+
+  .pf-plans-side {
+    top: 100px;
+  }
+  .pf-plans-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--card);
+    font: 500 13px/1 var(--font-body-family);
+  }
+  .pf-plans-eyebrow::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--tomato);
+  }
+  .pf-plans-title {
+    margin-top: 18px;
+    font-size: 56px;
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+  }
+  .pf-plans-title em {
+    font-family: "Instrument Serif", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .pf-plans-lead {
+    margin-top: 12px;
+    max-width: 600px;
+    text-wrap: balance;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--ink-muted);
+  }
+
+  /* plan cards */
+  .pf-radios {
+    gap: 10px;
+    margin: 26px 0 0;
+  }
+  .pf-radio {
+    gap: 16px;
+    padding: 16px 22px;
+    cursor: pointer;
+    transition: border-color 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), background-color 0.25s var(--ease-out);
+  }
+  .pf-radio.is-on {
+    background: #fffaf6;
+    border-color: var(--tomato);
+    box-shadow: inset 0 0 0 1px var(--tomato), 0 16px 30px -24px rgba(196, 68, 26, 0.6);
+  }
+  .pf-radio:focus-visible {
+    outline: 2px solid var(--tomato);
+    outline-offset: 3px;
+  }
+  .pf-radio .pf-dot {
+    border-color: var(--hair);
+  }
+  .pf-radio.is-on .pf-dot {
+    border-color: var(--tomato);
+  }
+  .pf-radio-text {
+    gap: 5px;
+    font-size: 14px;
+  }
+  .pf-radio-text b {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font: 600 19px/1.15 var(--font-display-family);
+    letter-spacing: -0.025em;
+  }
+  .pf-radio-badge {
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: var(--tomato-deep);
+    color: #fff;
+    font: 600 11px/1 var(--font-body-family);
+    letter-spacing: 0.02em;
+  }
+  .pf-radio-price {
+    display: grid;
+    justify-items: end;
+    gap: 4px;
+    margin-left: auto;
+    font-size: inherit;
+  }
+  .pf-radio-price b {
+    font: 600 24px/1 var(--font-display-family);
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+  .pf-radio-price small {
+    font: 500 12px/1 var(--font-body-family);
+    color: var(--ink-muted);
+  }
+
+  /* delivery: segmented control with a sliding highlight */
+  .pf-freq-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .pf-freq-label {
+    flex: none;
+    font: 600 13px/1 var(--font-body-family);
+    color: var(--ink-muted);
+  }
+  .pf-seg {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--n), 1fr);
+    flex: 1;
+    padding: 4px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--card);
+  }
+  .pf-seg-thumb {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    width: calc((100% - 8px) / var(--n));
+    border-radius: 999px;
+    background: var(--ink);
+    transform: translateX(calc(var(--i) * 100%));
+    transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .pf-seg-opt {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 40px;
+    border-radius: 999px;
+    font: 500 14px/1 var(--font-body-family);
+    color: var(--ink);
+    cursor: pointer;
+    transition: color 0.3s var(--ease-out);
+  }
+  .pf-seg-opt small {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--tomato-deep);
+    transition: color 0.3s var(--ease-out);
+  }
+  .pf-seg-opt.is-on {
+    color: #fff;
+  }
+  .pf-seg-opt.is-on small {
+    color: #ffb08a;
+  }
+  .pf-seg-opt:focus-visible {
+    outline: 2px solid var(--tomato);
+    outline-offset: 2px;
+  }
+
+  /* summary + CTA */
+  .pf-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+    padding: 20px 22px 20px 24px;
+    border: 1px solid var(--hair);
+    border-radius: 20px;
+    background: var(--card);
+    box-shadow: 0 20px 40px -30px rgba(20, 20, 20, 0.3);
+  }
+  .pf-summary-text {
+    display: grid;
+    gap: 6px;
+  }
+  .pf-summary-label,
+  .pf-summary-note {
+    font: 500 13px/1.2 var(--font-body-family);
+    color: var(--ink-muted);
+  }
+  .pf-summary .pf-total-line {
+    margin-top: 0;
+    gap: 10px;
+    align-items: center;
+  }
+  .pf-summary .pf-total-line b {
+    font-size: 40px;
+  }
+  .pf-summary .pf-total-line s {
+    font-size: 16px;
+  }
+  .pf-save {
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #eef4ea;
+    color: #2f6a35;
+    font: 600 12px/1 var(--font-body-family);
+  }
+}
+
+/* cleanse CTA: brief confirmation after adding to the bag */
+@layer components {
+  .pf-btn.is-added {
+    background: #2f6a35;
+  }
+}

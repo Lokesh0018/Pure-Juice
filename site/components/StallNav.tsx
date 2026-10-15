@@ -1,20 +1,25 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { nav, pdp, products, rupee } from "@/site/content";
+import { nav, pdp, products, rupee, type Juice } from "@/site/content";
 import { Bottle, PureMark, RollNumber } from "./bits";
 
-type Item = { key: string; id: string; size: string; qty: number };
+/** A bag line: a product (+ size), or a custom line such as a cleanse plan (its own name, note, price and bottle). */
+type Item = { key: string; id: string; size: string; qty: number; name?: string; note?: string; price?: number; juice?: Juice };
+type AddDetail = { id: string; size?: string; name?: string; note?: string; price?: number; juice?: Juice };
 const AUTO_CLOSE = 2500; // ms
 
 const sizeOf = (size: string) => pdp.sizes.find((s) => s.id === size) ?? pdp.sizes[0];
-const priceOf = (it: Item) => (it.size === "single" ? products[it.id].price : sizeOf(it.size).price);
-const lineOf = (it: Item) => `${sizeOf(it.size).label} · ${sizeOf(it.size).note}`;
+const priceOf = (it: Item) => it.price ?? (it.size === "single" ? products[it.id].price : sizeOf(it.size).price);
+const lineOf = (it: Item) => it.note ?? `${sizeOf(it.size).label} · ${sizeOf(it.size).note}`;
+const nameOf = (it: Item) => it.name ?? products[it.id]?.name ?? it.id;
+const juiceOf = (it: Item): Juice => it.juice ?? products[it.id]?.juice ?? "orange";
 
 /**
  * NV18 · stamped logo left, links centre, Bag pill right. The cart is a full-height drawer from the right screen edge
  * over a light dim: a new item lands on top with a short highlight, the total and the count roll up. It closes on ×,
- * on a click outside, or by itself after 2.5 s. Listens for "pf:add" ({ id, size }).
+ * on a click outside, or by itself after 2.5 s. Listens for "pf:add": { id, size } for a product, or
+ * { id, size, name, note, price, juice } for a custom line (cleanse plans).
  */
 export default function StallNav() {
   const [open, setOpen] = useState(false);
@@ -34,13 +39,14 @@ export default function StallNav() {
 
   useEffect(() => {
     const onAdd = (e: Event) => {
-      const d = (e as CustomEvent<{ id: string; size?: string }>).detail ?? { id: "sunrise" };
+      const d = (e as CustomEvent<AddDetail>).detail ?? { id: "sunrise" };
       const size = d.size ?? "single";
       const key = `${d.id}-${size}`;
       setItems((list) => {
         const hit = list.find((i) => i.key === key);
         const rest = list.filter((i) => i.key !== key);
-        return [{ key, id: d.id, size, qty: (hit?.qty ?? 0) + 1 }, ...rest]; // the new item goes on top
+        const line: Item = { key, id: d.id, size, qty: (hit?.qty ?? 0) + 1, name: d.name, note: d.note, price: d.price, juice: d.juice };
+        return [line, ...rest]; // the new item goes on top
       });
       setFresh(key);
       setOpen(true);
@@ -107,12 +113,12 @@ export default function StallNav() {
         ) : (
           <ul className="pf-drawer-list">
             {items.map((it) => {
-              const p = products[it.id];
+              const name = nameOf(it);
               return (
                 <li key={it.key} className={it.key === fresh ? "is-fresh" : ""}>
-                  <Bottle juice={p.juice} className="pf-cart-bottle" />
+                  <Bottle juice={juiceOf(it)} className="pf-cart-bottle" />
                   <span className="pf-drawer-text">
-                    <b className="font-display">{p.name}</b>
+                    <b className="font-display">{name}</b>
                     <small>{lineOf(it)}</small>
                     <small>
                       {it.qty} × {rupee(priceOf(it))}
@@ -124,7 +130,7 @@ export default function StallNav() {
                       type="button"
                       onClick={() => removeItem(it.key)}
                       style={{ background: "none", border: "none", cursor: "pointer", fontSize: "12px", color: "var(--muted)", textDecoration: "underline", padding: "2px" }}
-                      aria-label={`Remove ${p.name}`}
+                      aria-label={`Remove ${name}`}
                     >
                       Remove
                     </button>

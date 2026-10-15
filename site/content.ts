@@ -143,7 +143,7 @@ export const nav = {
   links: [
     { label: "Botanicals", href: "#flavours" },
     { label: "Custom Blend", href: "#mix" },
-    { label: "Cleanse Programs", href: "#cleanses" },
+    { label: "Combos", href: "#cleanses" },
     { label: "Harvest Trace", href: "#farm" },
   ],
   bagCount: 0,
@@ -241,22 +241,29 @@ export const compare = {
 
 // ── Cleanse & subscription ──────────────────────────
 export const plans = {
-  title: "Targeted cleanse rituals.",
+  eyebrow: "Combos",
+  title: "Targeted cleanse",
+  accent: "rituals.",
+  lead: "Pick a length and how often it arrives. Every bottle is pressed the morning it ships.",
   stamp: "Chilled insulated delivery",
+  included: ["Cold-chain delivery", "Day-by-day guide", "Pause or skip anytime"],
   rows: [
-    { id: "reset", name: "1-Day Cleanse Reset", note: "6 tailored bottles · botanical detox & green hydration", price: 799 },
-    { id: "cleanse3", name: "3-Day Cellular Reboot", note: "18 bottles · includes thermal chiller bag & guide", price: 2249 },
-    { id: "reboot", name: "5-Day Deep Metabolism", note: "30 bottles · delivered in two fresh dawn drops", price: 3499 },
+    { id: "reset", name: "1-Day Cleanse Reset", note: "6 tailored bottles · botanical detox & green hydration", price: 799, days: 1, bottles: 6, juice: "green" as Juice },
+    { id: "cleanse3", name: "3-Day Cellular Reboot", note: "18 bottles · includes thermal chiller bag & guide", price: 2249, days: 3, bottles: 18, badge: "Most popular", juice: "orange" as Juice },
+    { id: "reboot", name: "5-Day Deep Metabolism", note: "30 bottles · delivered in two fresh dawn drops", price: 3499, days: 5, bottles: 30, juice: "beet" as Juice },
   ],
   start: "cleanse3",
+  freqLabel: "Delivery",
   freq: [
     { id: "once", label: "Single Box", off: 0 },
-    { id: "weekly", label: "Weekly (Save 15%)", off: 0.15 },
-    { id: "fortnight", label: "Fortnightly (Save 10%)", off: 0.1 },
-    { id: "monthly", label: "Monthly (Save 5%)", off: 0.05 },
+    { id: "weekly", label: "Weekly", off: 0.15 },
+    { id: "fortnight", label: "Fortnightly", off: 0.1 },
+    { id: "monthly", label: "Monthly", off: 0.05 },
   ],
   startFreq: "weekly",
   cta: "Begin Your Ritual",
+  added: "Added to crate",
+  note: "Free chilled delivery · cancel anytime",
 };
 
 // ── Reviews ─────────────────────────────────────────
