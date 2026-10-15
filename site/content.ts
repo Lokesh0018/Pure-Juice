@@ -261,14 +261,28 @@ export const plans = {
 
 // ── Reviews ─────────────────────────────────────────
 export const reviews = {
-  title: ["Verified reviews", "from daily drinkers."],
-  meta: "average rating from 3,800+ subscriber deliveries.",
+  eyebrow: "Customer reviews",
+  title: ["Verified reviews", "from"],
+  accent: "daily drinkers.",
+  rating: {
+    score: 4.9,
+    meta: "average rating from 3,800+ subscriber deliveries.",
+    // share of reviews per star (sample values)
+    bars: [
+      { stars: 5, pct: 91 },
+      { stars: 4, pct: 7 },
+      { stars: 3, pct: 1 },
+      { stars: 2, pct: 1 },
+      { stars: 1, pct: 0 },
+    ],
+  },
+  badge: "Verified subscriber",
   sample: "Verified subscriber experiences",
   notes: [
-    { quote: "Valencia Sunrise replaced my espresso ritual entirely. Clean sustained morning energy with zero afternoon crash.", who: "Rhea Sharma · Pune", fruit: "orange" },
-    { quote: "Ruby Beet Elixir before my half-marathon training runs made an undeniable difference in my stamina and recovery.", who: "Kabir Mehta · Mumbai", fruit: "beet" },
-    { quote: "Emerald Guava is crisp, beautifully balanced, and surprisingly sweet without a single gram of added sugar.", who: "Ananya Iyer · Bengaluru", fruit: "apple-green" },
-    { quote: "The 3-Day Reboot arrived frost-cold at 7:30 AM with fresh ice packs and a personalized tasting note.", who: "Devansh Roy · New Delhi", fruit: "lime-half" },
+    { quote: "Valencia Sunrise replaced my espresso ritual entirely. Clean sustained morning energy with zero afternoon crash.", name: "Rhea Sharma", city: "Pune", product: "Valencia Sunrise", fruit: "orange" },
+    { quote: "Ruby Beet Elixir before my half-marathon training runs made an undeniable difference in my stamina and recovery.", name: "Kabir Mehta", city: "Mumbai", product: "Ruby Beet Elixir", fruit: "beet" },
+    { quote: "Emerald Guava is crisp, beautifully balanced, and surprisingly sweet without a single gram of added sugar.", name: "Ananya Iyer", city: "Bengaluru", product: "Emerald Guava", fruit: "apple-green" },
+    { quote: "The 3-Day Reboot arrived frost-cold at 7:30 AM with fresh ice packs and a personalized tasting note.", name: "Devansh Roy", city: "New Delhi", product: "3-Day Reboot", fruit: "lime-half" },
   ],
 };
 

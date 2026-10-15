@@ -126,20 +126,9 @@ function build(vh: number, vw: number): Key[] | null {
   k(runStart - 50, { ...D, x: colX, y: trackY() - dropAbove });
   k(runStart, { ...D, x: tr.left, y: trackY() - dropAbove });
   k(runEnd, { ...D, x: tr.left + tr.w * 0.92, y: trackY() - dropAbove });
-  // ── Cleanse: right margin lane, along the seam, then into a bottle in the crate photo
-  const pTop = docTop(plans);
-  const rightLane = Math.min(vw - 22, tr.left + tr.w + 30);
-  k(runEnd + 60, { ...D, x: rightLane, y: trackY() - dropAbove });
-  k(pTop - vh * 0.45, { ...D, x: rightLane, y: vh * 0.5 });
-  k(pTop - vh * 0.3, { ...D, x: vw * 0.49, y: vh * 0.3 - 30 }); // just above the seam
-  const bottlePx = photo.dataset.orangeBottle!.split(",").map(Number);
-  const landAt = pTop - vh * 0.02;
-  const land = coverPoint(photo, bottlePx[0], bottlePx[1]);
-  const landY = land.y;
-  k(pTop - vh * 0.15, { ...D, x: land.x + 80, y: vh * 0.11 });
-  k(landAt, { ...D, x: land.x, y: landY, squash: true });
-  k(landAt + 40, { ...D, x: land.x, y: landY, drop: 0, splash: 0.6 });
-  k(landAt + 140, { ...D, x: land.x, y: landY, drop: 0, splash: 1, o: 0 });
+  // ── End of Benefits bar: drop gently dissolves at the end of the track
+  k(runEnd + 40, { ...D, x: tr.left + tr.w * 0.95, y: trackY() - dropAbove, o: 0.5 });
+  k(runEnd + 80, { ...D, x: tr.left + tr.w, y: trackY() - dropAbove, o: 0 });
   // ── Footer: a final orange rolls in from the right and becomes a round stamp
   const st = centre(stampSpot);
   k(max - 250, { x: st.x + 380, y: st.y, size: 130, rot: 0, o: 0 });

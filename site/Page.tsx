@@ -30,7 +30,6 @@ export default function Page() {
         <PourEdge color="#161616" />
         <CartonBars />
         <CleansePlans />
-        <PourEdge color="#F6F4EF" />
         <FridgeNotes />
       </main>
       <StallFooter />
