@@ -104,7 +104,8 @@ function build(vh: number, vw: number): Key[] | null {
   const FPIN = farmStage.parentElement!.offsetHeight - vh;
   const fs = centre(farmSpot);
   const fy = fs.y;
-  const step = (f: number) => farmTop + FPIN * (f / 4);
+  // farm phases are equal fifths of the pin: step k is centred at (k + 0.5) / 5 (same beats as before, re-timed)
+  const step = (f: number) => farmTop + FPIN * ((f + 0.5) / 5);
   k(step(1.45), { x: fs.x, y: fy, size: 120, rot: -40, o: 0 });
   k(step(1.85), { x: fs.x, y: fy, size: 120, rot: 0 });
   k(step(2.1), { x: fs.x, y: fy, size: 120, rot: 10 });

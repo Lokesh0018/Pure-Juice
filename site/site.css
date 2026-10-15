@@ -4426,3 +4426,215 @@ html.is-static .pf-press-slice {
     transform: scaleX(var(--b, 1));
   }
 }
+
+/* ═══ Orchard to bottle: timeline + photo card ════════════════════════════════ */
+@layer components {
+  .pf-farm-head {
+    position: absolute;
+    left: 64px;
+    top: 112px;
+  }
+  .pf-farm-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--card);
+    font: 500 13px/1 var(--font-body-family);
+  }
+  .pf-farm-eyebrow::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--tomato);
+  }
+  .pf-farm-heading {
+    margin-top: 18px;
+    font-size: 56px;
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+  }
+  .pf-farm-heading em {
+    font-family: "Instrument Serif", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  /* timeline */
+  .pf-ledger {
+    left: 64px;
+    top: 316px;
+    width: 740px;
+    padding-left: 34px;
+    border-top: 0;
+  }
+  .pf-rail {
+    position: absolute;
+    left: 9px;
+    top: 36px;
+    bottom: 36px;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--hair);
+  }
+  .pf-rail-fill {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--tomato);
+    transform-origin: top;
+  }
+  .pf-ledger-bar {
+    left: 22px;
+    right: -14px;
+    height: 72px;
+    border-left: 0;
+    border-radius: 14px;
+    background: var(--card);
+    box-shadow: 0 1px 2px rgba(20, 20, 20, 0.04), 0 14px 30px -20px rgba(20, 20, 20, 0.25);
+  }
+  .pf-ledger li {
+    position: relative;
+    grid-template-columns: 34px 112px 78px 1fr;
+    align-items: center;
+    gap: 14px;
+    height: 72px;
+    padding: 0 0 0 12px;
+    border-bottom: 0;
+    font-size: 15px;
+    color: var(--ink-muted);
+    transition: color 0.3s var(--ease-out);
+  }
+  .pf-ledger-dot {
+    position: absolute;
+    left: -34px;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    border: 2px solid var(--hair);
+    border-radius: 50%;
+    background: var(--paper);
+    color: transparent;
+    transition: background-color 0.3s var(--ease-out), border-color 0.3s var(--ease-out), color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+  }
+  .pf-ledger li.is-done .pf-ledger-dot {
+    border-color: var(--tomato);
+    background: var(--tomato);
+    color: #fff;
+  }
+  .pf-ledger li.is-on .pf-ledger-dot {
+    border-color: var(--tomato);
+    background: var(--card);
+    box-shadow: 0 0 0 5px rgba(232, 84, 30, 0.16);
+  }
+  .pf-ledger-n {
+    font: 600 13px/1 var(--font-body-family);
+    font-variant-numeric: tabular-nums;
+    color: #a9a59d;
+  }
+  .pf-ledger b {
+    font-size: 21px;
+  }
+  .pf-ledger li.is-on b {
+    color: var(--tomato);
+  }
+  .pf-ledger li.is-on .pf-ledger-n {
+    color: var(--ink);
+  }
+  .pf-ledger-time {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .pf-ledger-note {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pf-ledger li.is-on .pf-ledger-note {
+    color: var(--ink);
+  }
+
+  /* orange: cut and pressed in the free space under the timeline */
+  .pf-farm-spot {
+    left: 640px;
+    top: 712px;
+    width: 120px;
+    height: 120px;
+  }
+
+  /* photo + step card */
+  .pf-photo {
+    left: 856px;
+    top: 112px;
+    width: 520px;
+    height: 690px;
+  }
+  .pf-photo-frame {
+    height: 100%;
+    border-radius: 24px;
+  }
+  .pf-photo figcaption.pf-farm-card {
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 22px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 20px 40px -24px rgba(20, 20, 20, 0.45);
+  }
+  .pf-farm-card .pf-farm-big {
+    position: relative;
+    left: auto;
+    top: auto;
+    display: flex;
+    font-size: 64px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    color: var(--tomato);
+  }
+  .pf-farm-card-text {
+    display: grid;
+    gap: 4px;
+    padding-left: 18px;
+    border-left: 1px solid var(--hair);
+  }
+  .pf-farm-card-meta {
+    font: 500 13px/1 var(--font-body-family);
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .pf-farm-card .pf-farm-word {
+    position: relative;
+    left: auto;
+    top: auto;
+    font-size: 32px;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+  }
+}
+
+/* farm: one photo per phase, crossfading with a gentle settle-in zoom */
+@layer components {
+  .pf-photo-frame .pf-photo-layer {
+    opacity: 0;
+    transform: scale(1.05);
+    transition: opacity 0.55s var(--ease-out), transform 1.1s var(--ease-out);
+  }
+  .pf-photo-frame .pf-photo-layer.is-on {
+    z-index: 1;
+    opacity: 1;
+    transform: scale(1);
+  }
+}

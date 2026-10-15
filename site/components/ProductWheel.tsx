@@ -174,12 +174,6 @@ export default function ProductWheel() {
               <span className="pf-pdp-label">
                 <Bottle juice="empty" word={p.word} labelOnly />
               </span>
-              {/* cold water drops sliding slowly down the glass */}
-              <span className="pf-drops" aria-hidden>
-                {[0, 1, 2, 3, 4].map((k) => (
-                  <i key={k} style={{ "--k": k } as CSSProperties} />
-                ))}
-              </span>
             </span>
             <span key={`props-${id}`} className="pf-swap">
               <Fruit name={p.inside[0].fruit} className="pf-disc-prop pf-disc-prop-a" />

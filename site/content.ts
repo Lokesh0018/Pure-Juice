@@ -144,7 +144,7 @@ export const nav = {
     { label: "Botanicals", href: "#flavours" },
     { label: "Custom Blend", href: "#mix" },
     { label: "Combos", href: "#cleanses" },
-    { label: "Harvest Trace", href: "#farm" },
+    { label: "Our Process", href: "#farm" },
   ],
   bagCount: 0,
   bag: [] as { id: string; qty: number }[],
@@ -214,6 +214,7 @@ export const pdp = {
 
 // ── Farm → bottle ───────────────────────────────────
 export const farm = {
+  eyebrow: "Our process · 5 phases",
   title: ["Orchard to bottle", "before your alarm."],
   steps: [
     { word: "Harvest", time: "4:30 am", note: "picked ripe in certified organic groves", photo: "farm-orchard" },
