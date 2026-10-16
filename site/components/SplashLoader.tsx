@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { prefersReducedMotion } from "@/lib/gsap";
 
 const WIPE_AT = 1.8; // s: the wipe starts here (if the hero images are in), and the hero intro starts with it
 const WIPE = 0.6; // s: so the loader is gone at 2.4 s
 
 /**
- * I34 drop-and-splash loader: a juice drop falls onto the kraft paper, squashes, splashes into an orange crown with
- * droplets, PURE JUICE rises out of the splash, a real 0→100 counter (the hero's eager images), then the panel wipes
- * up while the hero intro already moves. All motion is CSS from the first paint (lesson 11); JS only counts, fires
+ * Logo-fill loader: the JUICE logo sits as a faint grey ghost and fills with colour from the bottom up as the hero's
+ * eager images load (real 0→100 counter + a slim progress bar), then the panel wipes up while the hero intro moves. All motion is CSS from the first paint (lesson 11); JS only counts, fires
  * "pf:lift" as the wipe starts (lesson 80) and keeps the page still until then.
  */
 export default function SplashLoader() {
@@ -68,33 +67,22 @@ export default function SplashLoader() {
 
   if (gone) return null;
   return (
-    <div className={`pf-loader pf-life ${leaving ? "is-leaving" : ""}`} aria-hidden data-loader>
-      <div className="pf-loader-band" />
-      <div className="pf-loader-center">
-        <svg className="pf-loader-splash" viewBox="0 0 400 240" overflow="visible">
-          <ellipse className="pf-ld-puddle" cx="200" cy="198" rx="120" ry="16" fill="#E9741C" />
-          <g className="pf-ld-crown" fill="#E9741C">
-            <path d="M118 196c-8-34 4-58 20-70-2 24 4 44 18 66ZM282 196c8-34-4-58-20-70 2 24-4 44-18 66ZM172 192c-6-46 8-74 28-92 20 18 34 46 28 92Z" />
-          </g>
-          <g className="pf-ld-drops" fill="#E9741C">
-            <circle className="pf-ld-d1" cx="200" cy="170" r="9" />
-            <circle className="pf-ld-d2" cx="200" cy="170" r="11" />
-            <circle className="pf-ld-d3" cx="200" cy="170" r="6" />
-            <circle className="pf-ld-d4" cx="200" cy="170" r="7" />
-            <circle className="pf-ld-d5" cx="200" cy="170" r="5" />
-          </g>
-          <path className="pf-ld-drop" d="M200 112c14 22 26 38 26 54a26 26 0 0 1-52 0c0-16 12-32 26-54Z" fill="#E9741C" />
-        </svg>
-        <div className="pf-loader-word-mask">
-          <p className="pf-loader-word font-display">
-            Pure <em>Juice</em>
-          </p>
+    <div className={`pf-loader pf-life ${leaving ? "is-leaving" : ""}`} aria-hidden data-loader style={{ "--p": pct / 100 } as CSSProperties}>
+      <div className="pf-loader-center pf-ld2">
+        {/* the logo fills with colour from the bottom up as the page loads */}
+        <div className="pf-ld2-logo">
+          <img src="/logo.webp" alt="" className="pf-ld2-ghost" draggable={false} />
+          <img src="/logo.webp" alt="" className="pf-ld2-fill" draggable={false} />
         </div>
+        <div className="pf-ld2-bar">
+          <i />
+        </div>
+        <p className="pf-ld2-status">
+          <span>{pct < 100 ? "Pressing fresh" : "Ready"}</span>
+          <b>{String(pct).padStart(2, "0")}%</b>
+        </p>
+        <p className="pf-ld2-tag">Pure Juice · cold-pressed at sunrise</p>
       </div>
-      <p className="pf-loader-count font-display">
-        {String(pct).padStart(2, "0")}
-        <small>%</small>
-      </p>
     </div>
   );
 }

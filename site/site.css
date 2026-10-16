@@ -5907,3 +5907,80 @@ html.has-traveller .pf-traveller-slot {
     left: 340px;
   }
 }
+
+/* ═══ Loader: the logo fills with juice ═══════════════════════════════════════ */
+@layer components {
+  .pf-loader {
+    background: radial-gradient(60% 55% at 50% 45%, #fffaf3, var(--paper) 70%);
+  }
+  .pf-ld2 {
+    gap: 0;
+    animation: pf-ld2-in 0.7s var(--ease-out) both;
+  }
+  .pf-ld2-logo {
+    position: relative;
+    width: 340px;
+    aspect-ratio: 620 / 376;
+  }
+  .pf-ld2-logo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    user-select: none;
+  }
+  .pf-ld2-ghost {
+    filter: grayscale(1);
+    opacity: 0.16;
+  }
+  /* colour rises from the bottom; a little ahead of 0 so the first frame already shows a sliver of juice */
+  .pf-ld2-fill {
+    clip-path: inset(calc((1 - (0.06 + 0.94 * var(--p, 0))) * 100%) 0 0 0);
+    transition: clip-path 0.35s var(--ease-out);
+  }
+  .pf-ld2-bar {
+    position: relative;
+    width: 220px;
+    height: 3px;
+    margin-top: 38px;
+    border-radius: 999px;
+    background: #e8e3d9;
+    overflow: hidden;
+  }
+  .pf-ld2-bar i {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--tomato);
+    transform: scaleX(var(--p, 0));
+    transform-origin: left;
+    transition: transform 0.35s var(--ease-out);
+  }
+  .pf-ld2-status {
+    display: flex;
+    justify-content: space-between;
+    width: 220px;
+    margin-top: 12px;
+    font: 500 13px/1 var(--font-body-family);
+    color: var(--ink-muted);
+  }
+  .pf-ld2-status b {
+    font-weight: 600;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .pf-ld2-tag {
+    margin-top: 28px;
+    font: italic 400 18px/1 "Instrument Serif", Georgia, serif;
+    color: var(--ink-muted);
+  }
+  /* the old drop-and-splash parts are no longer rendered */
+  .pf-loader-count,
+  .pf-loader-band {
+    display: none;
+  }
+}
+@keyframes pf-ld2-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
