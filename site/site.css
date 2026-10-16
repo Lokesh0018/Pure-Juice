@@ -6382,3 +6382,99 @@ html.is-static .pf-hero-fruit-swap > .pf-hero-prop {
 html.is-static .pf-hero-roller {
   display: none;
 }
+
+/* ═══ Nav: floating glass bar, "you are here" pill, bag with icon ════════════ */
+@layer components {
+  /* floating bar inside the 76 px band every section reserves for the nav */
+  .pf-nav {
+    inset: 12px max(16px, calc(50vw - 704px)) auto;
+    height: 60px;
+    padding: 0 10px 0 22px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--paper) 55%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .pf-nav.is-scrolled {
+    background: color-mix(in srgb, #fff 82%, transparent);
+    border-color: rgba(20, 20, 20, 0.07);
+    box-shadow: 0 10px 30px -14px rgba(30, 20, 10, 0.25), 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+  .pf-logo:hover {
+    transform: none;
+    opacity: 0.85;
+  }
+  .pf-logo-img {
+    height: 40px;
+    filter: none;
+  }
+  .pf-logo:focus-visible,
+  .pf-nav-link:focus-visible,
+  .pf-bag:focus-visible {
+    outline: 2px solid var(--tomato);
+    outline-offset: 3px;
+    border-radius: 999px;
+  }
+
+  /* links: a soft track, a sliding pill behind the current section's link */
+  .pf-nav-links {
+    position: relative;
+    gap: 2px;
+    padding: 4px;
+    border-radius: 999px;
+    background: rgba(20, 20, 20, 0.04);
+  }
+  .pf-nav-pill {
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 0;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 12px -6px rgba(0, 0, 0, 0.18);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), width 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.25s ease;
+  }
+  .pf-nav-pill.is-on {
+    opacity: 1;
+  }
+  .pf-nav-link {
+    position: relative;
+    z-index: 1;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font: 500 14px/1 var(--font-body-family);
+    color: var(--ink-muted);
+    transition: color 0.2s ease;
+  }
+  .pf-nav-link:hover,
+  .pf-nav-link.is-current {
+    color: var(--ink);
+  }
+  .pf-nav-link.is-current {
+    font-weight: 600;
+  }
+
+  /* bag: icon + label + count */
+  .pf-bag {
+    gap: 8px;
+    height: 44px;
+    padding: 0 8px 0 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .pf-bag:hover {
+    background: #2a2a2a;
+    box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.5);
+  }
+  .pf-bag-icon {
+    flex: none;
+    margin-right: -2px;
+  }
+  .pf-bag-count {
+    min-width: 28px;
+    height: 28px;
+  }
+}

@@ -28,6 +28,39 @@ export default function StallNav() {
   const [fresh, setFresh] = useState<string | null>(null);
   const close = useRef(0);
 
+  const [current, setCurrent] = useState<string | null>(null);
+  const linksRef = useRef<HTMLElement>(null);
+  const [pill, setPill] = useState<{ x: number; w: number } | null>(null);
+
+  // which section is on screen: the last one whose top (its pin wrapper's, for pinned sections) has passed 40% of
+  // the window. Above the first linked section (the hero) nothing is current.
+  useEffect(() => {
+    const ids = nav.links.map((l) => l.href);
+    const spy = () => {
+      let cur: string | null = null;
+      for (const href of ids) {
+        const el = document.querySelector<HTMLElement>(href);
+        if (!el) continue;
+        const box = (el.closest(".pf-pin") as HTMLElement | null) ?? el;
+        if (box.getBoundingClientRect().top <= window.innerHeight * 0.4) cur = href;
+      }
+      setCurrent(cur);
+    };
+    spy();
+    window.addEventListener("scroll", spy, { passive: true });
+    window.addEventListener("resize", spy);
+    return () => {
+      window.removeEventListener("scroll", spy);
+      window.removeEventListener("resize", spy);
+    };
+  }, []);
+
+  // the highlight pill slides to the current link (measured, so any label length fits)
+  useEffect(() => {
+    const a = current ? linksRef.current?.querySelector<HTMLElement>(`a[href="${current}"]`) : null;
+    setPill(a ? { x: a.offsetLeft, w: a.offsetWidth } : null);
+  }, [current]);
+
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -76,15 +109,24 @@ export default function StallNav() {
         <a href="#top" className="pf-logo" aria-label="Pure Juice home">
           <img src="/logo.webp" alt="Pure Juice" className="pf-logo-img" />
         </a>
-        <nav className="pf-nav-links" aria-label="Main">
+        <nav ref={linksRef} className="pf-nav-links" aria-label="Main">
+          <span
+            className={`pf-nav-pill ${pill ? "is-on" : ""}`}
+            style={pill ? { transform: `translateX(${pill.x}px)`, width: pill.w } : undefined}
+            aria-hidden
+          />
           {nav.links.map((l) => (
-            <a key={l.href} href={l.href} className="pf-scribble">
+            <a key={l.href} href={l.href} className={`pf-nav-link ${current === l.href ? "is-current" : ""}`} aria-current={current === l.href ? "location" : undefined}>
               {l.label}
             </a>
           ))}
         </nav>
         <div className="pf-bag-wrap">
           <button type="button" className={`pf-bag ${fresh && open ? "is-bump" : ""}`} aria-expanded={open} onClick={() => setOpen((o) => !o)} data-bag>
+            <svg className="pf-bag-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8Z" />
+              <path d="M9 8V6.5a3 3 0 0 1 6 0V8" />
+            </svg>
             <span className="pf-bag-label">Bag</span>
             <b className="pf-bag-count">
               <RollNumber value={String(count)} />
