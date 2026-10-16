@@ -22,13 +22,13 @@ export default function Page() {
       <main className="pf-page">
         <BottleWallHero />
         <PressMarquee />
-        <PourEdge color="var(--pf-band, #E9741C)" />
-        <FlavourStage />
-        <MixCrate />
         <ProductWheel />
         <FarmLedger />
         <PourEdge color="#161616" />
         <CartonBars />
+        <PourEdge color="var(--pf-band, #E9741C)" />
+        <FlavourStage />
+        <MixCrate />
         <CleansePlans />
         <FridgeNotes />
       </main>

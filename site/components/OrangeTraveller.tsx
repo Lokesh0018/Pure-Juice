@@ -61,18 +61,22 @@ function build(vh: number, vw: number): Key[] | null {
   const s0 = window.scrollY;
   const max = document.documentElement.scrollHeight - vh;
 
-  // ── Hero
+  // Page order: Hero → Today's specials → Our process → The difference → Products → Build your own → … → Footer.
+  // ── Hero: the orange lifts off and leaves to the right before Today's specials (whose buy box it never crosses)
   const ho = centre(heroOrange);
   k(0, { x: ho.x, y: ho.y, size: ho.w, rot: 0 });
-  // the Botanicals section is pinned: measure its pin wrapper (the sticky section itself moves with the scroll)
+  const pdpPin = q("#product")?.parentElement;
+  const specialsTop = pdpPin ? docTop(pdpPin) : vh;
+  k(specialsTop * 0.3, { x: ho.x + 60, y: ho.y - 150, size: ho.w, rot: 200 });
+  k(specialsTop * 0.75, { x: vw + 90, y: vh * 0.3, size: 128, rot: 520, o: 0 });
+  // the Products section is pinned: measure its pin wrapper (the sticky section itself moves with the scroll)
   const flavPin = flav.parentElement!;
   const H = docTop(flavPin); // flavours top (doc)
   const FPIN_F = Math.max(0, flavPin.offsetHeight - flav.offsetHeight); // px the section stays pinned
-  k(H * 0.3, { x: ho.x + 60, y: ho.y - 150, size: ho.w, rot: 200 });
-  k(H - vh * 0.55, { x: vw - 140, y: vh * 0.56, size: 128, rot: 560 });
-  // ── Flavours: the featured-orange spot, then hops along the card tops (right → left), then a free lane
+  // ── Products: a fresh orange settles on the featured spot, then hops along the card tops (right → left)
   const sp = centre(spot);
   const FT = H;
+  k(FT - vh * 0.4, { x: sp.x, y: sp.y, size: 140, rot: 620, o: 0 });
   // the orange rests on the featured spot while the goals change, then hops along the cards as the pin ends
   const cardsIn = FPIN_F > 0 ? FT + FPIN_F - 150 : FT + flav.offsetHeight - vh + 40;
   k(FT - vh * 0.1, { x: sp.x, y: sp.y, size: 140, rot: 720, squash: true });
@@ -141,7 +145,6 @@ function build(vh: number, vw: number): Key[] | null {
   k(runEnd, { ...D, x: tr.left + tr.w * 0.96, y: trackY() - dropAbove, o: 1 });
   // ── Stop drop right here: dissolve immediately at the bar's end so it never drifts down
   k(runEnd + 8, { ...D, x: tr.left + tr.w * 0.98, y: trackY() - dropAbove, o: 0 });
-  k(max - 260, { ...D, x: tr.left + tr.w * 0.98, y: trackY() - dropAbove, o: 0 });
   // ── Footer: a final orange rolls in from the right and becomes a round stamp
   const st = centre(stampSpot);
   k(max - 250, { x: st.x + 380, y: st.y, size: 130, rot: 0, o: 0 });

@@ -176,10 +176,11 @@ export const fruit = (name: string) => img(`fruit-${name}`);
 // ── Nav ─────────────────────────────────────────────
 export const nav = {
   links: [
+    { label: "Today's Specials", href: "#product" },
+    { label: "Our Process", href: "#farm" },
     { label: "Products", href: "#flavours" },
     { label: "Custom Blend", href: "#mix" },
     { label: "Combos", href: "#cleanses" },
-    { label: "Our Process", href: "#farm" },
   ],
   bagCount: 0,
   bag: [] as { id: string; qty: number }[],
