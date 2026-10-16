@@ -431,84 +431,108 @@ body {
   }
 
   /* ── Hero (HR23) ─────────────────────────── */
-  .pf-hero {
+  /* ── Hero Spotlight Stage (Option A) ───────────── */
+  .pf-hero-spotlight {
     position: relative;
-    height: max(900px, 100vh);
+    height: max(920px, 100vh);
     overflow: hidden;
-    background: var(--paper);
+    background: radial-gradient(circle at 75% 45%, rgba(255, 235, 215, 0.45) 0%, transparent 60%), var(--paper);
+    perspective: 1200px;
   }
   .pf-hero-art {
     position: absolute;
     inset: 0;
+    pointer-events: none;
   }
 
-  .pf-wall {
+  .pf-hero-glow {
     position: absolute;
-    left: 820px;
-    top: 30px;
-    width: 940px;
-    height: 900px;
-    rotate: -34deg;
-    transform-origin: 40% 50%;
+    left: 780px;
+    top: 140px;
+    width: 580px;
+    height: 580px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--glow-c, #E9741C) 0%, transparent 68%);
+    opacity: 0.22;
+    filter: blur(50px);
+    transition: background 0.7s ease, opacity 0.5s ease;
   }
-  .pf-wall-row {
+
+  .pf-hero-pedestal {
     position: absolute;
-    display: flex;
-    gap: 34px;
+    left: 870px;
+    top: 670px;
+    width: 380px;
+    height: 48px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(30, 20, 10, 0.22) 0%, rgba(30, 20, 10, 0.06) 45%, transparent 72%);
+    filter: blur(6px);
   }
-  .pf-wall-row-a {
-    left: 20px;
-    top: 70px;
-  }
-  .pf-wall-row-b {
-    left: 120px;
-    top: 500px;
-  }
-  .pf-wall-item {
-    display: block;
-    width: 158px;
-    filter: drop-shadow(14px 18px 16px rgba(80, 45, 10, 0.22));
-    transition: translate 0.5s var(--ease-out), filter 0.5s var(--ease-out);
-  }
-  .pf-wall-item:hover {
-    translate: 0 -26px;
-    filter: drop-shadow(14px 30px 22px rgba(80, 45, 10, 0.26)) brightness(1.04);
-  }
+
   .pf-hero-prop {
     position: absolute;
-    filter: drop-shadow(6px 10px 10px rgba(80, 45, 10, 0.2));
+    filter: drop-shadow(6px 12px 14px rgba(80, 45, 10, 0.22));
+    pointer-events: none;
+    user-select: none;
   }
   .pf-hero-leaf-a {
-    width: 130px;
-    left: 960px;
-    top: 100px;
-    rotate: -30deg;
+    width: 140px;
+    left: 820px;
+    top: 130px;
+    rotate: -24deg;
   }
   .pf-hero-leaf-b {
     width: 110px;
-    left: 1330px;
-    top: 120px;
-    rotate: 40deg;
+    left: 1310px;
+    top: 260px;
+    rotate: 35deg;
   }
   .pf-hero-orange {
-    width: 150px;
-    left: 820px;
-    top: 712px;
+    width: 155px;
+    left: 810px;
+    top: 680px;
   }
   .pf-hero-half {
-    width: 128px;
-    left: 952px;
-    top: 770px;
-    rotate: 18deg;
+    width: 135px;
+    left: 1240px;
+    top: 640px;
+    rotate: 22deg;
   }
+
   .pf-hero-copy {
     position: absolute;
     left: 64px;
-    top: 168px;
-    width: 740px;
+    top: 150px;
+    width: 720px;
+    z-index: 10;
   }
+
+  .pf-hero-eyebrow-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px 6px 10px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    font: 700 12px/1 var(--font-body-family);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    margin-bottom: 24px;
+  }
+  .pf-live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #1cb046;
+    box-shadow: 0 0 0 3px rgba(28, 176, 70, 0.2);
+    animation: pf-breathe 2s ease-in-out infinite alternate;
+  }
+
   .pf-h1 {
-    font-size: 148px;
+    font-size: 136px;
     line-height: 0.88;
   }
   .pf-h1 em {
@@ -516,8 +540,8 @@ body {
     color: var(--tomato);
   }
   .pf-hero-lead {
-    margin-top: 40px;
-    width: 400px;
+    margin-top: 32px;
+    width: 440px;
     font-size: 19px;
     line-height: 1.5;
     color: var(--ink-muted);
@@ -526,38 +550,213 @@ body {
   .pf-hero-cta {
     display: flex;
     gap: 14px;
-    margin-top: 34px;
+    margin-top: 32px;
   }
   .pf-hero-badges {
     display: flex;
-    gap: 18px;
-    margin-top: 40px;
+    gap: 14px;
+    margin-top: 34px;
+    color: var(--ink);
+    flex-wrap: wrap;
+  }
+
+  /* Interactive Flavour Switcher Chips */
+  .pf-hero-switcher {
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+    width: 580px;
+  }
+  .pf-hero-switcher-label {
+    display: block;
+    font: 700 12px/1 var(--font-body-family);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+  }
+  .pf-hero-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .pf-hero-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1.5px solid rgba(0, 0, 0, 0.08);
+    font: 700 13px/1 var(--font-body-family);
+    color: var(--ink);
+    cursor: pointer;
+    transition: transform 0.2s var(--ease-out), border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+  .pf-hero-chip:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+  .pf-hero-chip.is-active {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+  .pf-hero-chip-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--chip-accent, #E9741C);
+  }
+
+  /* 3D Centerpiece Stage Right */
+  .pf-hero-centerpiece {
+    position: absolute;
+    left: 820px;
+    top: 70px;
+    width: 540px;
+    height: 780px;
+    z-index: 5;
+    transform: rotateX(var(--hero-tilt-x, 0deg)) rotateY(var(--hero-tilt-y, 0deg));
+    transform-style: preserve-3d;
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .pf-spotlight-disc {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 440px;
+    height: 440px;
+    translate: -50% -46%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.2) 60%, transparent 75%);
+    box-shadow: inset 0 0 60px rgba(255, 255, 255, 0.9);
+    pointer-events: none;
+  }
+
+  .pf-spotlight-bottle-wrap {
+    position: absolute;
+    left: 50%;
+    top: 48%;
+    translate: -50% -50%;
+    width: 250px;
+    filter: drop-shadow(20px 32px 30px rgba(60, 30, 5, 0.28));
+    animation: pf-fade-only 0.45s ease-out both;
+  }
+  .pf-spotlight-bottle {
+    width: 100%;
+    cursor: grab;
+    transition: transform 0.4s var(--ease-out);
+  }
+  .pf-spotlight-bottle:hover {
+    transform: scale(1.03) rotate(-2deg);
+  }
+
+  /* Floating Taste Profile Glass Card */
+  .pf-spotlight-card {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 16px 36px -10px rgba(50, 30, 10, 0.15), 0 2px 6px rgba(0, 0, 0, 0.04);
+    border-radius: 16px;
+    z-index: 12;
+  }
+
+  .pf-spotlight-card-taste {
+    left: -20px;
+    bottom: 120px;
+    width: 230px;
+    padding: 18px 20px;
+    transform: translateZ(30px);
+    animation: pf-float 6s ease-in-out infinite alternate;
+  }
+  .pf-spotlight-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .pf-spotlight-tag {
+    font: 700 11px/1 var(--font-body-family);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: var(--kraft);
     color: var(--ink);
   }
-  .pf-chalk-sign {
-    position: absolute;
-    left: 548px;
-    top: 616px;
-    z-index: 4;
+  .pf-spotlight-rating {
+    font: 700 12px/1 var(--font-body-family);
+    color: #e07212;
+  }
+  .pf-spotlight-name {
+    font-size: 20px;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .pf-spotlight-notes {
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+  }
+  .pf-spotlight-bars {
+    display: grid;
+    gap: 6px;
+  }
+  .pf-spotlight-bar-row {
+    display: grid;
+    grid-template-columns: 46px 1fr;
+    align-items: center;
+    gap: 8px;
+    font: 600 11px/1 var(--font-body-family);
+    color: var(--ink-muted);
+  }
+  .pf-spotlight-track {
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+  .pf-spotlight-track i {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--tomato);
+    transition: width 0.4s var(--ease-out);
+  }
+
+  /* Fresh Quality Seal Badge */
+  .pf-spotlight-card-seal {
+    right: 20px;
+    top: 140px;
+    padding: 16px 18px;
+    text-align: center;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    width: 230px;
-    padding: 20px 24px;
-    rotate: -6deg;
-    text-align: center;
-    color: var(--chalk-text);
-    background: var(--chalk);
-    border: 8px solid var(--wood-2);
-    border-radius: 6px;
-    box-shadow: 0 14px 24px rgba(40, 25, 10, 0.25);
-    font-size: 24px;
-    line-height: 1.15;
+    gap: 3px;
+    transform: translateZ(20px);
+    animation: pf-float-slow 7s ease-in-out infinite alternate;
   }
-  .pf-chalk-price {
-    font-size: 40px;
-    line-height: 1;
-    color: #ffd6a8;
+  .pf-seal-cal {
+    font: 800 22px/1 var(--font-display-family);
+    color: var(--ink);
+  }
+  .pf-seal-note {
+    font: 600 11px/1 var(--font-body-family);
+    color: var(--ink-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .pf-seal-price {
+    font: 800 24px/1 var(--font-display-family);
+    color: var(--tomato);
+    margin-top: 4px;
   }
 
   /* ── Flavours (PS03) ─────────────────────── */
@@ -5983,4 +6182,175 @@ html.has-traveller .pf-traveller-slot {
 @keyframes pf-ld2-in {
   from { opacity: 0; transform: translateY(10px) scale(0.97); }
   to { opacity: 1; transform: none; }
+}
+
+/* ═══ Hero: two-line headline, switcher above the CTA, fits one screen ═══════ */
+@layer components {
+  .pf-hero-spotlight {
+    height: calc(76px + 824px * var(--fit, 1));
+  }
+  .pf-hero-spotlight > .pf-stage {
+    position: relative;
+    left: 50%;
+    width: 1440px;
+    max-width: none;
+    height: 900px;
+    margin-inline: 0;
+    transform: translateX(-50%) scale(var(--fit, 1));
+    transform-origin: 50% 76px;
+  }
+  .pf-hero-spotlight .pf-hero-copy {
+    top: 132px;
+    width: 680px;
+  }
+  .pf-hero-spotlight .pf-hero-eyebrow-pill {
+    margin-bottom: 22px;
+    letter-spacing: 0.04em;
+  }
+  .pf-hero-spotlight .pf-h1 {
+    font-size: 100px;
+    line-height: 1;
+    letter-spacing: -0.045em;
+  }
+  .pf-hero-spotlight .pf-line {
+    white-space: nowrap;
+  }
+  .pf-hero-spotlight .pf-hero-lead {
+    margin-top: 22px;
+    width: 470px;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  .pf-hero-spotlight .pf-hero-switcher {
+    margin-top: 26px;
+    padding-top: 0;
+    border-top: 0;
+  }
+  .pf-hero-spotlight .pf-hero-switcher-label {
+    margin-bottom: 10px;
+    font: 600 13px/1 var(--font-body-family);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .pf-hero-spotlight .pf-hero-chip {
+    padding: 9px 14px;
+    font-weight: 600;
+  }
+  .pf-hero-spotlight .pf-hero-chip:focus-visible,
+  .pf-hero-spotlight .pf-btn:focus-visible {
+    outline: 2px solid var(--tomato);
+    outline-offset: 3px;
+  }
+  .pf-hero-spotlight .pf-hero-cta {
+    margin-top: 24px;
+  }
+  .pf-hero-spotlight .pf-hero-badges {
+    margin-top: 26px;
+    gap: 10px;
+  }
+
+  /* the taste card sits mid-left of the bottle, clear of the travelling orange below it */
+  .pf-hero-spotlight .pf-spotlight-card-taste {
+    left: -30px;
+    bottom: auto;
+    top: 300px;
+  }
+}
+
+/* ═══ Hero: continuous bottle cycle + flavour fruits ══════════════════════════ */
+@layer components {
+  /* all bottles stacked: the active one cross-fades in (no gap, no pop) */
+  .pf-spotlight-stack {
+    aspect-ratio: 600 / 1525;
+    animation: none;
+  }
+  .pf-spotlight-stack .pf-spotlight-bottle {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.7s var(--ease-out);
+  }
+  .pf-spotlight-stack .pf-spotlight-bottle.is-on {
+    opacity: 1;
+  }
+  .pf-spotlight-bottle:hover {
+    transform: none;
+  }
+
+  /* fruits: each set drifts in softly when the flavour changes, then floats */
+  .pf-hero-fruit-swap {
+    display: contents;
+  }
+  .pf-hero-fruit-swap > .pf-hero-prop {
+    animation: pf-hero-fruit-in 0.8s var(--ease-out) both, pf-float 3.6s ease-in-out 0.8s infinite alternate;
+  }
+  .pf-hero-fruit-swap:nth-child(2) > .pf-hero-prop { animation-delay: 0.08s, 1s; }
+  .pf-hero-fruit-swap:nth-child(3) > .pf-hero-prop { animation-delay: 0.14s, 1.3s; }
+  .pf-hero-fruit-swap:nth-child(4) > .pf-hero-prop { animation-delay: 0.2s, 0.9s; }
+  .pf-hero-prop {
+    filter: drop-shadow(8px 16px 16px rgba(60, 30, 5, 0.18));
+  }
+  /* per-image tuning (each file has its own margins and proportions) */
+  .pf-hero-orange.pf-hf-strawberry { width: 120px; left: 830px; top: 650px; }
+  .pf-hero-orange.pf-hf-gauva { width: 190px; left: 790px; top: 640px; }
+  .pf-hero-orange.pf-hf-mango { width: 175px; left: 795px; top: 655px; }
+  .pf-hero-orange.pf-hf-beet { width: 130px; left: 820px; top: 610px; }
+  .pf-hero-orange.pf-hf-lime-half { width: 150px; left: 810px; top: 670px; }
+  .pf-hero-half.pf-hf-apple-red { width: 130px; rotate: 0deg; }
+  .pf-hero-half.pf-hf-cucumber { width: 125px; }
+  .pf-hero-half.pf-hf-pineapple { width: 110px; top: 600px; rotate: 12deg; }
+  .pf-hero-half.pf-hf-carrot { width: 70px; left: 1270px; top: 560px; rotate: 28deg; }
+  .pf-hero-leaf-a.pf-hf-mint { width: 120px; }
+  .pf-hero-leaf-a.pf-hf-ginger { width: 120px; rotate: -10deg; }
+  .pf-hero-leaf-b.pf-hf-strawberry { width: 80px; rotate: 18deg; }
+  .pf-hero-leaf-b.pf-hf-spinach { width: 90px; rotate: 20deg; }
+  .pf-hero-leaf-b.pf-hf-lemon-half { width: 95px; rotate: 10deg; }
+  .pf-hero-leaf-b.pf-hf-lime-half { width: 90px; rotate: 10deg; }
+
+  /* the chip timer: how long until the next bottle */
+  .pf-hero-chip {
+    position: relative;
+    overflow: hidden;
+  }
+  .pf-hero-chip-timer {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 3px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    opacity: 0.45;
+    transform-origin: left;
+    animation: pf-chip-timer linear both;
+  }
+  .pf-hero-chip-timer.is-held {
+    opacity: 0.2;
+  }
+}
+/* the travelling orange waits (hidden) while another flavour is on show at the very top */
+html.pf-hero-alt .pf-traveller {
+  visibility: hidden;
+}
+html.is-static .pf-hero-chip-timer {
+  display: none;
+}
+html.is-static .pf-hero-fruit-swap > .pf-hero-prop {
+  animation: none;
+}
+@keyframes pf-hero-fruit-in {
+  from { opacity: 0; transform: translateY(14px) rotate(-6deg); }
+  to { opacity: 1; transform: none; }
+}
+
+/* hero bottle swap: labels never overlap mid-crossfade (old label out fast, new one in after its bottle) */
+@layer components {
+  .pf-spotlight-stack .pf-spotlight-bottle .pf-label {
+    opacity: 0;
+    transition: opacity 0.12s linear;
+  }
+  .pf-spotlight-stack .pf-spotlight-bottle.is-on .pf-label {
+    opacity: 1;
+    transition: opacity 0.3s var(--ease-out) 0.38s;
+  }
 }

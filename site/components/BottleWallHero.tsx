@@ -1,39 +1,106 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { gsap } from "@/lib/gsap";
-import { hero, products } from "@/site/content";
+import { hero, juiceColor, products, rupee, type Juice } from "@/site/content";
 import { clamp, isStatic, onLift, onScreen } from "@/site/lib/motion";
 import { Arrow, Bottle, Fruit, Stamp } from "./bits";
 
-// M42 drive: shown progress = max(intro, scroll) (lessons 4, 64, 81). The intro starts on the loader's lift and runs
-// linearly, long enough that the record scroll overtakes it; 0.5 = the rows' resting layout.
-const INTRO_RATE = 0.21; // per second
-const INTRO_MAX = 0.62;
-const SCROLL_FROM = 0.28; // progress at scrollY 0
-const ROW_TRAVEL = 260; // px each row travels along the diagonal from p 0 → 0.5 (and again 0.5 → 1)
+// The signature blends featured in the spotlight switcher, in cycle order (Sunrise → Berry → Guava → Mango → Beet → Melon)
+const SPOTLIGHT_FLAVOURS = ["sunrise", "berry", "green", "gold", "beet", "melon"] as const;
+const CYCLE = 3200; // ms per bottle while the hero is on screen
+const PAUSE_AFTER_CLICK = 7000; // ms a chosen flavour holds before the cycle resumes
 
-/**
- * HR23 · headline left, a diagonal wall of bottles in two rows on paint blobs right, leaves + citrus,
- * a chalkboard price sign. M42: the two rows slide opposite ways along the diagonal (intro, then scroll).
- */
+// fruits around the bottle per flavour: [main (on the travelling orange's spot), lower right, upper left, upper right]
+const HERO_FRUITS: Record<string, [string, string, string, string]> = {
+  sunrise: ["orange", "orange-half", "citrus-leaves", "mint"],
+  berry: ["strawberry", "apple-red", "mint", "strawberry"],
+  green: ["gauva", "cucumber", "mint", "spinach"],
+  gold: ["mango", "pineapple", "mint", "lemon-half"],
+  beet: ["beet", "carrot", "ginger", "mint"],
+  melon: ["lime-half", "cucumber", "mint", "lime-half"],
+};
+
 export default function BottleWallHero() {
   const root = useRef<HTMLElement>(null);
+  const [activeId, setActiveId] = useState<string>("sunrise");
+  const [added, setAdded] = useState(false);
+  const addTimer = useRef(0);
+  const activeProduct = products[activeId] ?? products.sunrise;
+
+  const [cycleKey, setCycleKey] = useState(0); // restarts the chip timer bar
+  const [paused, setPaused] = useState(false);
+
+  const handleSelectFlavour = (id: string) => {
+    setActiveId(id);
+    setPaused(true);
+    setCycleKey((k) => k + 1);
+  };
+
+  // continuous bottle change: next flavour every CYCLE ms while the hero is on screen; a click holds for a while
+  useEffect(() => {
+    if (isStatic()) return;
+    const t = window.setTimeout(
+      () => {
+        if (paused) {
+          setPaused(false);
+        } else {
+          const r = root.current!.getBoundingClientRect();
+          if (r.bottom > window.innerHeight * 0.4) {
+            setActiveId((cur) => SPOTLIGHT_FLAVOURS[(SPOTLIGHT_FLAVOURS.indexOf(cur as (typeof SPOTLIGHT_FLAVOURS)[number]) + 1) % SPOTLIGHT_FLAVOURS.length]);
+          }
+        }
+        setCycleKey((k) => k + 1);
+      },
+      paused ? PAUSE_AFTER_CLICK : CYCLE,
+    );
+    return () => clearTimeout(t);
+  }, [cycleKey, paused]);
+
+  // the travelling orange starts from the orange beside the bottle: on other flavours it waits hidden until the
+  // visitor starts scrolling (then it appears and continues its journey)
+  useEffect(() => {
+    const alt = activeId !== "sunrise";
+    const sync = () => document.documentElement.classList.toggle("pf-hero-alt", alt && window.scrollY < 30);
+    sync();
+    window.addEventListener("scroll", sync, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", sync);
+      document.documentElement.classList.remove("pf-hero-alt");
+    };
+  }, [activeId]);
+
+  const handleQuickAdd = () => {
+    window.dispatchEvent(new CustomEvent("pf:add", { detail: { id: activeId, size: "single" } }));
+    setAdded(true);
+    clearTimeout(addTimer.current);
+    addTimer.current = window.setTimeout(() => setAdded(false), 1600);
+  };
+
+  useEffect(() => () => clearTimeout(addTimer.current), []);
+
+  // fit the 1440 × 900 design to the window (width and height below the nav); layout, so it runs in ?static=1 too
+  useEffect(() => {
+    const el = root.current!;
+    const fit = () =>
+      el.style.setProperty("--fit", String(Math.min(1, document.documentElement.clientWidth / 1440, (window.innerHeight - 76) / (900 - 76))));
+    fit();
+    window.addEventListener("resize", fit);
+    return () => window.removeEventListener("resize", fit);
+  }, []);
 
   useEffect(() => {
     if (isStatic()) return;
     const el = root.current!;
     const q = gsap.utils.selector(el);
-    const rowA = q("[data-wall-row=a]")[0];
-    const rowB = q("[data-wall-row=b]")[0];
     const depth1 = q("[data-depth='1']");
     const depth2 = q("[data-depth='2']");
     const depth3 = q("[data-depth='3']");
     const copy = q(".pf-hero-copy")[0];
+    const stageBox = q(".pf-hero-centerpiece")[0];
 
     gsap.set(q(".pf-line-in"), { yPercent: 110 });
     gsap.set(q("[data-hero-in]"), { autoAlpha: 0, y: 26 });
-    gsap.set(q(".pf-chalk-sign"), { autoAlpha: 0, y: -50, rotate: 0 });
 
     let introStart = -1;
     const offLift = onLift(() => {
@@ -41,101 +108,92 @@ export default function BottleWallHero() {
       gsap
         .timeline()
         .to(q(".pf-line-in"), { yPercent: 0, duration: 0.9, ease: "power4.out", stagger: 0.12 })
-        .to(q("[data-hero-in]"), { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 0.08 }, 0.35)
-        .to(q(".pf-chalk-sign"), { autoAlpha: 1, y: 0, rotate: 0, duration: 0.8, ease: "power3.out" }, 0.55);
+        .to(q("[data-hero-in]"), { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 0.08 }, 0.35);
     });
 
     const tick = () => {
       if (!onScreen(el)) return;
-      const t = introStart < 0 ? 0 : (performance.now() - introStart) / 1000;
-      const intro = Math.min(INTRO_MAX, t * INTRO_RATE);
       const s = clamp(window.scrollY / el.offsetHeight);
-      const p = Math.max(intro, SCROLL_FROM + (1 - SCROLL_FROM) * s);
-      // after the intro the rows never stop: a slow drift keeps sliding them while the page rests (lesson 8)
-      const drift = introStart < 0 ? 0 : Math.sin(Math.max(0, t - 2.4) * 0.55) * 34;
-      const x = ROW_TRAVEL * (1 - 2 * p) + drift;
-      gsap.set(rowA, { x });
-      gsap.set(rowB, { x: -x });
-      gsap.set(depth1, { y: -50 * p });
-      gsap.set(depth2, { y: -110 * p });
-      gsap.set(depth3, { y: -190 * p });
-      gsap.set(copy, { y: -90 * s });
+      gsap.set(depth1, { y: -50 * s });
+      gsap.set(depth2, { y: -110 * s });
+      gsap.set(depth3, { y: -180 * s });
+      gsap.set(copy, { y: -70 * s });
+      if (stageBox) gsap.set(stageBox, { y: -40 * s });
     };
     gsap.ticker.add(tick);
 
-    // bottles tilt slightly toward the cursor while hovered
-    const items = q<HTMLElement>(".pf-wall-item");
-    const offs = items.map((it) => {
-      const move = (e: PointerEvent | MouseEvent) => {
-        const r = it.getBoundingClientRect();
-        const dx = clamp((e.clientX - (r.left + r.width / 2)) / (r.width / 2), -1, 1);
-        const dy = clamp((e.clientY - (r.top + r.height / 2)) / (r.height / 2), -1, 1);
-        it.style.setProperty("--tilt", `${(dx * 7).toFixed(2)}deg`);
-        it.style.setProperty("--tilt-y", `${(dy * 6).toFixed(2)}px`);
-      };
-      const leave = () => {
-        it.style.setProperty("--tilt", "0deg");
-        it.style.setProperty("--tilt-y", "0px");
-      };
-      it.addEventListener("pointermove", move);
-      it.addEventListener("mousemove", move);
-      it.addEventListener("pointerleave", leave);
-      it.addEventListener("mouseleave", leave);
-      return () => {
-        it.removeEventListener("pointermove", move);
-        it.removeEventListener("mousemove", move);
-        it.removeEventListener("pointerleave", leave);
-        it.removeEventListener("mouseleave", leave);
-      };
-    });
+    // Spotlight 3D tilt on mouse movement across the hero section
+    const move = (e: MouseEvent) => {
+      const r = el.getBoundingClientRect();
+      const dx = clamp((e.clientX - (r.left + r.width * 0.7)) / (r.width * 0.35), -1, 1);
+      const dy = clamp((e.clientY - (r.top + r.height * 0.5)) / (r.height * 0.5), -1, 1);
+      el.style.setProperty("--hero-tilt-x", `${(-dy * 7).toFixed(2)}deg`);
+      el.style.setProperty("--hero-tilt-y", `${(dx * 8).toFixed(2)}deg`);
+    };
+    const leave = () => {
+      el.style.setProperty("--hero-tilt-x", "0deg");
+      el.style.setProperty("--hero-tilt-y", "0deg");
+    };
+
+    el.addEventListener("mousemove", move);
+    el.addEventListener("mouseleave", leave);
+
     return () => {
       offLift();
       gsap.ticker.remove(tick);
-      offs.forEach((f) => f());
+      el.removeEventListener("mousemove", move);
+      el.removeEventListener("mouseleave", leave);
     };
   }, []);
 
   return (
-    <section id="top" ref={root} className="pf-hero" data-section="hero" data-record-time="0" data-record-hold="1.4" data-record-label="Hero intro">
+    <section id="top" ref={root} className="pf-hero pf-hero-spotlight" data-section="hero" data-record-time="0" data-record-hold="1.4" data-record-label="Hero intro">
       <div className="pf-stage">
+        {/* Ambient atmospheric backdrop */}
         <div className="pf-hero-art" aria-hidden>
           <span data-depth="1" className="pf-depth">
-            <span className="pf-hero-disc" />
+            <span
+              className="pf-hero-glow"
+              style={{
+                "--glow-c": juiceColor[activeProduct.juice] ?? "#E9741C",
+              } as CSSProperties}
+            />
           </span>
           <span data-depth="2" className="pf-depth">
-            <span className="pf-hero-disc pf-hero-disc-sm" />
+            <span className="pf-hero-pedestal" />
           </span>
-          <div className="pf-wall">
-            {[hero.rowA, hero.rowB].map((row, r) => (
-              <div key={r} className={`pf-wall-row pf-wall-row-${r ? "b" : "a"}`} data-wall-row={r ? "b" : "a"}>
-                {row.map((id, i) => {
-                  const p = products[id];
-                  const demo = r === 0 && i === 1;
-                  return (
-                    <a
-                      key={`${id}-${i}`}
-                      href="#flavours"
-                      className="pf-wall-item"
-                      data-cursor="Shop"
-                      {...(demo ? { "data-hover-demo": "", "data-hover-hold": "1.0", "data-hover-label": "Hero bottle" } : {})}
-                      aria-label={p.name}
-                    >
-                      <Bottle juice={p.juice} word={p.word} eager />
-                    </a>
-                  );
-                })}
-              </div>
-            ))}
-          </div>
+
+          {/* Floating Organic Botanical Elements */}
           <span data-depth="3" className="pf-depth">
-            <Fruit name="citrus-leaves" className="pf-hero-prop pf-hero-leaf-a pf-float" />
-            <Fruit name="mint" className="pf-hero-prop pf-hero-leaf-b pf-float pf-float-slow" />
-            <Fruit name="orange" className="pf-hero-prop pf-hero-orange pf-float pf-float-slow pf-traveller-slot" />
-            <Fruit name="orange-half" className="pf-hero-prop pf-hero-half pf-float" />
+            {(() => {
+              const [main, low, upL, upR] = HERO_FRUITS[activeId] ?? HERO_FRUITS.sunrise;
+              return (
+                <>
+                  <span key={`ul-${activeId}`} className="pf-hero-fruit-swap">
+                    <Fruit name={upL} className={`pf-hero-prop pf-hero-leaf-a pf-hf-${upL}`} />
+                  </span>
+                  <span key={`ur-${activeId}`} className="pf-hero-fruit-swap">
+                    <Fruit name={upR} className={`pf-hero-prop pf-hero-leaf-b pf-hf-${upR}`} />
+                  </span>
+                  <span key={`main-${activeId}`} className="pf-hero-fruit-swap">
+                    <Fruit name={main} className={`pf-hero-prop pf-hero-orange pf-hf-${main} ${activeId === "sunrise" ? "pf-traveller-slot" : ""}`} />
+                  </span>
+                  <span key={`low-${activeId}`} className="pf-hero-fruit-swap">
+                    <Fruit name={low} className={`pf-hero-prop pf-hero-half pf-hf-${low}`} />
+                  </span>
+                </>
+              );
+            })()}
           </span>
         </div>
 
+        {/* Left Editorial Copy & Actions */}
         <div className="pf-hero-copy">
+          <div className="pf-hero-eyebrow-pill" data-hero-in>
+            <span className="pf-live-dot" />
+            <span>Today&apos;s Press · Fresh Batch at Dawn</span>
+          </div>
+
           <h1 className="pf-h1 font-display">
             <span className="pf-line pf-mask">
               <span className="pf-line-in">{hero.lines[0]}</span>
@@ -146,34 +204,126 @@ export default function BottleWallHero() {
               </span>
             </span>
           </h1>
+
           <p className="pf-hero-lead" data-hero-in>
             {hero.lead}
           </p>
+
+          {/* Interactive Botanical Flavour Switcher Chips */}
+          <div className="pf-hero-switcher" data-hero-in>
+            <span className="pf-hero-switcher-label">Choose your press</span>
+            <div className="pf-hero-chips" role="tablist" aria-label="Hero juice flavour switcher">
+              {SPOTLIGHT_FLAVOURS.map((id) => {
+                const p = products[id];
+                const isActive = id === activeId;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    className={`pf-hero-chip ${isActive ? "is-active" : ""}`}
+                    onClick={() => handleSelectFlavour(id)}
+                    style={{
+                      "--chip-accent": juiceColor[p.juice],
+                    } as CSSProperties}
+                  >
+                    <span className="pf-hero-chip-dot" />
+                    <span>{p.word}</span>
+                    {isActive && (
+                      <i
+                        key={cycleKey}
+                        className={`pf-hero-chip-timer ${paused ? "is-held" : ""}`}
+                        style={{ animationDuration: `${paused ? PAUSE_AFTER_CLICK : CYCLE}ms` }}
+                        aria-hidden
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
           <div className="pf-hero-cta" data-hero-in>
-            <a href="#flavours" className="pf-btn pf-btn-tomato" data-magnetic>
-              {hero.primary} <Arrow />
-            </a>
+            <button
+              type="button"
+              className={`pf-btn ${added ? "pf-btn-ink" : "pf-btn-tomato"}`}
+              onClick={handleQuickAdd}
+              data-magnetic
+            >
+              {added ? "Added to Bag ✓" : `Order Fresh · ${rupee(activeProduct.price)}`} <Arrow />
+            </button>
             <a href="#cleanses" className="pf-btn pf-btn-line">
               {hero.secondary}
             </a>
           </div>
+
           <div className="pf-hero-badges" data-hero-in>
             {hero.badges.map((b) => (
-              <Stamp key={b}>
-                {b}
-              </Stamp>
+              <Stamp key={b}>{b}</Stamp>
             ))}
           </div>
+
         </div>
 
-        <div className="pf-chalk-sign" aria-label="Today's press, 149 rupees a bottle">
-          <span>{hero.chalk[0]}</span>
-          <span className="pf-chalk-price">{hero.chalk[1]}</span>
-          <span>{hero.chalk[2]}</span>
+        {/* Centerpiece 3D Stage Right */}
+        <div className="pf-hero-centerpiece pf-hero-stage-in">
+          <div className="pf-spotlight-disc" />
+
+          {/* Master Spotlight Bottle */}
+          <div className="pf-spotlight-bottle-wrap pf-spotlight-stack">
+            {SPOTLIGHT_FLAVOURS.map((id) => (
+              <Bottle
+                key={id}
+                juice={products[id].juice}
+                word={products[id].word}
+                className={`pf-spotlight-bottle ${id === activeId ? "is-on" : ""}`}
+                eager
+              />
+            ))}
+          </div>
+
+          {/* Floating Live Taste Profile Micro-Card */}
+          <div className="pf-spotlight-card pf-spotlight-card-taste">
+            <div className="pf-spotlight-card-top">
+              <span className="pf-spotlight-tag">{activeProduct.goal}</span>
+              <span className="pf-spotlight-rating">★ {activeProduct.rating.toFixed(1)}</span>
+            </div>
+            <p className="pf-spotlight-name font-display">{activeProduct.name}</p>
+            <p className="pf-spotlight-notes">{activeProduct.notes}</p>
+            <div className="pf-spotlight-bars">
+              <div className="pf-spotlight-bar-row">
+                <span>Sweet</span>
+                <div className="pf-spotlight-track">
+                  <i style={{ width: `${(activeProduct.taste.sweet / 5) * 100}%` }} />
+                </div>
+              </div>
+              <div className="pf-spotlight-bar-row">
+                <span>Tangy</span>
+                <div className="pf-spotlight-track">
+                  <i style={{ width: `${(activeProduct.taste.tangy / 5) * 100}%` }} />
+                </div>
+              </div>
+              <div className="pf-spotlight-bar-row">
+                <span>Zing</span>
+                <div className="pf-spotlight-track">
+                  <i style={{ width: `${(activeProduct.taste.zing / 5) * 100}%` }} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Fresh Quality Seal Badge */}
+          <div className="pf-spotlight-card pf-spotlight-card-seal" aria-hidden>
+            <span className="pf-seal-cal">{activeProduct.nutrition.kcal} kcal</span>
+            <span className="pf-seal-note">100% Raw · Unfiltered</span>
+            <span className="pf-seal-price">{rupee(activeProduct.price)}</span>
+          </div>
         </div>
       </div>
-      {/* record stop: a short scroll, then the hover on the Sunrise bottle while the rows keep sliding */}
+
+      {/* Record stop marker */}
       <span className="pf-marker" style={{ top: 150 }} data-record-time="0.45" data-record-hold="0.9" data-record-label="Hero hover" aria-hidden />
     </section>
   );
 }
+
