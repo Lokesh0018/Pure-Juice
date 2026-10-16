@@ -1,16 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { bottle, fruit, type Juice } from "@/site/content";
 
-/** Pure Juice brand mark: a tomato juice drop with an ink leaf (same drawing as app/icon.svg). */
-export function PureMark({ className = "" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="14 4 38 56" aria-hidden focusable="false">
-      <path d="M32 15c8 11 15 19 15 28a15 15 0 0 1-30 0c0-9 7-17 15-28Z" fill="var(--tomato, #E8541E)" />
-      <path d="M33.5 15.5C36 8 43 5.5 50 6.5 48.5 13 42 17.5 33.5 15.5Z" fill="currentColor" />
-      <ellipse cx="26" cy="44" rx="3.5" ry="6" fill="#fff" opacity=".5" />
-    </svg>
-  );
-}
+
 
 /**
  * One juice bottle: a pixel-aligned colour still (all share one cut-out mask), with the brand + flavour

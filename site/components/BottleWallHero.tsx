@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { gsap } from "@/lib/gsap";
-import { hero, juiceColor, products, rupee, type Juice } from "@/site/content";
+import { hero, juiceColor, products, rupee } from "@/site/content";
 import { clamp, isStatic, onLift, onScreen } from "@/site/lib/motion";
 import { Arrow, Bottle, Fruit, Stamp } from "./bits";
 
@@ -90,9 +90,7 @@ export default function BottleWallHero() {
     gsap.set(q(".pf-line-in"), { yPercent: 110 });
     gsap.set(q("[data-hero-in]"), { autoAlpha: 0, y: 26 });
 
-    let introStart = -1;
     const offLift = onLift(() => {
-      introStart = performance.now();
       gsap
         .timeline()
         .to(q(".pf-line-in"), { yPercent: 0, duration: 0.9, ease: "power4.out", stagger: 0.12 })

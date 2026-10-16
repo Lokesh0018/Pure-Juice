@@ -5,10 +5,12 @@ import { prefersReducedMotion } from "@/lib/gsap";
 
 const WIPE_AT = 1.8; // s: the wipe starts here (if the hero images are in), and the hero intro starts with it
 const WIPE = 0.6; // s: so the loader is gone at 2.4 s
+const LETTERS = ["j", "u", "i", "c", "e"]; // logo layers cut from /logo.webp (public/images/loader/)
 
 /**
- * Logo-fill loader: the JUICE logo sits as a faint grey ghost and fills with colour from the bottom up as the hero's
- * eager images load (real 0→100 counter + a slim progress bar), then the panel wipes up while the hero intro moves. All motion is CSS from the first paint (lesson 11); JS only counts, fires
+ * Juice-pour loader: the JUICE logo builds itself in 1.75 s: letters rise, the orange drops in and squeezes, juice
+ * falls from it into the U and fills it bottom-up, while the hero's eager images load (real 0→100 counter + a slim
+ * progress bar); then the panel wipes up while the hero intro moves. All motion is CSS from the first paint (lesson 11); JS only counts, fires
  * "pf:lift" as the wipe starts (lesson 80) and keeps the page still until then.
  */
 export default function SplashLoader() {
@@ -69,10 +71,17 @@ export default function SplashLoader() {
   return (
     <div className={`pf-loader pf-life ${leaving ? "is-leaving" : ""}`} aria-hidden data-loader style={{ "--p": pct / 100 } as CSSProperties}>
       <div className="pf-loader-center pf-ld2">
-        {/* the logo fills with colour from the bottom up as the page loads */}
+        {/* the logo builds itself: letters rise, the orange drops in and is squeezed, a stream of juice falls
+            into the U and fills it from the bottom up (wavy surface), then the stream stops */}
         <div className="pf-ld2-logo">
-          <img src="/logo.webp" alt="" className="pf-ld2-ghost" draggable={false} />
-          <img src="/logo.webp" alt="" className="pf-ld2-fill" draggable={false} />
+          {LETTERS.map((l, i) => (
+            <img key={l} src={`/images/loader/l-${l}.webp`} alt="" className="pf-ld2-letter" style={{ "--i": i } as CSSProperties} draggable={false} />
+          ))}
+          <span className="pf-ld2-stream" />
+          <span className="pf-ld2-juice">
+            <i />
+          </span>
+          <img src="/images/loader/fruit.webp" alt="" className="pf-ld2-fruit" draggable={false} />
         </div>
         <div className="pf-ld2-bar">
           <i />

@@ -15,6 +15,7 @@ const smallInk: Record<Juice, string> = {
   berry: "#FFFFFF",
   beet: "#FFFFFF",
 };
+
 /** small goal icons (24 px grid, currentColor) */
 function GoalIcon({ name }: { name: string }) {
   const p = { fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };

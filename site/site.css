@@ -4677,11 +4677,18 @@ html.is-static .pf-press-slice {
     letter-spacing: -0.01em;
   }
 
-  /* timeline */
+  /* the photo is sized from the window: as tall as the screen allows (690 px at 900 high, the design),
+     its width follows the photo's 520:690 shape but never takes more than 40 % of the stage */
+  .pf-farm {
+    --photo-h: clamp(440px, calc(100vh - 210px), 760px);
+    --photo-w: min(calc(var(--photo-h) * 0.7536), 40%);
+  }
+
+  /* timeline: keeps a 52 px gap to the photo */
   .pf-ledger {
     left: 64px;
     top: 316px;
-    width: 740px;
+    width: min(740px, calc(100% - 180px - var(--photo-w)));
     padding-left: 34px;
     border-top: 0;
   }
@@ -4784,14 +4791,26 @@ html.is-static .pf-press-slice {
 
   /* photo + step card */
   .pf-photo {
-    left: 856px;
+    left: auto;
+    right: 64px;
     top: 112px;
-    width: 520px;
-    height: 690px;
+    width: var(--photo-w);
+    height: var(--photo-h);
   }
   .pf-photo-frame {
     height: 100%;
     border-radius: 24px;
+    isolation: isolate;
+    box-shadow: 0 1px 2px rgba(20, 20, 20, 0.06), 0 36px 60px -38px rgba(60, 35, 10, 0.45);
+  }
+  .pf-photo-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px rgba(20, 20, 20, 0.06);
+    pointer-events: none;
   }
   .pf-photo figcaption.pf-farm-card {
     left: 18px;
@@ -4816,6 +4835,11 @@ html.is-static .pf-press-slice {
     line-height: 1;
     letter-spacing: -0.05em;
     color: var(--tomato);
+  }
+  /* Inter Tight 600 digits fill 11.7 %–88.3 % of the 1 em cell (the old 0.2em clip was measured for the big
+     display number and sliced the tops off); a 0.08em margin keeps the neighbouring digits hidden while it rolls */
+  .pf-farm-card .pf-farm-roll {
+    clip-path: inset(0.08em 0 0.08em 0);
   }
   .pf-farm-card-text {
     display: grid;
@@ -6121,21 +6145,64 @@ html.has-traveller .pf-traveller-slot {
     width: 340px;
     aspect-ratio: 620 / 376;
   }
-  .pf-ld2-logo img {
+  /* every layer is the full 620 x 376 logo canvas, so they stack back into the exact logo */
+  .pf-ld2-logo img,
+  .pf-ld2-juice {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     user-select: none;
   }
-  .pf-ld2-ghost {
-    filter: grayscale(1);
-    opacity: 0.16;
+  /* 1 · letters rise in one after another */
+  .pf-ld2-letter {
+    animation: pf-ld2-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) calc(0.05s + var(--i) * 0.06s) both;
   }
-  /* colour rises from the bottom; a little ahead of 0 so the first frame already shows a sliver of juice */
-  .pf-ld2-fill {
-    clip-path: inset(calc((1 - (0.06 + 0.94 * var(--p, 0))) * 100%) 0 0 0);
-    transition: clip-path 0.35s var(--ease-out);
+  /* 2 · the orange drops in, then squeezes once as the juice starts to run */
+  .pf-ld2-fruit {
+    z-index: 3;
+    transform-origin: 30.8% 43%;
+    animation:
+      pf-ld2-drop 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both,
+      pf-ld2-squeeze 0.42s cubic-bezier(0.45, 0, 0.25, 1) 0.68s;
+  }
+  /* 3 · a stream falls from the orange to the bottom of the U, flows while it fills, then runs dry */
+  .pf-ld2-stream {
+    position: absolute;
+    left: 29.6%;
+    top: 40%;
+    z-index: 1;
+    width: 2.4%;
+    height: 51%;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #fe7d05 0 40%, #ffa64d 50%, #fe7d05 60% 100%) 0 0 / 100% 40px #fe7d05;
+    animation:
+      pf-ld2-pour 0.3s cubic-bezier(0.55, 0, 0.75, 0.2) 0.72s both,
+      pf-ld2-flow 0.45s linear 0.72s infinite,
+      pf-ld2-dry 0.2s cubic-bezier(0.45, 0, 0.25, 1) 1.6s forwards;
+  }
+  /* 4 · the U fills bottom-up: a flat juice-orange liquid with a moving wavy surface, masked to the logo's juice shape */
+  .pf-ld2-juice {
+    z-index: 2;
+    overflow: hidden;
+    -webkit-mask: url("/images/loader/juice.webp") 0 0 / 100% 100% no-repeat;
+    mask: url("/images/loader/juice.webp") 0 0 / 100% 100% no-repeat;
+  }
+  .pf-ld2-juice i {
+    position: absolute;
+    inset: 0;
+    background: #fe7d05;
+    animation: pf-ld2-fill 0.8s cubic-bezier(0.45, 0, 0.25, 1) 0.92s both;
+  }
+  .pf-ld2-juice i::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 100%;
+    width: calc(100% + 24px);
+    height: 6px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 6'%3E%3Cpath d='M0 6V3Q6 0 12 3T24 3V6Z' fill='%23fe7d05'/%3E%3C/svg%3E") 0 0 / 24px 6px repeat-x;
+    animation: pf-ld2-wave 0.7s linear infinite;
   }
   .pf-ld2-bar {
     position: relative;
@@ -6182,6 +6249,38 @@ html.has-traveller .pf-traveller-slot {
 @keyframes pf-ld2-in {
   from { opacity: 0; transform: translateY(10px) scale(0.97); }
   to { opacity: 1; transform: none; }
+}
+@keyframes pf-ld2-rise {
+  from { opacity: 0; transform: translateY(14%); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes pf-ld2-drop {
+  from { opacity: 0; transform: translateY(-45%) rotate(-14deg); }
+  60% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+@keyframes pf-ld2-squeeze {
+  0%, 100% { transform: none; }
+  45% { transform: scale(1.04, 0.94); }
+}
+@keyframes pf-ld2-pour {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+@keyframes pf-ld2-dry {
+  from { clip-path: inset(0 0 0 0); }
+  to { clip-path: inset(100% 0 0 0); }
+}
+@keyframes pf-ld2-flow {
+  to { background-position: 0 40px; }
+}
+/* liquid top edge: below the canvas (empty U, wave hidden) → 37 % (past the neck, so the U is full) */
+@keyframes pf-ld2-fill {
+  from { transform: translateY(100%); }
+  to { transform: translateY(37%); }
+}
+@keyframes pf-ld2-wave {
+  to { transform: translateX(-24px); }
 }
 
 /* ═══ Hero: two-line headline, switcher above the CTA, fits one screen ═══════ */
@@ -6384,100 +6483,100 @@ html.is-static .pf-hero-roller {
 }
 
 /* ═══ Nav: floating glass bar, "you are here" pill, bag with icon ════════════ */
-@layer components {
-  /* floating bar inside the 76 px band every section reserves for the nav */
-  .pf-nav {
-    inset: 12px max(16px, calc(50vw - 704px)) auto;
-    height: 60px;
-    padding: 0 10px 0 22px;
-    border: 1px solid transparent;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--paper) 55%, transparent);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-  .pf-nav.is-scrolled {
-    background: color-mix(in srgb, #fff 82%, transparent);
-    border-color: rgba(20, 20, 20, 0.07);
-    box-shadow: 0 10px 30px -14px rgba(30, 20, 10, 0.25), 0 1px 2px rgba(0, 0, 0, 0.04);
-  }
-  .pf-logo:hover {
-    transform: none;
-    opacity: 0.85;
-  }
-  .pf-logo-img {
-    height: 40px;
-    filter: none;
-  }
-  .pf-logo:focus-visible,
-  .pf-nav-link:focus-visible,
-  .pf-bag:focus-visible {
-    outline: 2px solid var(--tomato);
-    outline-offset: 3px;
-    border-radius: 999px;
-  }
-
-  /* links: a soft track, a sliding pill behind the current section's link */
-  .pf-nav-links {
-    position: relative;
-    gap: 2px;
-    padding: 4px;
-    border-radius: 999px;
-    background: rgba(20, 20, 20, 0.04);
-  }
-  .pf-nav-pill {
-    position: absolute;
-    left: 0;
-    top: 4px;
-    bottom: 4px;
-    width: 0;
-    border-radius: 999px;
-    background: #fff;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 12px -6px rgba(0, 0, 0, 0.18);
-    opacity: 0;
-    transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), width 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.25s ease;
-  }
-  .pf-nav-pill.is-on {
-    opacity: 1;
-  }
-  .pf-nav-link {
-    position: relative;
-    z-index: 1;
-    padding: 10px 16px;
-    border-radius: 999px;
-    font: 500 14px/1 var(--font-body-family);
-    color: var(--ink-muted);
-    transition: color 0.2s ease;
-  }
-  .pf-nav-link:hover,
-  .pf-nav-link.is-current {
-    color: var(--ink);
-  }
-  .pf-nav-link.is-current {
-    font-weight: 600;
-  }
-
-  /* bag: icon + label + count */
-  .pf-bag {
-    gap: 8px;
-    height: 44px;
-    padding: 0 8px 0 16px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, box-shadow 0.2s ease;
-  }
-  .pf-bag:hover {
-    background: #2a2a2a;
-    box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.5);
-  }
-  .pf-bag-icon {
-    flex: none;
-    margin-right: -2px;
-  }
-  .pf-bag-count {
-    min-width: 28px;
-    height: 28px;
-  }
+/* floating bar inside the 76 px band every section reserves for the nav */
+.pf-nav {
+  inset: 12px max(16px, calc(50vw - 704px)) auto !important;
+  height: 60px !important;
+  padding: 0 10px 0 22px !important;
+  border: 1px solid transparent !important;
+  border-radius: 999px !important;
+  background: color-mix(in srgb, var(--paper) 55%, transparent) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
 }
+.pf-nav.is-scrolled {
+  background: color-mix(in srgb, #fff 82%, transparent) !important;
+  border-color: rgba(20, 20, 20, 0.07) !important;
+  box-shadow: 0 10px 30px -14px rgba(30, 20, 10, 0.25), 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+}
+.pf-logo:hover {
+  transform: none;
+  opacity: 0.85;
+}
+.pf-logo-img {
+  height: 40px !important;
+  filter: none !important;
+}
+.pf-logo:focus-visible,
+.pf-nav-link:focus-visible,
+.pf-bag:focus-visible {
+  outline: 2px solid var(--tomato);
+  outline-offset: 3px;
+  border-radius: 999px;
+}
+
+/* links: a soft track, a sliding pill behind the current section's link */
+.pf-nav-links {
+  position: relative !important;
+  gap: 2px !important;
+  padding: 4px !important;
+  border-radius: 999px !important;
+  background: rgba(20, 20, 20, 0.04) !important;
+}
+.pf-nav-pill {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 0;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 12px -6px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), width 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.25s ease;
+}
+.pf-nav-pill.is-on {
+  opacity: 1;
+}
+.pf-nav-link {
+  position: relative;
+  z-index: 1;
+  padding: 10px 16px !important;
+  border-radius: 999px !important;
+  font: 500 14px/1 var(--font-body-family) !important;
+  color: var(--ink-muted) !important;
+  transition: color 0.2s ease;
+}
+.pf-nav-link:hover,
+.pf-nav-link.is-current {
+  color: var(--ink) !important;
+}
+.pf-nav-link.is-current {
+  font-weight: 600 !important;
+}
+
+/* bag: icon + label + count */
+.pf-bag {
+  gap: 8px !important;
+  height: 44px !important;
+  padding: 0 8px 0 16px !important;
+  cursor: pointer;
+  border-radius: 999px !important;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.pf-bag:hover {
+  background: #2a2a2a;
+  box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.5);
+}
+.pf-bag-icon {
+  flex: none;
+  margin-right: -2px;
+}
+.pf-bag-count {
+  min-width: 28px !important;
+  height: 28px !important;
+}
+
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    Phones & tablets (< 1024 px). Desktop (≥ 1024 px) is unchanged: every rule below is inside these media queries.
@@ -6550,48 +6649,48 @@ html.is-static .pf-hero-roller {
 
   /* ── nav: logo · bag · menu button; links open as a panel ── */
   .pf-nav {
-    inset: 10px 12px auto;
-    height: 56px;
-    grid-template-columns: 1fr auto auto;
-    gap: 8px;
-    padding: 0 8px 0 16px;
+    inset: 10px 12px auto !important;
+    height: 56px !important;
+    grid-template-columns: 1fr auto auto !important;
+    gap: 8px !important;
+    padding: 0 8px 0 16px !important;
   }
   .pf-logo-img {
-    height: 34px;
+    height: 34px !important;
   }
   .pf-menu-btn {
-    display: grid;
-    order: 3;
+    display: grid !important;
+    order: 3 !important;
   }
   .pf-bag-wrap {
-    order: 2;
+    order: 2 !important;
   }
   .pf-nav-links {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    right: 0;
-    display: none;
-    flex-direction: column;
-    gap: 2px;
-    padding: 8px;
-    border-radius: 20px;
-    background: #fff;
-    box-shadow: 0 20px 40px -18px rgba(30, 20, 10, 0.35), 0 1px 2px rgba(0, 0, 0, 0.05);
+    position: absolute !important;
+    top: calc(100% + 8px) !important;
+    left: 0 !important;
+    right: 0 !important;
+    display: none !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+    padding: 8px !important;
+    border-radius: 20px !important;
+    background: #fff !important;
+    box-shadow: 0 20px 40px -18px rgba(30, 20, 10, 0.35), 0 1px 2px rgba(0, 0, 0, 0.05) !important;
   }
   .pf-nav-links.is-open {
-    display: flex;
+    display: flex !important;
   }
   .pf-nav-pill {
-    display: none;
+    display: none !important;
   }
   .pf-nav-link {
-    padding: 14px 16px;
-    font-size: 16px;
-    border-radius: 12px;
+    padding: 14px 16px !important;
+    font-size: 16px !important;
+    border-radius: 12px !important;
   }
   .pf-nav-link.is-current {
-    background: var(--kraft);
+    background: var(--kraft) !important;
   }
   .pf-drawer {
     width: min(430px, 100vw);
@@ -6757,6 +6856,7 @@ html.is-static .pf-hero-roller {
   .pf-farm .pf-photo {
     position: relative;
     left: auto;
+    right: auto;
     top: auto;
     width: 100%;
     max-width: 560px;
