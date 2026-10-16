@@ -6297,11 +6297,9 @@ html.has-traveller .pf-traveller-slot {
   .pf-hero-orange.pf-hf-beet { width: 130px; left: 820px; top: 610px; }
   .pf-hero-orange.pf-hf-lime-half { width: 150px; left: 810px; top: 670px; }
   .pf-hero-half.pf-hf-apple-red { width: 130px; rotate: 0deg; }
-  .pf-hero-half.pf-hf-cucumber { width: 125px; }
   .pf-hero-half.pf-hf-pineapple { width: 110px; top: 600px; rotate: 12deg; }
-  .pf-hero-half.pf-hf-carrot { width: 70px; left: 1270px; top: 560px; rotate: 28deg; }
+  .pf-hero-half.pf-hf-carrot { width: 150px; left: 1215px; top: 500px; rotate: 24deg; }
   .pf-hero-leaf-a.pf-hf-mint { width: 120px; }
-  .pf-hero-leaf-a.pf-hf-ginger { width: 120px; rotate: -10deg; }
   .pf-hero-leaf-b.pf-hf-strawberry { width: 80px; rotate: 18deg; }
   .pf-hero-leaf-b.pf-hf-spinach { width: 90px; rotate: 20deg; }
   .pf-hero-leaf-b.pf-hf-lemon-half { width: 95px; rotate: 10deg; }
@@ -6353,4 +6351,34 @@ html.is-static .pf-hero-fruit-swap > .pf-hero-prop {
     opacity: 1;
     transition: opacity 0.3s var(--ease-out) 0.38s;
   }
+}
+
+/* footer finale: the rolling orange sits above the footer content (no pointer events) */
+@layer components {
+  .pf-fo {
+    z-index: 4;
+    will-change: transform;
+  }
+}
+
+/* hero scroll orange (fixed, decorative, under the nav) */
+.pf-hero-roller {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 40;
+  width: 104px;
+  height: 104px;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.pf-hero-roller img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(6px 12px 10px rgba(60, 30, 5, 0.22));
+}
+html.is-static .pf-hero-roller {
+  display: none;
 }

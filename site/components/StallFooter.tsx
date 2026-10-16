@@ -5,6 +5,7 @@ import { gsap } from "@/lib/gsap";
 import { footer } from "@/site/content";
 import { clamp, isStatic, onScreen } from "@/site/lib/motion";
 import Meadow from "./Meadow";
+import FooterOrange from "./FooterOrange";
 
 /** Social icons (24 px grid, drawn in currentColor). */
 function SocialIcon({ id }: { id: "instagram" | "youtube" | "x" }) {
@@ -175,7 +176,7 @@ export default function StallFooter() {
           <p className="pf-footnote">{footer.note}</p>
         </div>
       </div>
-      <span className="pf-stamp-spot" data-orange-stamp aria-hidden />
+      <FooterOrange />
       <div
         className="pf-wordmark font-display"
         aria-hidden

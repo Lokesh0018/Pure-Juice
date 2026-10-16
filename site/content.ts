@@ -214,8 +214,8 @@ export const flavours = {
   inside: "Inside every bottle",
   details: "Details",
   add: "Add",
-  // scroll steps of the pinned section (goal ids): Orange → Mango → Berry → Green → back to Orange
-  sequence: ["immunity", "energy", "glow", "detox", "immunity"],
+  // scroll steps of the pinned section (goal ids): Orange → Mango → Berry → Green
+  sequence: ["immunity", "energy", "glow", "detox"],
   // one fixed card row (never rebuilt while the goals change)
   cards: ["gold", "berry", "green", "beet"],
 };

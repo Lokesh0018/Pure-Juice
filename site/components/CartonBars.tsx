@@ -5,14 +5,6 @@ import { gsap } from "@/lib/gsap";
 import { compare } from "@/site/content";
 import { clamp, isStatic, onScreen } from "@/site/lib/motion";
 
-declare global {
-  interface Window {
-    /** 0→1: how far the travelling juice drop has run along the "Fruit per bottle" bar (set by OrangeTraveller) */
-    __pfRun?: number;
-  }
-}
-
-const FRUIT_ROW = 2; // "Fruit per bottle": filled by the travelling drop instead of by the scroll alone
 
 /** "1.2 kg" → { n: 1.2, dec: 1, unit: " kg" }; "None" → null */
 function parse(v: string) {
@@ -44,8 +36,8 @@ export default function CartonBars() {
       const p = clamp((window.innerHeight - r.top) / (window.innerHeight * 0.85));
       rows.forEach((row, i) => {
         const data = compare.rows[i];
-        const t = i === FRUIT_ROW ? clamp(window.__pfRun ?? 0) : clamp((p - 0.08 - i * 0.14) / 0.32);
-        const tt = i === FRUIT_ROW ? t : clamp((p - 0.16 - i * 0.14) / 0.32);
+        const t = clamp((p - 0.08 - i * 0.14) / 0.32);
+        const tt = clamp((p - 0.16 - i * 0.14) / 0.32);
         row.style.setProperty("--a", String(t));
         row.style.setProperty("--b", String(tt));
         const text = `${show(data.ours, t)}|${show(data.theirs, tt)}`;
@@ -104,7 +96,7 @@ export default function CartonBars() {
               <span role="cell" className="pf-cmp-cell is-ours-cell">
                 <b data-ours>{r.ours}</b>
                 <small>{r.oursNote}</small>
-                <span className="pf-track" {...(i === FRUIT_ROW ? { "data-run-track": "" } : {})}>
+                <span className="pf-track">
                   <i className={`is-ours ${r.a === 0 ? "is-dot" : ""}`} style={{ "--w": `${r.a}%` } as CSSProperties} />
                 </span>
               </span>

@@ -57,18 +57,6 @@ export default function BottleWallHero() {
     return () => clearTimeout(t);
   }, [cycleKey, paused]);
 
-  // the travelling orange starts from the orange beside the bottle: on other flavours it waits hidden until the
-  // visitor starts scrolling (then it appears and continues its journey)
-  useEffect(() => {
-    const alt = activeId !== "sunrise";
-    const sync = () => document.documentElement.classList.toggle("pf-hero-alt", alt && window.scrollY < 30);
-    sync();
-    window.addEventListener("scroll", sync, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", sync);
-      document.documentElement.classList.remove("pf-hero-alt");
-    };
-  }, [activeId]);
 
   const handleQuickAdd = () => {
     window.dispatchEvent(new CustomEvent("pf:add", { detail: { id: activeId, size: "single" } }));

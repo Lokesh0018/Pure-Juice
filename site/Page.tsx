@@ -11,7 +11,7 @@ import CartonBars from "./components/CartonBars";
 import CleansePlans from "./components/CleansePlans";
 import FridgeNotes from "./components/FridgeNotes";
 import StallFooter from "./components/StallFooter";
-import OrangeTraveller from "./components/OrangeTraveller";
+import HeroOrange from "./components/HeroOrange";
 
 /** Pure Juice · "Studio Press": warm white, ink and one orange, with full-colour flavour bands. */
 export default function Page() {
@@ -33,7 +33,7 @@ export default function Page() {
         <FridgeNotes />
       </main>
       <StallFooter />
-      <OrangeTraveller />
+      <HeroOrange />
     </>
   );
 }
