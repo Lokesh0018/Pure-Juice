@@ -6298,7 +6298,7 @@ html.has-traveller .pf-traveller-slot {
   .pf-hero-orange.pf-hf-lime-half { width: 150px; left: 810px; top: 670px; }
   .pf-hero-half.pf-hf-apple-red { width: 130px; rotate: 0deg; }
   .pf-hero-half.pf-hf-pineapple { width: 110px; top: 600px; rotate: 12deg; }
-  .pf-hero-half.pf-hf-carrot { width: 150px; left: 1215px; top: 500px; rotate: 24deg; }
+  .pf-hero-half.pf-hf-carrot { width: 150px; left: 1215px; top: 600px; rotate: 24deg; }
   .pf-hero-leaf-a.pf-hf-mint { width: 120px; }
   .pf-hero-leaf-b.pf-hf-strawberry { width: 80px; rotate: 18deg; }
   .pf-hero-leaf-b.pf-hf-spinach { width: 90px; rotate: 20deg; }
@@ -6476,5 +6476,683 @@ html.is-static .pf-hero-roller {
   .pf-bag-count {
     min-width: 28px;
     height: 28px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   Phones & tablets (< 1024 px). Desktop (≥ 1024 px) is unchanged: every rule below is inside these media queries.
+   Each section turns from a fixed 1440 canvas into a stacked layout; pinned scroll sections become plain sections
+   (their steps are tapped instead, see isCompact() in site/lib/motion.ts).
+   ═══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 1023px) {
+  :root {
+    --gutter: 40px;
+  }
+
+  /* ── shared: stages flow normally, no fit-scaling, no pinning ── */
+  .pf-hero-spotlight > .pf-stage,
+  .pf-pdp > .pf-stage,
+  .pf-mix > .pf-stage,
+  .pf-flavours > .pf-stage,
+  .pf-farm > .pf-stage,
+  .pf-compare > .pf-stage,
+  .pf-plans > .pf-stage,
+  .pf-reviews > .pf-stage {
+    position: relative;
+    left: auto;
+    width: auto;
+    max-width: none;
+    height: auto;
+    margin: 0;
+    padding: 0 var(--gutter);
+    transform: none;
+  }
+  .pf-pin,
+  .pf-flv-pin {
+    height: auto !important;
+  }
+  .pf-sticky,
+  .pf-flv-pin > .pf-flavours {
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 0;
+  }
+  .pf-hero-spotlight,
+  .pf-pdp,
+  .pf-farm,
+  .pf-compare,
+  .pf-flavours,
+  .pf-mix,
+  .pf-plans,
+  .pf-reviews {
+    height: auto !important;
+    padding: 96px 0 72px;
+  }
+  .pf-hero-roller,
+  .pf-marker {
+    display: none !important;
+  }
+
+  /* shared heading scale */
+  .pf-hero-spotlight .pf-h1 {
+    font-size: clamp(46px, 11vw, 88px);
+  }
+  .pf-cmp-title,
+  .pf-plans-title,
+  .pf-rv-title,
+  .pf-mix-title,
+  .pf-farm-heading,
+  .pf-flv-name,
+  .pf-buy-title {
+    font-size: clamp(34px, 8vw, 54px) !important;
+  }
+
+  /* ── nav: logo · bag · menu button; links open as a panel ── */
+  .pf-nav {
+    inset: 10px 12px auto;
+    height: 56px;
+    grid-template-columns: 1fr auto auto;
+    gap: 8px;
+    padding: 0 8px 0 16px;
+  }
+  .pf-logo-img {
+    height: 34px;
+  }
+  .pf-menu-btn {
+    display: grid;
+    order: 3;
+  }
+  .pf-bag-wrap {
+    order: 2;
+  }
+  .pf-nav-links {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 20px 40px -18px rgba(30, 20, 10, 0.35), 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  .pf-nav-links.is-open {
+    display: flex;
+  }
+  .pf-nav-pill {
+    display: none;
+  }
+  .pf-nav-link {
+    padding: 14px 16px;
+    font-size: 16px;
+    border-radius: 12px;
+  }
+  .pf-nav-link.is-current {
+    background: var(--kraft);
+  }
+  .pf-drawer {
+    width: min(430px, 100vw);
+  }
+
+  /* ── hero ── */
+  .pf-hero-spotlight {
+    padding-top: 104px;
+  }
+  .pf-hero-spotlight .pf-hero-art {
+    display: none;
+  }
+  .pf-hero-spotlight .pf-hero-copy {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: auto;
+    transform: none !important;
+  }
+  .pf-hero-spotlight .pf-line {
+    white-space: normal;
+  }
+  .pf-hero-spotlight .pf-hero-lead {
+    width: auto;
+    max-width: 560px;
+  }
+  .pf-hero-spotlight .pf-hero-cta {
+    flex-wrap: wrap;
+  }
+  .pf-hero-centerpiece {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    max-width: 560px;
+    height: 540px;
+    margin: 28px auto 0;
+    transform: none !important;
+  }
+  .pf-hero-spotlight .pf-spotlight-card-taste {
+    left: 0;
+    top: auto;
+    bottom: 24px;
+    transform: none;
+  }
+  .pf-hero-spotlight .pf-spotlight-card-seal {
+    right: 0;
+    top: 24px;
+  }
+
+  /* ── Today's specials: flavour chips, bottle, buy box, inside, profile ── */
+  .pf-pdp > .pf-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .pf-pdp .pf-wheel {
+    order: 1;
+    position: static;
+    display: flex;
+    gap: 8px;
+    width: auto;
+    height: auto;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-mask: none;
+    mask: none;
+    scrollbar-width: none;
+  }
+  .pf-pdp .pf-wheel li {
+    position: static;
+    width: auto;
+    flex: none;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  .pf-pdp .pf-wheel-name {
+    padding: 10px 16px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--card);
+  }
+  .pf-pdp .pf-wheel-small {
+    position: static;
+    font: 500 14px/1 var(--font-body-family);
+    letter-spacing: 0;
+    color: var(--ink);
+    opacity: 1 !important;
+  }
+  .pf-pdp .pf-wheel-big {
+    display: none;
+  }
+  .pf-pdp .pf-wheel-name.is-on {
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+  .pf-pdp .pf-wheel-name.is-on .pf-wheel-small {
+    color: #fff;
+  }
+  .pf-pdp .pf-disc-wrap {
+    order: 2;
+    position: relative;
+    left: 50%;
+    top: auto;
+    width: 540px;
+    height: 600px;
+    margin: 0 0 -60px;
+    transform: translateX(-50%) scale(0.9);
+    transform-origin: top center;
+  }
+  .pf-pdp .pf-buy {
+    order: 3;
+    position: static;
+    width: auto;
+    max-width: 560px;
+  }
+  .pf-pdp .pf-inside {
+    order: 4;
+    position: static;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .pf-pdp .pf-profile {
+    order: 5;
+    position: static;
+    width: auto;
+    max-width: 560px;
+  }
+
+  /* ── Our process: tap a step; photo below ── */
+  .pf-farm-head {
+    position: static;
+  }
+  .pf-farm .pf-ledger {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    margin-top: 28px;
+  }
+  .pf-farm .pf-ledger-bar {
+    display: none;
+  }
+  .pf-farm .pf-ledger li {
+    height: auto;
+    grid-template-columns: 30px 1fr auto;
+    row-gap: 4px;
+    padding: 14px 12px;
+    border-radius: 14px;
+    cursor: pointer;
+  }
+  .pf-farm .pf-ledger li.is-on {
+    background: var(--card);
+    box-shadow: 0 1px 2px rgba(20, 20, 20, 0.04), 0 14px 30px -20px rgba(20, 20, 20, 0.25);
+  }
+  .pf-farm .pf-ledger-note {
+    grid-column: 2 / -1;
+    white-space: normal;
+  }
+  .pf-farm-spot {
+    display: none;
+  }
+  .pf-farm .pf-photo {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    margin: 28px auto 0;
+    transform: none !important;
+  }
+  .pf-farm .pf-photo-frame {
+    height: auto;
+    aspect-ratio: 4 / 5;
+  }
+
+  /* ── The difference: stacked table ── */
+  .pf-compare {
+    padding-bottom: 96px;
+  }
+  .pf-compare-side {
+    position: static;
+    width: auto;
+  }
+  .pf-compare-note,
+  .pf-cmp-lead {
+    width: auto;
+    max-width: 560px;
+  }
+  .pf-cmp-table {
+    --label: 0px;
+    --pad: 18px;
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    margin-top: 32px;
+  }
+  .pf-cmp-highlight {
+    display: none;
+  }
+  .pf-cmp-head,
+  .pf-compare .pf-bar {
+    grid-template-columns: 1fr 1fr;
+  }
+  .pf-cmp-head > span:first-child {
+    display: none;
+  }
+  .pf-cmp-label {
+    grid-column: 1 / -1;
+    padding: 16px 0 6px;
+  }
+  .pf-compare .pf-bar {
+    min-height: 0;
+    padding-bottom: 18px;
+  }
+  .pf-cmp-cell {
+    padding: 0 14px 0 0;
+  }
+  .pf-cmp-cell.is-ours-cell {
+    padding-left: 12px;
+    border-left: 2px solid var(--tomato);
+  }
+  .pf-cmp-col {
+    padding-left: 0;
+  }
+
+  /* ── Products: chips, copy, bottle, inside, cards ── */
+  .pf-flavours .pf-ghost {
+    display: none;
+  }
+  .pf-flavours .pf-flv-head {
+    position: static;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .pf-flavours .pf-chips {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .pf-flavours .pf-chip {
+    flex: none;
+  }
+  .pf-flavours .pf-flavour-copy {
+    position: static;
+    width: auto;
+    margin-top: 24px;
+  }
+  .pf-flavours .pf-flavour-desc {
+    width: auto;
+    max-width: 560px;
+  }
+  .pf-flavours .pf-flavour-buy {
+    flex-wrap: wrap;
+  }
+  .pf-flavours .pf-flavour-art {
+    position: relative;
+    left: 50%;
+    top: auto;
+    width: 640px;
+    height: 820px;
+    margin: 8px 0 -245px;
+    scale: 1;
+    transform: translateX(-50%) scale(0.7);
+    transform-origin: top center;
+  }
+  .pf-flv-inside {
+    position: static;
+    width: auto;
+    max-width: 560px;
+  }
+  .pf-flavours .pf-tags {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  /* ── Build your own ── */
+  .pf-mix-copy {
+    position: static;
+  }
+  .pf-mix .pf-mix-lead {
+    width: auto;
+    max-width: 560px;
+  }
+  .pf-mix .pf-crate {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    max-width: 560px;
+    margin-top: 28px;
+    transform: none !important;
+  }
+  .pf-mix .pf-mix-bottle {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 170px;
+    margin: 28px auto 0;
+    transform: none !important;
+  }
+  .pf-mix .pf-board {
+    position: relative;
+    right: auto;
+    top: auto;
+    width: auto;
+    max-width: 560px;
+    height: auto;
+    min-height: 0;
+    margin: 28px auto 0;
+    transform: none !important;
+  }
+
+  /* ── Combos ── */
+  .pf-plans-pic {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: 420px;
+  }
+  .pf-plans-side {
+    position: static;
+    width: auto;
+    margin-top: 32px;
+  }
+  .pf-freq-wrap {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .pf-summary {
+    flex-wrap: wrap;
+  }
+
+  /* ── Testimonials ── */
+  .pf-reviews-side {
+    position: static;
+    width: auto;
+    max-width: 560px;
+  }
+  .pf-notes {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: 440px;
+    margin-top: 32px;
+  }
+  .pf-note {
+    width: calc(100% - 70px);
+  }
+
+  /* ── Footer ── */
+  .pf-footer {
+    height: auto;
+    padding-bottom: 260px;
+  }
+  .pf-strip {
+    padding: 24px var(--gutter) 0;
+  }
+  .pf-press {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    height: auto;
+    padding: 36px 28px;
+  }
+  .pf-strip-title {
+    font-size: clamp(30px, 7vw, 44px) !important;
+  }
+  .pf-footer-body {
+    padding: 48px var(--gutter) 0;
+  }
+  .pf-cols {
+    flex-wrap: wrap;
+    gap: 32px 48px;
+  }
+  .pf-socials {
+    flex-wrap: wrap;
+  }
+  .pf-wordmark {
+    font-size: 22vw;
+    bottom: -4vw;
+  }
+  .pf-footer .pf-fo {
+    right: var(--gutter);
+    top: auto;
+    bottom: 150px;
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* ── phones (< 600 px) ── */
+@media (max-width: 599px) {
+  :root {
+    --gutter: 20px;
+  }
+  .pf-hero-centerpiece {
+    height: 460px;
+  }
+  .pf-hero-spotlight .pf-spotlight-bottle-wrap {
+    width: 190px;
+  }
+  .pf-hero-spotlight .pf-spotlight-disc {
+    width: 320px;
+    height: 320px;
+  }
+  .pf-hero-spotlight .pf-spotlight-card-taste {
+    width: 200px;
+    padding: 14px 16px;
+  }
+  .pf-hero-spotlight .pf-spotlight-card-seal {
+    padding: 12px 14px;
+  }
+  .pf-pdp .pf-disc-wrap {
+    margin-bottom: -228px;
+    transform: translateX(-50%) scale(0.62);
+  }
+  .pf-flavours .pf-flavour-art {
+    margin-bottom: -410px;
+    transform: translateX(-50%) scale(0.5);
+  }
+  .pf-flavours .pf-tags {
+    grid-template-columns: 1fr;
+  }
+  .pf-farm .pf-ledger li {
+    font-size: 14px;
+  }
+  .pf-seg {
+    grid-template-columns: repeat(2, 1fr);
+    border-radius: 20px;
+  }
+  .pf-seg-thumb {
+    display: none;
+  }
+  .pf-seg-opt.is-on {
+    background: var(--ink);
+  }
+  .pf-plans-pic {
+    height: 340px;
+  }
+  .pf-cmp-cell b {
+    font-size: 21px;
+  }
+  .pf-note blockquote {
+    font-size: 22px;
+  }
+  .pf-notes {
+    height: 420px;
+  }
+  .pf-note {
+    width: calc(100% - 50px);
+    padding: 24px 22px 22px;
+  }
+  .pf-note figcaption {
+    left: 22px;
+    right: 22px;
+  }
+  .pf-note-product {
+    display: none;
+  }
+  .pf-crate {
+    gap: 6px;
+    padding: 8px;
+  }
+  .pf-mix .pf-bin {
+    height: 104px;
+  }
+  .pf-bin-fruit {
+    max-width: 60px;
+    max-height: 60px;
+  }
+}
+
+/* the menu button only exists on small screens */
+.pf-menu-btn {
+  display: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: rgba(20, 20, 20, 0.05);
+  cursor: pointer;
+}
+.pf-menu-icon {
+  position: relative;
+  width: 18px;
+  height: 12px;
+}
+.pf-menu-icon i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ink);
+  transition: transform 0.3s var(--ease-out), top 0.3s var(--ease-out);
+}
+.pf-menu-icon i:first-child {
+  top: 1px;
+}
+.pf-menu-icon i:last-child {
+  top: 9px;
+}
+.pf-menu-icon.is-open i:first-child {
+  top: 5px;
+  transform: rotate(45deg);
+}
+.pf-menu-icon.is-open i:last-child {
+  top: 5px;
+  transform: rotate(-45deg);
+}
+@media (max-width: 1023px) {
+  .pf-menu-btn {
+    display: grid;
+  }
+}
+
+/* small-screen fixes (round 2) */
+@media (max-width: 1023px) {
+  .pf-hero-spotlight .pf-hero-switcher {
+    width: auto;
+  }
+  .pf-pdp .pf-wheel-name {
+    font-size: 14px;
+    line-height: 1;
+    width: auto;
+  }
+  .pf-press {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pf-press-copy,
+  .pf-press-side {
+    min-width: 0;
+  }
+  .pf-press-lead,
+  .pf-strip-title {
+    max-width: 100%;
+  }
+  .pf-signup {
+    width: 100%;
+  }
+  .pf-signup input {
+    min-width: 0;
+  }
+  .pf-radio-text b {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+}
+
+@media (max-width: 599px) {
+  .pf-flavours .pf-flavour-art {
+    margin-top: -40px;
+    margin-bottom: -470px;
   }
 }

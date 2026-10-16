@@ -29,6 +29,7 @@ export default function StallNav() {
   const close = useRef(0);
 
   const [current, setCurrent] = useState<string | null>(null);
+  const [menu, setMenu] = useState(false); // small screens: the links open as a panel
   const linksRef = useRef<HTMLElement>(null);
   const [pill, setPill] = useState<{ x: number; w: number } | null>(null);
 
@@ -109,7 +110,20 @@ export default function StallNav() {
         <a href="#top" className="pf-logo" aria-label="Pure Juice home">
           <img src="/logo.webp" alt="Pure Juice" className="pf-logo-img" />
         </a>
-        <nav ref={linksRef} className="pf-nav-links" aria-label="Main">
+        <button
+          type="button"
+          className="pf-menu-btn"
+          aria-label={menu ? "Close menu" : "Open menu"}
+          aria-expanded={menu}
+          aria-controls="pf-nav-links"
+          onClick={() => setMenu((m) => !m)}
+        >
+          <span className={`pf-menu-icon ${menu ? "is-open" : ""}`} aria-hidden>
+            <i />
+            <i />
+          </span>
+        </button>
+        <nav ref={linksRef} id="pf-nav-links" className={`pf-nav-links ${menu ? "is-open" : ""}`} aria-label="Main" onClick={() => setMenu(false)}>
           <span
             className={`pf-nav-pill ${pill ? "is-on" : ""}`}
             style={pill ? { transform: `translateX(${pill.x}px)`, width: pill.w } : undefined}

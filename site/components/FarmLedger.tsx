@@ -3,7 +3,7 @@
 import { useEffect, useRef, type CSSProperties } from "react";
 import { gsap } from "@/lib/gsap";
 import { farm, img } from "@/site/content";
-import { clamp, isStatic, onScreen, pinProgress } from "@/site/lib/motion";
+import { clamp, isCompact, isStatic, onScreen, pinProgress } from "@/site/lib/motion";
 
 const PIN = 1200; // px pinned: 5 steps
 const N = farm.steps.length;
@@ -74,8 +74,19 @@ export default function FarmLedger() {
         .fromTo(word, { yPercent: 0, autoAlpha: 1, clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", duration: 0.15, ease: "power2.out" });
     };
 
+    // compact screens: tap a step to show it
+    const taps = rows.map((r, k) => {
+      const f = () => {
+        if (!isCompact() || k === shown) return;
+        setStep(k);
+        shown = k;
+      };
+      r.addEventListener("click", f);
+      return () => r.removeEventListener("click", f);
+    });
+
     const tick = () => {
-      if (!onScreen(root)) return;
+      if (!onScreen(root) || isCompact()) return;
       // the pin is split into 5 equal phases; each phase owns its photo until the next one starts
       const p = pinProgress(pin.current!);
       const i = Math.min(N - 1, Math.floor(clamp(p) * N));
@@ -95,6 +106,7 @@ export default function FarmLedger() {
     gsap.ticker.add(tick);
     return () => {
       gsap.ticker.remove(tick);
+      taps.forEach((off) => off());
       swap?.kill();
     };
   }, []);

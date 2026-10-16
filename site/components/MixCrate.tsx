@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { gsap, loadPlugin } from "@/lib/gsap";
 import { img, mix, rupee } from "@/site/content";
-import { isStatic, onScreen, pinProgress } from "@/site/lib/motion";
+import { isCompact, isStatic, onScreen, pinProgress } from "@/site/lib/motion";
 import { Arrow, Fruit } from "./bits";
 
 // Bottle geometry (% of its height): cap 0–15, liquid from the shoulder (15.5) to the base. The stills have their
@@ -207,7 +207,7 @@ export default function MixCrate() {
     const tick = () => {
       const p = pinProgress(pin.current!);
       if (p <= 0 && pin.current!.getBoundingClientRect().top > 0) touched.current = false; // back above: demo again
-      if (!onScreen(root)) return;
+      if (!onScreen(root) || isCompact()) return;
       gsap.set(crate, { y: 18 - 36 * p });
       gsap.set(board, { y: 30 - 60 * p });
       gsap.set(bottle, { y: 10 - 20 * p });

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { gsap } from "@/lib/gsap";
 import { juiceColor, pdp, products, rupee } from "@/site/content";
-import { clamp, isStatic, lerp, onScreen, pinProgress, smooth } from "@/site/lib/motion";
+import { clamp, isCompact, isStatic, lerp, onScreen, pinProgress, smooth } from "@/site/lib/motion";
 import { Arrow, Bottle, Fruit, RollNumber, Stamp } from "./bits";
 
 const PIN = 700; // px pinned
@@ -134,6 +134,10 @@ export default function ProductWheel() {
     }
     const tick = () => {
       if (!onScreen(root)) return;
+      if (isCompact()) {
+        draw(manual.current?.q ?? LAST);
+        return;
+      }
       const pr = pinProgress(pin.current!);
       let q = lerp(FIRST, LAST, clamp(pr / STEP_END));
       const m = manual.current;

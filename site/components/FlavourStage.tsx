@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { gsap } from "@/lib/gsap";
 import { flavours, ghostWord, goals, juiceColor, products, rupee, startGoal, type Juice } from "@/site/content";
 import { Bottle, Fruit } from "./bits";
-import { clamp, isStatic, onScreen } from "@/site/lib/motion";
+import { clamp, isCompact, isStatic, onScreen } from "@/site/lib/motion";
 
 // White small text fails contrast on the orange, green and gold bands (lesson 124): use a deep ink there.
 const smallInk: Record<Juice, string> = {
@@ -79,7 +79,7 @@ export default function FlavourStage() {
     const wrap = pin.current!;
     let shown = -1;
     const tick = () => {
-      if (!onScreen(el)) return;
+      if (!onScreen(el) || isCompact()) return;
       // pin progress 0 → 1 over the pinned scroll; each step of the sequence owns an equal slice of it
       const w = wrap.getBoundingClientRect();
       const span = Math.max(1, wrap.offsetHeight - el.offsetHeight);

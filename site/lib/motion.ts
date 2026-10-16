@@ -21,6 +21,8 @@ export function onLift(fn: () => void) {
 }
 
 export const isStatic = () => prefersReducedMotion();
+/** phones and tablets (< 1024 px): stacked layouts, sections are not pinned, scroll does not drive steps */
+export const isCompact = () => typeof window !== "undefined" && window.innerWidth < 1024;
 
 export const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 export const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
