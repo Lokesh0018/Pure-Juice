@@ -30,6 +30,9 @@ export type Product = {
   inside: { fruit: string; label: string; pct: number }[]; // pct: share of the blend (sample values)
   taste: { sweet: number; tangy: number; earthy: number; zing: number }; // 0–5
   bestFor: string[]; // when / why to drink it
+  notes: string; // short flavour notes for cards
+  rating: number; // sample values
+  reviews: number;
   nutrition: { kcal: number; sugar: number; vitC: string; fibre: string };
 };
 
@@ -42,6 +45,9 @@ export const products: Record<string, Product> = {
     goal: "Immunity",
     taste: { sweet: 3, tangy: 3, earthy: 1, zing: 4 },
     bestFor: ["Morning", "Cold season"],
+    notes: "Citrus · Carrot · Ginger",
+    rating: 4.9,
+    reviews: 1240,
     price: 149,
     ml: 300,
     blurb: "Valencia orange, sweet heirloom carrot, cold-crushed turmeric and ginger. Your morning vitality boost, bottled fresh at dawn.",
@@ -61,6 +67,9 @@ export const products: Record<string, Product> = {
     goal: "Radiance",
     taste: { sweet: 4, tangy: 3, earthy: 1, zing: 1 },
     bestFor: ["Afternoon", "Skin glow"],
+    notes: "Berry · Apple · Beet",
+    rating: 4.8,
+    reviews: 860,
     price: 169,
     ml: 300,
     blurb: "Hill strawberry, antioxidant blueberries, crisp Fuji apple and ruby pomegranate. Rich in polyphenols for an instant skin glow.",
@@ -80,14 +89,17 @@ export const products: Record<string, Product> = {
     goal: "Cleanse",
     taste: { sweet: 2, tangy: 3, earthy: 3, zing: 2 },
     bestFor: ["Morning", "Digestion"],
+    notes: "Guava · Greens · Mint",
+    rating: 4.8,
+    reviews: 920,
     price: 159,
     ml: 300,
     blurb: "Crisp pink guava, Granny Smith apple, hydroponic baby spinach, English cucumber and garden mint. Refreshing alkalising purity.",
     inside: [
-      { fruit: "apple-green", label: "2 tart green apples", pct: 40 },
-      { fruit: "spinach", label: "Tender baby spinach", pct: 25 },
-      { fruit: "cucumber", label: "Crisp garden cucumber", pct: 25 },
-      { fruit: "mint", label: "Peppermint leaves", pct: 10 },
+      { fruit: "gauva", label: "2 ripe pink guavas", pct: 40 },
+      { fruit: "apple-green", label: "1 tart green apple", pct: 25 },
+      { fruit: "spinach", label: "Tender baby spinach", pct: 20 },
+      { fruit: "cucumber", label: "Crisp garden cucumber", pct: 15 },
     ],
     nutrition: { kcal: 92, sugar: 14, vitC: "85%", fibre: "3 g" },
   },
@@ -99,6 +111,9 @@ export const products: Record<string, Product> = {
     goal: "Stamina",
     taste: { sweet: 2, tangy: 1, earthy: 5, zing: 3 },
     bestFor: ["Pre-workout", "Endurance"],
+    notes: "Beet · Carrot · Ginger",
+    rating: 4.7,
+    reviews: 610,
     price: 159,
     ml: 300,
     blurb: "Mineral-rich root beet, crisp orchard apple, juicy orange and fiery ginger. Natural nitrates formulated for athletic endurance.",
@@ -118,14 +133,17 @@ export const products: Record<string, Product> = {
     goal: "Vitality",
     taste: { sweet: 5, tangy: 2, earthy: 1, zing: 2 },
     bestFor: ["Midday", "Energy"],
+    notes: "Mango · Pineapple · Lime",
+    rating: 4.9,
+    reviews: 1030,
     price: 149,
     ml: 300,
     blurb: "Alphonso gold mango, ripe Queen pineapple, cold-pressed lime and wild honey notes. Tropical decadence with zero refined sugar.",
     inside: [
-      { fruit: "pineapple", label: "½ sweet pineapple", pct: 50 },
-      { fruit: "lemon-half", label: "1 juicy lemon", pct: 20 },
+      { fruit: "mango", label: "1 Alphonso mango", pct: 45 },
+      { fruit: "pineapple", label: "½ sweet pineapple", pct: 25 },
+      { fruit: "lemon-half", label: "1 juicy lemon", pct: 15 },
       { fruit: "ginger", label: "Fresh yellow ginger", pct: 15 },
-      { fruit: "mint", label: "Spearmint sprigs", pct: 15 },
     ],
     nutrition: { kcal: 134, sugar: 22, vitC: "165%", fibre: "2 g" },
   },
@@ -137,6 +155,9 @@ export const products: Record<string, Product> = {
     goal: "Hydration",
     taste: { sweet: 3, tangy: 2, earthy: 1, zing: 1 },
     bestFor: ["Hot days", "Hydration"],
+    notes: "Melon · Lime · Mint",
+    rating: 4.7,
+    reviews: 540,
     price: 139,
     ml: 300,
     blurb: "Seedless field watermelon, cold lime zest and steeped Moroccan mint. Deeply cellular hydration for warm sunny days.",
@@ -155,7 +176,7 @@ export const fruit = (name: string) => img(`fruit-${name}`);
 // ── Nav ─────────────────────────────────────────────
 export const nav = {
   links: [
-    { label: "Botanicals", href: "#flavours" },
+    { label: "Products", href: "#flavours" },
     { label: "Custom Blend", href: "#mix" },
     { label: "Combos", href: "#cleanses" },
     { label: "Our Process", href: "#farm" },
@@ -178,13 +199,25 @@ export const hero = {
 };
 
 // ── Flavours (goal chips) ───────────────────────────
+// scroll order: the pinned Botanicals section steps through these in order (Immunity first, the orange flavour)
 export const goals = [
-  { id: "detox", label: "Detox", lead: "green", cards: ["green", "beet", "sunrise", "gold"] },
-  { id: "immunity", label: "Immunity", lead: "sunrise", cards: ["sunrise", "gold", "berry", "green"] },
-  { id: "energy", label: "Energy", lead: "gold", cards: ["gold", "sunrise", "berry", "green"] },
-  { id: "glow", label: "Radiance", lead: "berry", cards: ["berry", "melon", "green", "sunrise"] },
+  { id: "immunity", icon: "shield", label: "Immunity", lead: "sunrise" },
+  { id: "energy", icon: "bolt", label: "Energy", lead: "gold" },
+  { id: "glow", icon: "sparkle", label: "Radiance", lead: "berry" },
+  { id: "detox", icon: "leaf", label: "Detox", lead: "green" },
 ] as const;
 export const startGoal = "immunity";
+export const flavours = {
+  eyebrow: "Products",
+  heading: "Shop by goal",
+  inside: "Inside every bottle",
+  details: "Details",
+  add: "Add",
+  // scroll steps of the pinned section (goal ids): Orange → Mango → Berry → Green → back to Orange
+  sequence: ["immunity", "energy", "glow", "detox", "immunity"],
+  // one fixed card row (never rebuilt while the goals change)
+  cards: ["gold", "berry", "green", "beet"],
+};
 export const ghostWord: Record<Juice, string> = {
   orange: "Valencia",
   berry: "Berries",

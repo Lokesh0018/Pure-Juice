@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { gsap } from "@/lib/gsap";
-import { fruit, ghostWord, goals, img, juiceColor, products, rupee, startGoal, type Juice } from "@/site/content";
+import { flavours, ghostWord, goals, juiceColor, products, rupee, startGoal, type Juice } from "@/site/content";
 import { Bottle, Fruit } from "./bits";
 import { clamp, isStatic, onScreen } from "@/site/lib/motion";
 
@@ -15,20 +15,39 @@ const smallInk: Record<Juice, string> = {
   berry: "#FFFFFF",
   beet: "#FFFFFF",
 };
+/** small goal icons (24 px grid, currentColor) */
+function GoalIcon({ name }: { name: string }) {
+  const p = { fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden {...p}>
+      {name === "leaf" && <path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14Zm0 0 7-7" />}
+      {name === "shield" && <path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6l-7-3Z" />}
+      {name === "bolt" && <path d="M13 3 5 14h6l-1 7 8-11h-6l1-7Z" />}
+      {name === "sparkle" && <path d="M12 3c.6 4.2 2.8 6.4 7 7-4.2.6-6.4 2.8-7 7-.6-4.2-2.8-6.4-7-7 4.2-.6 6.4-2.8 7-7Z" />}
+    </svg>
+  );
+}
+// The section is designed at 1440 × 960 (content from the header at 96 px to the cards' bottom + padding). It is
+// scaled to fit the window below the fixed nav (and its width), and its height follows, so it always fits one screen.
+const DESIGN_W = 1440;
+const DESIGN_H = 960;
+const NAV_H = 76;
+// three fruits shown around the bottle, per flavour. The first sits on the travelling orange's spot: on the orange
+// steps the traveller itself is that fruit; on the other steps this flavour's own fruit (mango, strawberry, guava) shows.
 const props: Record<Juice, [string, string, string]> = {
   orange: ["orange", "orange-half", "citrus-leaves"],
   berry: ["strawberry", "apple-red", "mint"],
-  green: ["apple-green", "cucumber", "mint"],
+  green: ["gauva", "cucumber", "mint"],
   beet: ["beet", "carrot", "ginger"],
-  gold: ["pineapple", "lemon-half", "mint"],
+  gold: ["mango", "lemon-half", "mint"],
   melon: ["lime-half", "mint", "cucumber"],
 };
-const ADVANCE = 4000; // ms between automatic flavour changes while the band is on screen
-const PAUSE_AFTER_CLICK = 8000;
+const STEPS = flavours.sequence;
+const PIN = 350 * STEPS.length; // px pinned: ~350 px of scroll per step
 
 /**
- * PS03 · full-colour flavour stage (giant faded flavour name, hand-lettered goal word, counter) + goal chips on top
- * + 4 kraft price-tag cards. M543: a chip click (or the 4 s auto-advance) wipes the next colour in from the right
+ * PS03 · "Botanicals": full-colour flavour stage. Header row (title + goal chips), then three columns (featured
+ * flavour copy with price and actions · bottle · "Inside every bottle" blend list), then 4 product cards. Pinned: the scroll steps through the goals (a chip click holds until you scroll on). M543: each change wipes the next colour in from the right
  * edge behind the content; the name, copy and bottle swap whole, the cards re-enter one by one (X38, tiles never
  * reflow, lesson 52) and a burst of that flavour's fruit pieces flies out. Scroll: the ghost word drifts sideways and
  * the bottle rises. The travelling orange lands on the featured-orange spot and hops along the card tops.
@@ -37,16 +56,18 @@ export default function FlavourStage() {
   const [goalId, setGoalId] = useState<string>(startGoal);
   const [base, setBase] = useState<string>(startGoal); // colour under the wipe
   const root = useRef<HTMLElement>(null);
-  const lastClick = useRef(0);
+  const pin = useRef<HTMLDivElement>(null);
+  const manual = useRef<number | null>(null); // scrollY of a chip click: the click holds until the visitor scrolls on
   const gi = goals.findIndex((g) => g.id === goalId);
   const goal = goals[gi];
   const lead = products[goal.lead];
   const color = juiceColor[lead.juice];
   const baseColor = juiceColor[products[goals.find((g) => g.id === base)!.lead].juice];
   const [pa, pb, pc] = props[lead.juice];
+  const add = (id: string) => window.dispatchEvent(new CustomEvent("pf:add", { detail: { id } }));
 
   const choose = (id: string) => {
-    lastClick.current = performance.now();
+    manual.current = window.scrollY;
     setGoalId(id);
   };
 
@@ -55,25 +76,40 @@ export default function FlavourStage() {
     if (isStatic()) return;
     const el = root.current!;
     const ghost = el.querySelector<HTMLElement>(".pf-ghost")!;
-    const art = el.querySelector<HTMLElement>(".pf-flavour-art")!;
+    const wrap = pin.current!;
+    let shown = -1;
     const tick = () => {
       if (!onScreen(el)) return;
-      const r = el.getBoundingClientRect();
-      const p = clamp((window.innerHeight - r.top) / (window.innerHeight + r.height));
+      // pin progress 0 → 1 over the pinned scroll; each step of the sequence owns an equal slice of it
+      const w = wrap.getBoundingClientRect();
+      const span = Math.max(1, wrap.offsetHeight - el.offsetHeight);
+      const p = clamp(-w.top / span);
+      const f = p * STEPS.length;
+      const i = Math.min(STEPS.length - 1, Math.floor(f));
       gsap.set(ghost, { x: 160 - 360 * p });
-      gsap.set(art, { y: 90 - 180 * p });
+      el.style.setProperty("--seg", String(i === STEPS.length - 1 && p >= 1 ? 1 : clamp(f - i)));
+      if (manual.current !== null && Math.abs(window.scrollY - manual.current) < 60) return; // a chip click holds
+      manual.current = null;
+      if (i !== shown) {
+        shown = i;
+        setGoalId(STEPS[i]);
+      }
     };
     gsap.ticker.add(tick);
-    const timer = window.setInterval(() => {
-      const r = el.getBoundingClientRect();
-      const visible = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
-      if (visible < window.innerHeight * 0.55 || performance.now() - lastClick.current < PAUSE_AFTER_CLICK) return;
-      setGoalId((g) => goals[(goals.findIndex((x) => x.id === g) + 1) % goals.length].id);
-    }, ADVANCE);
     return () => {
       gsap.ticker.remove(tick);
-      clearInterval(timer);
     };
+  }, []);
+
+  // fit to the window (runs in ?static=1 too: it is layout, not motion)
+  useEffect(() => {
+    const fit = () => {
+      const f = Math.min(1, (window.innerHeight - NAV_H) / (DESIGN_H - NAV_H), document.documentElement.clientWidth / DESIGN_W);
+      pin.current!.style.setProperty("--fit", String(f));
+    };
+    fit();
+    window.addEventListener("resize", fit);
+    return () => window.removeEventListener("resize", fit);
   }, []);
 
   // the pour edge above this band takes its current colour
@@ -81,50 +117,20 @@ export default function FlavourStage() {
     document.documentElement.style.setProperty("--pf-band", baseColor);
   }, [baseColor]);
 
-  // each change: the colour wipe + a burst of fruit pieces
+  // each change: the colour wipe (the bottle cross-fades on its own; no fruit pieces)
   useEffect(() => {
     if (isStatic() || goalId === base) return;
-    const el = root.current!;
-    const wipe = el.querySelector<HTMLElement>(".pf-wipe")!;
-    const burst = el.querySelector<HTMLElement>(".pf-burst")!;
+    const wipe = root.current!.querySelector<HTMLElement>(".pf-wipe")!;
     const tl = gsap
       .timeline({ onComplete: () => setBase(goalId) })
       .fromTo(wipe, { clipPath: "inset(0 0 0 100%)" }, { clipPath: "inset(0 0 0 0%)", duration: 0.8, ease: "power3.inOut" });
-    const pieces: HTMLImageElement[] = [];
-    const names = props[products[goals.find((g) => g.id === goalId)!.lead].juice];
-    for (let i = 0; i < 12; i++) {
-      const p = document.createElement("img");
-      p.src = fruit(names[i % 3]);
-      p.className = "pf-burst-piece";
-      const size = 26 + ((i * 37) % 26);
-      Object.assign(p.style, { width: `${size}px`, height: `${size}px` });
-      burst.appendChild(p);
-      pieces.push(p);
-      const a = (i / 12) * Math.PI * 2 + 0.3;
-      const d = 170 + ((i * 53) % 110);
-      gsap.fromTo(
-        p,
-        { x: 0, y: 0, scale: 0.92, autoAlpha: 1, rotate: 0 },
-        {
-          x: Math.cos(a) * d,
-          y: Math.sin(a) * d * 0.8 - 40,
-          rotate: (i % 2 ? 1 : -1) * 140,
-          scale: 0.94,
-          autoAlpha: 0,
-          duration: 0.95,
-          ease: "power3.out",
-          delay: 0.3,
-          onComplete: () => p.remove(),
-        },
-      );
-    }
     return () => {
       tl.kill();
-      pieces.forEach((p) => p.remove());
     };
   }, [goalId, base]);
 
   return (
+    <div ref={pin} className="pf-pin pf-flv-pin" style={{ "--pin": `${PIN}px` } as CSSProperties}>
     <section
       id="flavours"
       ref={root}
@@ -138,6 +144,11 @@ export default function FlavourStage() {
     >
       <div className="pf-wipe" aria-hidden />
       <div className="pf-stage">
+        <div className="pf-flv-head">
+          <p className="pf-flv-title">
+            <span className="pf-flv-eyebrow">{flavours.eyebrow}</span>
+            <span>{flavours.heading}</span>
+          </p>
         <div className="pf-chips" role="tablist" aria-label="Shop by goal">
           {goals.map((g) => (
             <button
@@ -149,9 +160,12 @@ export default function FlavourStage() {
               onClick={() => choose(g.id)}
               {...(g.id === "energy" ? { "data-hover-demo": "click", "data-hover-label": "Energy chip" } : {})}
             >
+              <GoalIcon name={g.icon} />
               {g.label}
+              {g.id === goalId && <i className="pf-chip-timer" aria-hidden />}
             </button>
           ))}
+        </div>
         </div>
 
         <div className="pf-ghost font-display" aria-hidden>
@@ -161,62 +175,92 @@ export default function FlavourStage() {
         </div>
 
         <div key={`copy-${goalId}`} className="pf-flavour-copy pf-swap">
-          <p className="pf-count font-display">
-            {String(gi + 1).padStart(2, "0")} / {String(goals.length).padStart(2, "0")}
-          </p>
           <p className="pf-flavour-word mk">{goal.label}</p>
-          <h2 className="pf-h2 font-display">
-            {lead.name.split(" ").map((w) => (
-              <span key={w} className="pf-line">
-                {w}
-              </span>
-            ))}
-          </h2>
+          <h2 className="pf-flv-name font-display">{lead.name}</h2>
+          <p className="pf-flv-rate">
+            <span aria-hidden>★</span> <b>{lead.rating.toFixed(1)}</b> · {lead.reviews.toLocaleString("en-IN")} reviews
+          </p>
           <p className="pf-flavour-desc">{lead.blurb}</p>
+          <p className="pf-flv-best">
+            {lead.bestFor.map((b) => (
+              <em key={b}>{b}</em>
+            ))}
+            <em>{lead.nutrition.kcal} kcal</em>
+          </p>
           <div className="pf-flavour-buy">
-            <span className="mk pf-flavour-price">{rupee(lead.price)}</span>
-            <button
-              type="button"
-              className="pf-btn pf-btn-paper"
-              onClick={() => window.dispatchEvent(new CustomEvent("pf:add", { detail: { id: lead.id } }))}
-            >
+            <span className="pf-flavour-price">{rupee(lead.price)}</span>
+            <button type="button" className="pf-btn pf-btn-paper" onClick={() => add(lead.id)}>
               Add to bag
             </button>
+            <a href="#product" className="pf-flv-details">
+              {flavours.details}
+            </a>
           </div>
         </div>
 
+        <aside key={`inside-${goalId}`} className="pf-flv-inside pf-swap" aria-label={`${flavours.inside}: ${lead.name}`}>
+          <p className="pf-flv-inside-title">{flavours.inside}</p>
+          <ul>
+            {lead.inside.map((f) => (
+              <li key={f.label}>
+                <Fruit name={f.fruit} />
+                <span className="pf-flv-inside-text">
+                  <span>{f.label}</span>
+                  <span className="pf-flv-bar">
+                    <i style={{ width: `${f.pct}%` }} />
+                  </span>
+                </span>
+                <b>{f.pct}%</b>
+              </li>
+            ))}
+          </ul>
+        </aside>
+
         <div className="pf-flavour-art" aria-hidden>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img key={`splash-${lead.juice}`} src={img(`splash-${lead.juice}`)} alt="" className="pf-splash pf-swap" />
+          <span className="pf-flv-halo" />
           <Bottle key={`bottle-${lead.juice}`} juice={lead.juice} word={lead.word} className="pf-flavour-bottle pf-swap" />
-          <Fruit name={pa} className="pf-fprop pf-fprop-a pf-traveller-slot" />
+          <Fruit key={`spot-${pa}`} name={pa} className={`pf-fprop pf-fprop-a pf-swap ${lead.juice === "orange" ? "pf-traveller-slot" : `pf-fprop-hero pf-fprop-${pa}`}`} />
           <Fruit name={pb} className="pf-fprop pf-fprop-b" />
           <Fruit name={pc} className="pf-fprop pf-fprop-c" />
           <span className="pf-orange-spot" data-orange-spot aria-hidden />
-          <div className="pf-burst" />
         </div>
 
         <ul className="pf-tags">
-          {goal.cards.map((id, i) => {
+          {flavours.cards.map((id, i) => {
             const p = products[id];
+            const g = goals.find((x) => x.lead === id); // the goal this flavour leads (same word as its chip)
             return (
               <li
-                key={`${goalId}-${i}`}
-                className={`pf-tag pf-tag-in ${p.goal === goal.label ? "is-match" : ""}`}
+                key={id}
+                onClick={(e) => {
+                  if (g && !(e.target as HTMLElement).closest("button")) choose(g.id);
+                }}
+                aria-current={id === goal.lead ? "true" : undefined}
+                className={`pf-tag pf-tag-in ${id === goal.lead ? "is-match" : ""}`}
                 style={{ animationDelay: `${i * 0.07}s` }}
                 data-cursor="Shop"
                 data-hop={i}
                 {...(i === 0 ? { "data-hover-demo": "", "data-hover-hold": "0.8", "data-hover-label": "Price tag" } : {})}
               >
-                <span className="pf-tag-text">
-                  <b className="font-display">{p.name}</b>
-                  <small>
-                    {p.goal} · {p.ml} ml
-                  </small>
+                <span className="pf-card-media" style={{ "--c": juiceColor[p.juice] } as CSSProperties}>
+                  <Bottle juice={p.juice} className="pf-card-bottle" />
                 </span>
-                <span className="mk pf-tag-price">{rupee(p.price)}</span>
-                <Bottle juice={p.juice} className="pf-tag-bottle" />
-                <span className="pf-tag-add">+ Add</span>
+                <span className="pf-card-body">
+                  <span className="pf-card-top">
+                    <em className="pf-card-goal">{g ? g.label : p.goal}</em>
+                    <span className="pf-card-rate">
+                      ★ {p.rating.toFixed(1)} <small>({p.reviews.toLocaleString("en-IN")})</small>
+                    </span>
+                  </span>
+                  <b className="pf-card-name font-display">{p.name}</b>
+                  <small className="pf-card-notes">{p.notes}</small>
+                  <span className="pf-card-foot">
+                    <span className="pf-card-price">{rupee(p.price)}</span>
+                    <button type="button" className="pf-card-add" onClick={() => add(p.id)} aria-label={`Add ${p.name} to bag`}>
+                      + {flavours.add}
+                    </button>
+                  </span>
+                </span>
               </li>
             );
           })}
@@ -232,5 +276,6 @@ export default function FlavourStage() {
         aria-hidden
       />
     </section>
+    </div>
   );
 }

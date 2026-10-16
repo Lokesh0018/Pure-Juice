@@ -54,7 +54,7 @@ function build(vh: number, vw: number): Key[] | null {
   const plans = q("[data-section=plans]");
   const photo = q<HTMLImageElement>("[data-orange-bottle]");
   const stampSpot = q("[data-orange-stamp]");
-  if (!heroOrange || !spot || hops.length < 4 || !flav || !mixStage || !bin || !farmStage || !farmSpot || !compareEl || !track || !plans || !photo || !stampSpot) return null;
+  if (!heroOrange || !spot || hops.length < 2 || !flav || !mixStage || !bin || !farmStage || !farmSpot || !compareEl || !track || !plans || !photo || !stampSpot) return null;
 
   const keys: Key[] = [];
   const k = (s: number, p: Partial<Key>) => keys.push({ ...ORANGE, ...p, s } as Key);
@@ -64,16 +64,29 @@ function build(vh: number, vw: number): Key[] | null {
   // ── Hero
   const ho = centre(heroOrange);
   k(0, { x: ho.x, y: ho.y, size: ho.w, rot: 0 });
-  const H = flav.getBoundingClientRect().top + s0; // flavours top (doc)
+  // the Botanicals section is pinned: measure its pin wrapper (the sticky section itself moves with the scroll)
+  const flavPin = flav.parentElement!;
+  const H = docTop(flavPin); // flavours top (doc)
+  const FPIN_F = Math.max(0, flavPin.offsetHeight - flav.offsetHeight); // px the section stays pinned
   k(H * 0.3, { x: ho.x + 60, y: ho.y - 150, size: ho.w, rot: 200 });
   k(H - vh * 0.55, { x: vw - 140, y: vh * 0.56, size: 128, rot: 560 });
   // ── Flavours: the featured-orange spot, then hops along the card tops (right → left), then a free lane
   const sp = centre(spot);
   const FT = H;
-  const cardsIn = FT + flav.offsetHeight - vh + 40;
+  // the orange rests on the featured spot while the goals change, then hops along the cards as the pin ends
+  const cardsIn = FPIN_F > 0 ? FT + FPIN_F - 150 : FT + flav.offsetHeight - vh + 40;
   k(FT - vh * 0.1, { x: sp.x, y: sp.y, size: 140, rot: 720, squash: true });
+  // the section's 5 scroll steps (orange · mango · berry · guava · orange): the orange rests on its spot for step 1,
+  // hands the spot to that flavour's own fruit for steps 2-4, and is back for step 5 before it continues its journey
+  if (FPIN_F > 0) {
+    const stepAt = (n: number) => FT + (FPIN_F * n) / 5;
+    k(stepAt(1) - 6, { x: sp.x, y: sp.y, size: 140, rot: 720 });
+    k(stepAt(1) + 6, { x: sp.x, y: sp.y, size: 140, rot: 720, o: 0 });
+    k(stepAt(4) - 6, { x: sp.x, y: sp.y, size: 140, rot: 720, o: 0 });
+    k(stepAt(4) + 6, { x: sp.x, y: sp.y, size: 140, rot: 720 });
+  }
   k(cardsIn, { x: sp.x, y: sp.y, size: 140, rot: 720 });
-  const order = [3, 2, 1, 0];
+  const order = hops.map((_, i) => i).reverse(); // right → left along every card (the orange-juice card first)
   order.forEach((i, n) => {
     const c = centre(hops[i]);
     k(cardsIn + 70 * (n + 1), { x: c.x, y: c.top + 14 - 48, size: 96, rot: 720 - 120 * (n + 1), hop: n === 0 ? 70 : 34, squash: true });
@@ -82,7 +95,7 @@ function build(vh: number, vw: number): Key[] | null {
   // by gliding right just above the card row, then straight down it and left across the top row into cell 1.
   // A single lane means no sideways snap between two lanes and only one change of direction after the hops.
   const c2 = centre(hops[1]);
-  const afterHops = cardsIn + 70 * 4;
+  const afterHops = cardsIn + 70 * hops.length;
   const mixTop = docTop(mixStage.parentElement!);
   const PIN = mixStage.parentElement!.offsetHeight - vh;
   const b = centre(bin);
