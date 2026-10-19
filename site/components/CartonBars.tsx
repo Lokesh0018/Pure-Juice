@@ -88,7 +88,7 @@ export default function CartonBars() {
               <i className="is-theirs" /> {compare.theirs}
             </span>
           </div>
-          {compare.rows.map((r, i) => (
+          {compare.rows.map((r) => (
             <div key={r.label} className="pf-bar" role="row" style={{ "--a": 1, "--b": 1 } as CSSProperties}>
               <span role="rowheader" className="pf-cmp-label">
                 {r.label}

@@ -7,7 +7,7 @@ export const meta: SiteMeta = {
   title: "Pure Juice · Cold-pressed at sunrise",
   description: "Cold-pressed juice, pressed every morning from market-fresh fruit. Flavours, mix your own, cleanses. Concept website.",
   loaderText: "Pure Juice",
-  // The site draws its own I34 drop-and-splash loader (site/components/SplashLoader.tsx).
+  // The site draws its own loader: the logo builds itself and juice fills the U (site/components/SplashLoader.tsx).
   loader: false,
   cursor: false,
   record: { duration: 36 },

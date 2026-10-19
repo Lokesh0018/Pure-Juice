@@ -15,7 +15,7 @@ export function Bottle({
   eager,
   labelOnly,
 }: {
-  juice: Juice | "empty" | "glass";
+  juice: Juice | "empty";
   word?: string;
   className?: string;
   style?: CSSProperties;

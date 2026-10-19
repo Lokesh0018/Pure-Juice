@@ -6,7 +6,7 @@ export const img = (name: string) => `${IMG}/${name}.webp`;
 export type Juice = "orange" | "berry" | "green" | "beet" | "gold" | "melon";
 
 /** Bottle stills: pixel-aligned colour edits of one master bottle (one shared cut-out mask). */
-export const bottle = (j: Juice | "empty" | "glass") => img(`bottle-${j}`);
+export const bottle = (j: Juice | "empty") => img(`bottle-${j}`);
 
 /** Band colours (whole bands only, never small accents). */
 export const juiceColor: Record<Juice, string> = {

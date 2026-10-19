@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { gsap } from "@/lib/gsap";
 import { flavours, ghostWord, goals, juiceColor, products, rupee, startGoal, type Juice } from "@/site/content";
 import { Bottle, Fruit } from "./bits";
-import { clamp, isCompact, isStatic, onScreen } from "@/site/lib/motion";
+import { clamp, fitStage, isCompact, isStatic, onScreen } from "@/site/lib/motion";
 
 // White small text fails contrast on the orange, green and gold bands (lesson 124): use a deep ink there.
 const smallInk: Record<Juice, string> = {
@@ -30,9 +30,7 @@ function GoalIcon({ name }: { name: string }) {
 }
 // The section is designed at 1440 × 960 (content from the header at 96 px to the cards' bottom + padding). It is
 // scaled to fit the window below the fixed nav (and its width), and its height follows, so it always fits one screen.
-const DESIGN_W = 1440;
 const DESIGN_H = 960;
-const NAV_H = 76;
 // three fruits shown around the bottle, per flavour. The first sits on the travelling orange's spot: on the orange
 // steps the traveller itself is that fruit; on the other steps this flavour's own fruit (mango, strawberry, guava) shows.
 const props: Record<Juice, [string, string, string]> = {
@@ -103,15 +101,7 @@ export default function FlavourStage() {
   }, []);
 
   // fit to the window (runs in ?static=1 too: it is layout, not motion)
-  useEffect(() => {
-    const fit = () => {
-      const f = Math.min(1, (window.innerHeight - NAV_H) / (DESIGN_H - NAV_H), document.documentElement.clientWidth / DESIGN_W);
-      pin.current!.style.setProperty("--fit", String(f));
-    };
-    fit();
-    window.addEventListener("resize", fit);
-    return () => window.removeEventListener("resize", fit);
-  }, []);
+  useEffect(() => fitStage(pin.current!, DESIGN_H), []);
 
   // the pour edge above this band takes its current colour
   useEffect(() => {

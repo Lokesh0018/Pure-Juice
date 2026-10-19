@@ -20,7 +20,7 @@ Uniqueness: **8 of 8 different** from each of the last 3 sites, see the sites lo
 | Section shape | **S7 full-colour bands, clean seams** (the wooden slat strips were removed; the X96 juice-pour edge stays) | bands meet paper directly, which keeps the page quiet |
 | Cards | **White cards, 16 px radius, hairline + soft shadow**; pills for buttons, chips and tags (one radius rule) | product cards and plan rows look like a real shop UI |
 | Signature | **Mix your own: crate-to-bottle fill** (new motion, see Motion map) | the visitor builds a juice: 3 fruits leave the crate, the bottle fills layer by layer, the chalkboard writes the blend's name and price |
-| Loader | **I34 drop-and-splash**: a juice drop falls, splashes, and PURE JUICE rises out of the splash, with a real 0–100 counter | a short, juicy opener that hands straight over to the hero |
+| Loader | **Logo pour** (replaced I34 drop-and-splash): the JUICE logo builds itself, the orange drops in and squeezes, juice pours into the U and fills it, with a real 0–100 counter | a short, juicy opener built from the brand's own logo that hands straight over to the hero |
 | Travelling object | **F9 / M717 travelling orange** (added in Round 3, user's request): one orange travels the page and becomes the juice | it tells the farm-to-bottle story in one object |
 
 **Eases:** arrivals `cubic-bezier(0.22,1,0.36,1)` (0.6–0.9 s), swaps `cubic-bezier(0.77,0,0.175,1)` (0.5–0.8 s), drawers `cubic-bezier(0.32,0.72,0,1)`; linear only for scrub, marquees and progress. Normal, confident speed (not slowed). Small squash only on the loader drop and fruit landings (market playful, never bouncy elsewhere).
@@ -37,7 +37,7 @@ Uniqueness: **8 of 8 different** from each of the last 3 sites, see the sites lo
 | 6 | Benefits in numbers | **ST06** | ours | ST06 comparison bars → chalkboard band, "Fresh vs a carton" (heat, added sugar, fruit per bottle, days since pressed) |
 | 7 | Cleanse & subscription | **PR14** | ours | PR14 radio plan list → crate photo left, plan rows with hand-lettered prices, delivery frequency chips, running total, Subscribe |
 | 8 | Reviews | **SP10** | ours | SP10 stacked review cards → taped paper notes in marker handwriting (sample reviews, fruit badges instead of faces); small note under the stack: "Sample values · concept site" |
-| 9 | Footer | **FO03** | ours | FO03 newsletter strip + columns + socials → tomato sign-up strip, link columns, crate-stencil wordmark sinking off the corner, "Concept website by Triozen Tech" |
+| 9 | Footer | **FO03** | ours | FO03 newsletter strip + columns + socials → tomato sign-up strip, link columns, crate-stencil wordmark sinking off the corner
 | — | Nav | **NV18** | ours | NV18 nav with mini-cart dropdown → stamped logo, Bag pill with count + flyout |
 
 No layout code twice, none used by Days 14–16. Ideas mixed from the two references + our own; nothing copied from a real brand's site (hero-1 is a real juice brand's page: we take only "diagonal bottles on paint blobs"; our bottles, labels, blobs, type and layout are ours, no logo, no copy).
@@ -46,7 +46,7 @@ No layout code twice, none used by Days 14–16. Ideas mixed from the two refere
 
 | # | Section | Layout | Motion | How it plays here | Record mode |
 |---|---|---|---|---|---|
-| 0 | Loader | — | **I34** drop-and-splash | a juice drop falls onto the kraft paper, splashes into orange shapes, PURE JUICE rises out of the splash; real 0→100 counter (hero images load behind it, lesson 3); CSS motion from the first paint (lesson 11) | fixed 2.4 s, wipes off while the hero intro already moves |
+| 0 | Loader | — | **Logo pour** (was I34) | letters rise, the orange drops in and squeezes, a juice stream falls into the U and fills it bottom-up with a wavy surface (logo layers in `public/images/loader/`); real 0→100 counter (hero images load behind it, lesson 3); CSS motion from the first paint (lesson 11) | fixed 2.4 s, wipes off while the hero intro already moves |
 | 1 | Nav | NV18 | **M383** text morph | the Bag pill label morphs "Bag 2" → "Added" → "Bag 3" (shared letters glide) when a bottle lands; the mini-cart flyout drops open for a beat (U54) | plays on the Add-to-bag click |
 | 2 | Hero | HR23 | **M42** split opposite scroll | the bottle wall's two diagonal rows slide in opposite directions along the diagonal, tied to scroll, while the blobs and leaves drift at 3 depths and the headline lines rise in from masks; a self-playing intro starts on the loader's last frame and runs until the scroll overtakes it (lessons 4, 64) | intro 1.4 s, then scrub; hover stop on one bottle |
 | 3 | Flavours | PS03 | **M543** clip-path wipe carousel | a goal-chip click wipes the next flavour colour in from the peeking right strip over the stage (0.8 s), the giant faded name swaps whole, the bottle and fruit cross-fade to the new flavour; with scroll the ghost word drifts sideways and the bottle rises (scrub). Cards change with **X38** sequential category slide (old tags leave one by one, new ones arrive): tiles never reflow (lesson 52) | cursor clicks "Energy" (orange → berry); normal mode auto-advances every 4 s while on screen |
@@ -101,7 +101,7 @@ No code used twice. Hero (M42 bottle rows) and signature (M716) repeat no earlie
 
 | Clock (s) | Section / step | Move · hold | Cursor |
 |---|---|---|---|
-| −2.4–0 | Loader I34: drop, splash, PURE JUICE, real counter, wipe (hero intro starts on the wipe) | fixed 2.4 | — |
+| −2.4–0 | Loader logo pour: letters, orange, juice fills the U, real counter, wipe (hero intro starts on the wipe) | fixed 2.4 | — |
 | 0–1.4 | Hero intro (rows slide, headline rises) | hold 1.4 | — |
 | 1.4–2.75 | Hero: short scroll, hold | 0.45 · 0.9 | **hover** Sunrise bottle |
 | 2.75–5.45 | Flavours arrive, hold | 1.5 · 1.2 | **click** "Energy" (orange → berry) |

@@ -39,6 +39,22 @@ export function pinProgress(wrapper: HTMLElement) {
   return span > 0 ? clamp(-r.top / span) : 0;
 }
 
+const NAV_H = 76; // the fixed nav: scaling is anchored just below it, so content never slides under it
+const DESIGN_W = 1440; // every stage is laid out at this width
+
+/**
+ * Fits a 1440-wide stage to the window by setting `--fit` on `el` (the CSS scales the stage by it): scales down,
+ * never up, so `designH` px of height fit below the nav and the 1440 width fits the window. It is layout, not motion,
+ * so it runs in ?static=1 too. Returns the cleanup for useEffect.
+ */
+export function fitStage(el: HTMLElement, designH: number) {
+  const fit = () =>
+    el.style.setProperty("--fit", String(Math.min(1, document.documentElement.clientWidth / DESIGN_W, (window.innerHeight - NAV_H) / (designH - NAV_H))));
+  fit();
+  window.addEventListener("resize", fit);
+  return () => window.removeEventListener("resize", fit);
+}
+
 /** Is any part of the element on screen (with a margin)? */
 export function onScreen(el: HTMLElement, margin = 100) {
   const r = el.getBoundingClientRect();

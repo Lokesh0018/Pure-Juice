@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { gsap } from "@/lib/gsap";
 import { hero, juiceColor, products, rupee } from "@/site/content";
-import { clamp, isStatic, onLift, onScreen } from "@/site/lib/motion";
+import { clamp, fitStage, isStatic, onLift, onScreen } from "@/site/lib/motion";
 import { Arrow, Bottle, Fruit, Stamp } from "./bits";
 
 // The signature blends featured in the spotlight switcher, in cycle order (Sunrise → Berry → Guava → Mango → Beet → Melon)
@@ -67,15 +67,8 @@ export default function BottleWallHero() {
 
   useEffect(() => () => clearTimeout(addTimer.current), []);
 
-  // fit the 1440 × 900 design to the window (width and height below the nav); layout, so it runs in ?static=1 too
-  useEffect(() => {
-    const el = root.current!;
-    const fit = () =>
-      el.style.setProperty("--fit", String(Math.min(1, document.documentElement.clientWidth / 1440, (window.innerHeight - 76) / (900 - 76))));
-    fit();
-    window.addEventListener("resize", fit);
-    return () => window.removeEventListener("resize", fit);
-  }, []);
+  // fit the 1440 × 900 design to the window (width and height below the nav)
+  useEffect(() => fitStage(root.current!, 900), []);
 
   useEffect(() => {
     if (isStatic()) return;

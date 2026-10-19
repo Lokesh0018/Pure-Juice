@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { gsap, loadPlugin } from "@/lib/gsap";
 import { img, mix, rupee } from "@/site/content";
-import { isCompact, isStatic, onScreen, pinProgress } from "@/site/lib/motion";
+import { fitStage, isCompact, isStatic, onScreen, pinProgress } from "@/site/lib/motion";
 import { Arrow, Fruit } from "./bits";
 
 // Bottle geometry (% of its height): cap 0–15, liquid from the shoulder (15.5) to the base. The stills have their
@@ -14,7 +14,7 @@ const FILL_TOP = [100, 70, 42, 15.5]; // fill line after 0 / 1 / 2 / 3 picks
 const PIN = 750; // px of scroll the stage stays pinned (record: 5 short stops inside it, each hold ≤ 1.2 s)
 // Scroll drives the demo blend (forward and back): pin progress at which Orange, Carrot, Ginger are picked.
 // The travelling orange sits in cell 1 until the first threshold, then hands over to the Orange pick.
-export const PICK_AT = [0.14, 0.36, 0.58];
+const PICK_AT = [0.14, 0.36, 0.58];
 // Liquid surface waves: one period + direction per layer, shared by its white seam line, and every wave is put in
 // phase with one global clock (a negative delay from performance.now), so line and juice always roll together.
 const WAVE = [
@@ -34,8 +34,6 @@ const phaseRef = (i: number) => (el: HTMLElement | null) => {
   el.dataset.phased = "1";
 };
 const FIT_H = 820; // px of window height the stage needs; shorter windows scale it down (anchored below the nav)
-const NAV_H = 76;
-const DESIGN_W = 1440; // the stage is laid out at this width; narrower windows scale it down too
 
 const binOf = (id: string) => mix.bins.find((b) => b.id === id)!;
 
@@ -187,14 +185,7 @@ export default function MixCrate() {
   }, [full]);
 
   // fit the pinned stage to short windows (the grid and bottle never drop below the screen)
-  useEffect(() => {
-    const root = stage.current!;
-    const fit = () =>
-      root.style.setProperty("--fit", String(Math.min(1, (window.innerHeight - NAV_H) / (FIT_H - NAV_H), document.documentElement.clientWidth / DESIGN_W)));
-    fit();
-    window.addEventListener("resize", fit);
-    return () => window.removeEventListener("resize", fit);
-  }, []);
+  useEffect(() => fitStage(stage.current!, FIT_H), []);
 
   // Pinned stage life (lesson 9): crate, bottle and board drift with the pin; the scroll picks the demo blend.
   useEffect(() => {
